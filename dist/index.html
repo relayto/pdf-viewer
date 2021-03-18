@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>PDF Viewer Example</title>
+  </head>
+  <body>
+  <div id="pdfViewerContent"></div>
+  <script>
+    setTimeout(() => {
+      window.PDFViewerApplication.initialize({
+        spreadMode: 2,
+        relaytoPagesView: [
+          {
+            embed: {
+              pdfSvg: true,
+            }
+          },
+          {
+            style: {
+              embed: {
+                type: 'video',
+                url: 'https://aaa.com',
+              }
+            },
+          }
+        ],
+      });
+      window.PDFViewerApplication.open('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf');
+    }, 1000);
+  </script>
+  </body>
+</html>
