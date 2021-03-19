@@ -4,8 +4,6 @@ import { EventBus, RendererType } from 'pdfjs-dist/lib/web/ui_utils';
 
 import { PDFViewer } from './monkey-path/pdf.js/web/pdf_viewer';
 
-const OPEN_EVENT_NAME = 'openDocument';
-
 const DEFAULT_SCALE_VALUE = 'auto';
 const DEFAULT_SCALE_DELTA = 1.1;
 const MIN_SCALE = 0.1;
@@ -38,6 +36,8 @@ class PDFViewerApplication {
   eventBus = null;
   preferences = null;
 
+  container = null;
+
   spreadMode = -1;
   initialized = false;
   settingPages = [];
@@ -50,14 +50,6 @@ class PDFViewerApplication {
     this.initialized = true;
   };
 
-  addEventOpenFile = (callback) => {
-    document.addEventListener(OPEN_EVENT_NAME, callback, false);
-  };
-
-  removeEventOpenFile = (callback) => {
-    document.removeEventListener(OPEN_EVENT_NAME, callback);
-  };
-
   bindEvents = () => {
     this.eventBus._on('resize', webViewerResize);
   };
@@ -66,19 +58,24 @@ class PDFViewerApplication {
     this.eventBus._off('resize', webViewerResize);
   };
 
-  open = (pdfSource) => {
-    document.dispatchEvent(
-      new CustomEvent(
-        OPEN_EVENT_NAME,
-        { detail: { pdfSource } }
-      ),
-    );
+  onPassword = () => {};
+
+  onProgress = ({ loaded, total }) => {
+    const level = loaded / total;
+    const percent = Math.round(level * 100);
+
+    console.log(percent);
   };
 
-  loadDocument = (url, onPassword, onProgress) => {
+  open = (pdfSource) => {
+    this.loadDocument(pdfSource)
+      .then(this.initViewer);
+  };
+
+  loadDocument = (url) => {
     this.pdfLoadingTask = pdfjsLib.getDocument(url);
-    this.pdfLoadingTask.onPassword = onPassword;
-    this.pdfLoadingTask.onProgress = onProgress;
+    this.pdfLoadingTask.onPassword = this.onPassword;
+    this.pdfLoadingTask.onProgress = this.onProgress;
 
     return this.pdfLoadingTask.promise.then((doc) => {
       this.pdfDocument = doc;
@@ -98,14 +95,31 @@ class PDFViewerApplication {
     }
   };
 
-  initViewer = (container) => {
+  close = () => {
+    if (!this.pdfLoadingTask) {
+      return undefined;
+    }
+
+    this.pdfLoadingTask
+      .destroy()
+      .then(() => {
+        this.pdfLoadingTask = null;
+        if (this.pdfDocument) {
+          this.pdfDocument = null;
+          this.pdfViewer.setDocument(null);
+          this.pdfLinkService.setDocument(null);
+        }
+      });
+  };
+
+  initViewer = () => {
     this.eventBus = new EventBus();
     this.pdfLinkService = new PDFLinkService({
       eventBus: this.eventBus,
     });
 
     this.pdfViewer = new PDFViewer({
-      container,
+      container: this.container,
       eventBus: this.eventBus,
       linkService: this.pdfLinkService,
     });
