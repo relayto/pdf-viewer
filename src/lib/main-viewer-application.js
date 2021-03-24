@@ -48,6 +48,13 @@ class PDFViewerApplication {
       pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
     }
 
+    this.container = (
+      config.container ||
+      window.document.getElementById(
+        config.containerId || 'pdfViewerContent'
+      )
+    );
+
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
     this.spreadMode = config.spreadMode || -1;
@@ -72,9 +79,7 @@ class PDFViewerApplication {
     console.log(percent);
   };
 
-  open = (pdfSource, containerId = 'pdfViewerContent') => {
-    this.container = window.document.getElementById(containerId);
-
+  open = (pdfSource) => {
     this.loadDocument(pdfSource)
       .then(this.initViewer);
   };
