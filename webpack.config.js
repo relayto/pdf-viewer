@@ -10,9 +10,11 @@ module.exports = {
     hot: true,
     inline: true,
   },
-  entry: './src/index.js',
+  entry: {
+    'main-viewer': './src/main-viewer.js',
+  },
   output: {
-    filename: 'pdf-viewer-bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
   },
@@ -46,4 +48,15 @@ module.exports = {
       template: path.resolve(__dirname, 'dist/index.html'),
     }),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "pdfjs",
+          chunks: "initial",
+        },
+      },
+    },
+  },
 };

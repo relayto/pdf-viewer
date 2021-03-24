@@ -2,7 +2,7 @@ import * as pdfjsLib from 'pdfjs-dist/webpack';
 import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
 import { EventBus, RendererType } from 'pdfjs-dist/lib/web/ui_utils';
 
-import { PDFViewer } from './monkey-path/pdf.js/web/pdf_viewer';
+import { PDFViewer } from '../monkey-path/pdf.js/web/pdf_viewer';
 
 const DEFAULT_SCALE_VALUE = 'auto';
 const DEFAULT_SCALE_DELTA = 1.1;
@@ -67,7 +67,9 @@ class PDFViewerApplication {
     console.log(percent);
   };
 
-  open = (pdfSource) => {
+  open = (pdfSource, containerId = 'pdfViewerContent') => {
+    this.container = window.document.getElementById(containerId);
+
     this.loadDocument(pdfSource)
       .then(this.initViewer);
   };

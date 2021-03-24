@@ -5,7 +5,12 @@
     <title>PDF Viewer Example</title>
   </head>
   <body>
-  <div id="pdfViewerContent"></div>
+
+  <div id="pdfViewerContent" class="viewerContainer">
+    <div class="pdfViewer">
+    </div>
+  </div>
+
   <script>
     setTimeout(() => {
       window.PDFViewerApplication.initialize({
