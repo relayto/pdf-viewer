@@ -43,6 +43,11 @@ class PDFViewerApplication {
   settingPages = [];
 
   initialize = (config = {}) => {
+    if (!config.isDefaultWorker) {
+      pdfjsLib.GlobalWorkerOptions.workerPort = null;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
+    }
+
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
     this.spreadMode = config.spreadMode || -1;
