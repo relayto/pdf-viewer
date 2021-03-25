@@ -3,7 +3,6 @@ import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
 import { EventBus, RendererType } from 'pdfjs-dist/lib/web/ui_utils';
 import { PDFRenderingQueue } from 'pdfjs-dist/lib/web/pdf_rendering_queue';
 
-// import { PDFViewer } from 'pdfjs-dist/web/pdf_viewer';
 import { PDFViewer } from '../monkey-path/pdf.js/web/pdf_viewer';
 
 const DEFAULT_SCALE_VALUE = 'auto';
