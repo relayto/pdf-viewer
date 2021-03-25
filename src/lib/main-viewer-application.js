@@ -1,7 +1,9 @@
 import * as pdfjsLib from 'pdfjs-dist/webpack';
 import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
 import { EventBus, RendererType } from 'pdfjs-dist/lib/web/ui_utils';
+import { PDFRenderingQueue } from 'pdfjs-dist/lib/web/pdf_rendering_queue';
 
+// import { PDFViewer } from 'pdfjs-dist/web/pdf_viewer';
 import { PDFViewer } from '../monkey-path/pdf.js/web/pdf_viewer';
 
 const DEFAULT_SCALE_VALUE = 'auto';
@@ -28,7 +30,14 @@ function webViewerResize() {
   pdfViewer.update();
 }
 
+function webViewerPageRendered({ pageNumber, error }) {
+  if (error && error.name === 'RenderingCancelledException') {
+    console.log(pageNumber, error);
+  }
+}
+
 class PDFViewerApplication {
+  pdfRenderingQueue = null;
   pdfDocument = null;
   pdfLoadingTask = null;
   pdfViewer = null;
@@ -42,14 +51,35 @@ class PDFViewerApplication {
   initialized = false;
   settingPages = [];
 
+  _initializeViewer = () => {
+    this.eventBus = new EventBus();
+
+    this.pdfRenderingQueue = new PDFRenderingQueue();
+    this.pdfRenderingQueue.onIdle = this.cleanup;
+
+    this.pdfLinkService = new PDFLinkService({
+      eventBus: this.eventBus,
+    });
+
+    this.pdfViewer = new PDFViewer({
+      container: this.container,
+      eventBus: this.eventBus,
+      linkService: this.pdfLinkService,
+      renderingQueue: this.pdfRenderingQueue,
+    });
+
+    this.pdfRenderingQueue.setViewer(this.pdfViewer);
+    this.pdfLinkService.setDocument(this.pdfDocument);
+    this.pdfViewer.setDocument(this.pdfDocument);
+
+    this.pdfViewer.spreadMode = this.spreadMode;
+  };
+
   initialize = (config = {}) => {
     if (!config.isDefaultWorker) {
       pdfjsLib.GlobalWorkerOptions.workerPort = null;
       pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
     }
-
-    this.eventBus = new EventBus();
-    this.bindEvents();
 
     this.container = (
       config.container ||
@@ -57,6 +87,10 @@ class PDFViewerApplication {
         config.containerId || 'pdfViewerContent'
       )
     );
+
+    this._initializeViewer();
+
+    this.bindEvents();
 
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
@@ -67,10 +101,12 @@ class PDFViewerApplication {
 
   bindEvents = () => {
     this.eventBus._on('resize', webViewerResize);
+    this.eventBus._on('pagerendered', webViewerPageRendered);
   };
 
   unbindEvents = () => {
     this.eventBus._off('resize', webViewerResize);
+    this.eventBus._off('pagerendered', webViewerPageRendered);
   };
 
   onPassword = () => {};
@@ -83,18 +119,43 @@ class PDFViewerApplication {
   };
 
   open = (pdfSource) => {
-    this.loadDocument(pdfSource)
-      .then(this.initViewer);
-  };
-
-  loadDocument = (url) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument(url);
+    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource });
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
 
-    return this.pdfLoadingTask.promise.then((doc) => {
-      this.pdfDocument = doc;
-      return doc;
+    return this.pdfLoadingTask
+      .promise
+      .then(this.load);
+  };
+
+  load = (pdfDocument) => {
+    this.pdfDocument = pdfDocument;
+
+    // Since the `setInitialView` call below depends on this being resolved,
+    // fetch it early to avoid delaying initial rendering of the PDF document.
+    const pageLayoutPromise = pdfDocument.getPageLayout().catch(() => {
+      /* Avoid breaking initial rendering; ignoring errors. */
+    });
+    const pageModePromise = pdfDocument.getPageMode().catch(() => {
+      /* Avoid breaking initial rendering; ignoring errors. */
+    });
+    const openActionPromise = pdfDocument.getOpenAction().catch(() => {
+      /* Avoid breaking initial rendering; ignoring errors. */
+    });
+
+    this.pdfViewer.setDocument(pdfDocument);
+    const { firstPagePromise } = this.pdfViewer;
+
+    firstPagePromise.then(() => {
+      Promise.all([
+        pageLayoutPromise,
+        pageModePromise,
+        openActionPromise,
+      ]).then(() => {
+        this.eventBus.dispatch('documentinit', { source: this });
+      }).then(() => {
+        this.pdfViewer.update();
+      });
     });
   };
 
@@ -120,28 +181,12 @@ class PDFViewerApplication {
       .then(() => {
         this.pdfLoadingTask = null;
         if (this.pdfDocument) {
+          this.pdfRenderingQueue = null;
           this.pdfDocument = null;
           this.pdfViewer.setDocument(null);
           this.pdfLinkService.setDocument(null);
         }
       });
-  };
-
-  initViewer = () => {
-    this.pdfLinkService = new PDFLinkService({
-      eventBus: this.eventBus,
-    });
-
-    this.pdfViewer = new PDFViewer({
-      container: this.container,
-      eventBus: this.eventBus,
-      linkService: this.pdfLinkService,
-    });
-
-    this.pdfLinkService.setDocument(this.pdfDocument);
-    this.pdfViewer.setDocument(this.pdfDocument);
-
-    this.pdfViewer.spreadMode = this.spreadMode;
   };
 
   zoomIn = (ticks) => {
