@@ -48,6 +48,9 @@ class PDFViewerApplication {
       pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
     }
 
+    this.eventBus = new EventBus();
+    this.bindEvents();
+
     this.container = (
       config.container ||
       window.document.getElementById(
@@ -125,7 +128,6 @@ class PDFViewerApplication {
   };
 
   initViewer = () => {
-    this.eventBus = new EventBus();
     this.pdfLinkService = new PDFLinkService({
       eventBus: this.eventBus,
     });
@@ -140,8 +142,6 @@ class PDFViewerApplication {
     this.pdfViewer.setDocument(this.pdfDocument);
 
     this.pdfViewer.spreadMode = this.spreadMode;
-
-    this.bindEvents();
   };
 
   zoomIn = (ticks) => {
