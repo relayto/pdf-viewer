@@ -60,7 +60,7 @@ class PDFViewerApplication {
 
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
-    this.spreadMode = config.spreadMode || -1;
+    this.spreadMode = config.spreadMode || 0;
 
     this.initialized = true;
   };
