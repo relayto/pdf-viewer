@@ -145,7 +145,7 @@ class PDFViewerApplication {
   };
 
   zoomIn = (ticks) => {
-    if (this.pdfViewer.isInPresentationMode) {
+    if (!this.pdfViewer || this.pdfViewer.isInPresentationMode) {
       return;
     }
 
@@ -159,9 +159,10 @@ class PDFViewerApplication {
   };
 
   zoomOut = (ticks) => {
-    if (this.pdfViewer.isInPresentationMode) {
+    if (!this.pdfViewer || this.pdfViewer.isInPresentationMode) {
       return;
     }
+
     let newScale = this.pdfViewer.currentScale;
     do {
       newScale = (newScale / DEFAULT_SCALE_DELTA).toFixed(2);
@@ -172,9 +173,10 @@ class PDFViewerApplication {
   };
 
   zoomReset = () => {
-    if (this.pdfViewer.isInPresentationMode) {
+    if (!this.pdfViewer || this.pdfViewer.isInPresentationMode) {
       return;
     }
+
     this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
   };
 
@@ -183,11 +185,13 @@ class PDFViewerApplication {
   }
 
   get page() {
-    return this.pdfViewer.currentPageNumber;
+    return (this.pdfViewer && this.pdfViewer.currentPageNumber) || 0;
   }
 
   set page(val) {
-    this.pdfViewer.currentPageNumber = val;
+    if (this.pdfViewer) {
+      this.pdfViewer.currentPageNumber = val;
+    }
   }
 }
 
