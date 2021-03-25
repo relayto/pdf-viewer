@@ -38,7 +38,7 @@ class PDFViewerApplication {
 
   container = null;
 
-  spreadMode = -1;
+  spreadMode = 0;
   initialized = false;
   settingPages = [];
 
