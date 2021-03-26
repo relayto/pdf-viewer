@@ -1,12 +1,7 @@
 {
   "presets": [
     [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "esmodules": true
-        }
-      }
+      "@babel/preset-env"
     ]
   ],
   "plugins": [
@@ -14,8 +9,10 @@
       "@babel/plugin-proposal-class-properties"
     ],
     [
-      "@babel/plugin-transform-react-jsx",
-      { "pragma": "h", "pragmaFrag": "Fragment" }
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
     ]
   ]
 }

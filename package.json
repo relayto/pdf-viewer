@@ -19,12 +19,10 @@
   "devDependencies": {
     "@babel/core": "^7.13.10",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/plugin-transform-react-jsx": "^7.12.17",
+    "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/preset-env": "^7.13.10",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.1.3",
-    "eslint": "^7.22.0",
-    "eslint-config-preact": "^1.1.3",
     "html-webpack-plugin": "^5.3.1",
     "style-loader": "^2.0.0",
     "webpack": "^5.26.2",
@@ -32,6 +30,8 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.13.10",
+    "monkey-path": "file:monkey-path",
     "pdfjs-dist": "^2.7.570"
   }
 }
