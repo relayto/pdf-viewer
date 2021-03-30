@@ -32,7 +32,7 @@ class PDFPageViewerApplication {
     this.eventBus = new EventBus();
   };
 
-  open = (pdfSource, page = 1, disableRange = false) => {
+  open = (pdfSource, page = 1, disableRange = false, params = {}) => {
     this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource, disableRange });
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
@@ -45,6 +45,7 @@ class PDFPageViewerApplication {
           scale: SCALE,
           defaultViewport: pdfPage.getViewport({ scale: SCALE }),
           eventBus: this.eventBus,
+          ...params,
         });
 
         pdfPageView.setPdfPage(pdfPage);
