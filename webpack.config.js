@@ -12,6 +12,7 @@ module.exports = {
   },
   entry: {
     'main-viewer': './src/main-viewer.js',
+    'page-viewer': './src/page-viewer',
   },
   output: {
     filename: '[name].js',
@@ -46,6 +47,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'build/index.html'),
       template: path.resolve(__dirname, 'dist/index.html'),
+    }),
+    new HtmlWebpackPlugin({
+      filename: path.resolve(__dirname, 'build/single-page.html'),
+      template: path.resolve(__dirname, 'dist/single-page.html'),
     }),
   ],
   optimization: {

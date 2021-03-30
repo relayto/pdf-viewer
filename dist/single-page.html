@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>PDF Single Page viewer Example</title>
+  </head>
+  <body>
+
+  <div id="pdfViewerContent" class="viewerContainer">
+    <div class="pdfViewer">
+    </div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      window.PDFPageViewerApplication.initialize({
+        isDefaultWorker: true,
+      });
+      window.PDFPageViewerApplication.open('example.pdf', 2);
+    }, 1000);
+  </script>
+  </body>
+</html>
