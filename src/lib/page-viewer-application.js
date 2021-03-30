@@ -55,4 +55,4 @@ class PDFPageViewerApplication {
   };
 }
 
-window.PDFPageViewerApplication = new PDFPageViewerApplication();
+window.rtPDFViewer = new PDFPageViewerApplication();
