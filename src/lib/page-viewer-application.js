@@ -32,8 +32,8 @@ class PDFPageViewerApplication {
     this.eventBus = new EventBus();
   };
 
-  open = (pdfSource, page = 1) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource });
+  open = (pdfSource, page = 1, disableRange = false) => {
+    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource, disableRange });
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
 

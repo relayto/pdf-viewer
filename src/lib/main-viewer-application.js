@@ -116,8 +116,8 @@ class PDFViewerApplication {
     console.log(percent);
   };
 
-  open = (pdfSource) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource });
+  open = (pdfSource, disableRange = false) => {
+    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource, disableRange });
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
 
