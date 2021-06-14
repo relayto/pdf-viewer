@@ -79,12 +79,9 @@ class PDFViewerApplication {
       pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
     }
 
-    this.container = (
+    this.container =
       config.container ||
-      window.document.getElementById(
-        config.containerId || 'pdfViewerContent'
-      )
-    );
+      window.document.getElementById(config.containerId || 'pdfViewerContent');
 
     this._initializeViewer();
 
@@ -117,13 +114,14 @@ class PDFViewerApplication {
   };
 
   open = (pdfSource, disableRange = false) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource, disableRange });
+    this.pdfLoadingTask = pdfjsLib.getDocument({
+      url: pdfSource,
+      disableRange,
+    });
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
 
-    return this.pdfLoadingTask
-      .promise
-      .then(this.load);
+    return this.pdfLoadingTask.promise.then(this.load);
   };
 
   load = (pdfDocument) => {
@@ -145,15 +143,13 @@ class PDFViewerApplication {
     const { firstPagePromise } = this.pdfViewer;
 
     firstPagePromise.then(() => {
-      Promise.all([
-        pageLayoutPromise,
-        pageModePromise,
-        openActionPromise,
-      ]).then(() => {
-        this.eventBus.dispatch('documentinit', { source: this });
-      }).then(() => {
-        this.pdfViewer.update();
-      });
+      Promise.all([pageLayoutPromise, pageModePromise, openActionPromise])
+        .then(() => {
+          this.eventBus.dispatch('documentinit', { source: this });
+        })
+        .then(() => {
+          this.pdfViewer.update();
+        });
     });
   };
 
@@ -174,17 +170,15 @@ class PDFViewerApplication {
       return undefined;
     }
 
-    this.pdfLoadingTask
-      .destroy()
-      .then(() => {
-        this.pdfLoadingTask = null;
-        if (this.pdfDocument) {
-          this.pdfRenderingQueue = null;
-          this.pdfDocument = null;
-          this.pdfViewer.setDocument(null);
-          this.pdfLinkService.setDocument(null);
-        }
-      });
+    this.pdfLoadingTask.destroy().then(() => {
+      this.pdfLoadingTask = null;
+      if (this.pdfDocument) {
+        this.pdfRenderingQueue = null;
+        this.pdfDocument = null;
+        this.pdfViewer.setDocument(null);
+        this.pdfLinkService.setDocument(null);
+      }
+    });
   };
 
   zoomIn = (ticks) => {
@@ -238,4 +232,4 @@ class PDFViewerApplication {
   }
 }
 
-window.PDFViewerApplication = new PDFViewerApplication();
+window.rtPDFViewer = new PDFViewerApplication();

@@ -1,5 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist/webpack';
-import { PDFPageView}  from 'pdfjs-dist/lib/web/pdf_page_view';
+import { PDFPageView } from 'pdfjs-dist/lib/web/pdf_page_view';
 import { EventBus } from 'pdfjs-dist/lib/web/ui_utils';
 
 const SCALE = 1.0;
@@ -22,22 +22,22 @@ class PDFPageViewerApplication {
       pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
     }
 
-    this.container = (
+    this.container =
       config.container ||
-      window.document.getElementById(
-        config.containerId || 'pdfViewerContent'
-      )
-    );
+      window.document.getElementById(config.containerId || 'pdfViewerContent');
 
     this.eventBus = new EventBus();
   };
 
   open = (pdfSource, page = 1, disableRange = false, params = {}) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument({ url: pdfSource, disableRange });
+    this.pdfLoadingTask = pdfjsLib.getDocument({
+      url: pdfSource,
+      disableRange,
+    });
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
 
-    return this.pdfLoadingTask.promise.then((pdfDocument) => (
+    return this.pdfLoadingTask.promise.then((pdfDocument) =>
       pdfDocument.getPage(page).then((pdfPage) => {
         const pdfPageView = new PDFPageView({
           container: this.container,
@@ -51,8 +51,8 @@ class PDFPageViewerApplication {
         pdfPageView.setPdfPage(pdfPage);
         return pdfPageView.draw();
       })
-    ));
+    );
   };
 }
 
-window.rtPDFViewer = new PDFPageViewerApplication();
+window.rtPDFPageViewer = new PDFPageViewerApplication();
