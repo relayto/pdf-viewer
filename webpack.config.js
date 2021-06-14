@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const SourceMapDevToolPlugin = require('source-map');
 
 module.exports = {
   devServer: {
@@ -10,6 +11,7 @@ module.exports = {
     hot: true,
     inline: true,
   },
+  devtool: 'source-map',
   entry: {
     'main-viewer': './src/main-viewer.js',
     'page-viewer': './src/page-viewer',
@@ -18,6 +20,7 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
     publicPath: '',
+    clean: true
   },
   module: {
     rules: [
