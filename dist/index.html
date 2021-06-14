@@ -1,10 +1,12 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <title>PDF Viewer Example</title>
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>PDF Viewer Example</title>
+</head>
+
+<body>
 
   <div id="pdfViewerContent" class="viewerContainer">
     <div class="pdfViewer">
@@ -13,7 +15,7 @@
 
   <script>
     setTimeout(() => {
-      window.PDFViewerApplication.initialize({
+      window.rtPDFViewer.initialize({
         isDefaultWorker: true,
         spreadMode: 0,
         relaytoPagesView: [
@@ -35,5 +37,6 @@
       window.rtPDFViewer.open('example.pdf');
     }, 1000);
   </script>
-  </body>
+</body>
+
 </html>

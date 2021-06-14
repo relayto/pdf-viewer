@@ -1,10 +1,10 @@
-import * as pdfjsLib from 'pdfjs-dist/webpack';
-import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service';
-import { EventBus, RendererType } from 'pdfjs-dist/lib/web/ui_utils';
-import { PDFRenderingQueue } from 'pdfjs-dist/lib/web/pdf_rendering_queue';
-import { PDFViewer } from 'monkey-path/pdf.js/web/pdf_viewer';
+import * as pdfjsLib from "pdfjs-dist/webpack";
+import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
+import { EventBus, RendererType } from "pdfjs-dist/lib/web/ui_utils";
+import { PDFRenderingQueue } from "pdfjs-dist/lib/web/pdf_rendering_queue";
+import { PDFViewer } from "pdfjs-dist/lib/web/pdf_viewer";
 
-const DEFAULT_SCALE_VALUE = 'auto';
+const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE_DELTA = 1.1;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
@@ -17,9 +17,9 @@ function webViewerResize() {
 
   const currentScaleValue = pdfViewer.currentScaleValue;
   if (
-    currentScaleValue === 'auto' ||
-    currentScaleValue === 'page-fit' ||
-    currentScaleValue === 'page-width'
+    currentScaleValue === "auto" ||
+    currentScaleValue === "page-fit" ||
+    currentScaleValue === "page-width"
   ) {
     // Note: the scale is constant for 'page-actual'.
     pdfViewer.currentScaleValue = currentScaleValue;
@@ -29,7 +29,7 @@ function webViewerResize() {
 }
 
 function webViewerPageRendered({ pageNumber, error }) {
-  if (error && error.name === 'RenderingCancelledException') {
+  if (error && error.name === "RenderingCancelledException") {
     console.log(pageNumber, error);
   }
 }
@@ -81,7 +81,7 @@ class PDFViewerApplication {
 
     this.container =
       config.container ||
-      window.document.getElementById(config.containerId || 'pdfViewerContent');
+      window.document.getElementById(config.containerId || "pdfViewerContent");
 
     this._initializeViewer();
 
@@ -95,13 +95,13 @@ class PDFViewerApplication {
   };
 
   bindEvents = () => {
-    this.eventBus._on('resize', webViewerResize);
-    this.eventBus._on('pagerendered', webViewerPageRendered);
+    this.eventBus._on("resize", webViewerResize);
+    this.eventBus._on("pagerendered", webViewerPageRendered);
   };
 
   unbindEvents = () => {
-    this.eventBus._off('resize', webViewerResize);
-    this.eventBus._off('pagerendered', webViewerPageRendered);
+    this.eventBus._off("resize", webViewerResize);
+    this.eventBus._off("pagerendered", webViewerPageRendered);
   };
 
   onPassword = () => {};
@@ -145,7 +145,7 @@ class PDFViewerApplication {
     firstPagePromise.then(() => {
       Promise.all([pageLayoutPromise, pageModePromise, openActionPromise])
         .then(() => {
-          this.eventBus.dispatch('documentinit', { source: this });
+          this.eventBus.dispatch("documentinit", { source: this });
         })
         .then(() => {
           this.pdfViewer.update();
