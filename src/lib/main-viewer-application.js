@@ -1,4 +1,4 @@
-import * as pdfjsLib from "pdfjs-dist/webpack";
+import { PDFJsFacade } from "./pdfjs-lib-facade";
 import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
 import { EventBus, RendererType } from "pdfjs-dist/lib/web/ui_utils";
 import { PDFRenderingQueue } from "pdfjs-dist/lib/web/pdf_rendering_queue";
@@ -35,6 +35,7 @@ function webViewerPageRendered({ pageNumber, error }) {
 }
 
 class PDFViewerApplication {
+  pdfjs = new PDFJsFacade();
   pdfRenderingQueue = null;
   pdfDocument = null;
   pdfLoadingTask = null;
@@ -74,10 +75,13 @@ class PDFViewerApplication {
   };
 
   initialize = (config = {}) => {
+    const { workerSrc, ...pdfjsLibConfigs } = config;
     if (!config.isDefaultWorker) {
-      pdfjsLib.GlobalWorkerOptions.workerPort = null;
-      pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
+      this.pdfjs.lib.GlobalWorkerOptions.workerPort = null;
+      this.pdfjs.lib.GlobalWorkerOptions.workerSrc = config.workerSrc;
     }
+
+    Object.assign(this.pdfjs.lib, pdfjsLibConfigs);
 
     this.container =
       config.container ||
@@ -114,7 +118,7 @@ class PDFViewerApplication {
   };
 
   open = (pdfSource, disableRange = false) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument({
+    this.pdfLoadingTask = this.pdfjs.lib.getDocument({
       url: pdfSource,
       disableRange,
     });

@@ -1,12 +1,12 @@
-import * as pdfjsLib from 'pdfjs-dist/webpack';
-import { PDFPageView } from 'pdfjs-dist/lib/web/pdf_page_view';
-import { EventBus } from 'pdfjs-dist/lib/web/ui_utils';
+import { PDFJsFacade } from "./pdfjs-lib-facade";
+import { PDFPageView } from "pdfjs-dist/lib/web/pdf_page_view";
+import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 
 const SCALE = 1.0;
 
 class PDFPageViewerApplication {
   container = null;
-
+  pdfjs = new PDFJsFacade();
   onPassword = () => {};
 
   onProgress = ({ loaded, total }) => {
@@ -17,41 +17,63 @@ class PDFPageViewerApplication {
   };
 
   initialize = (config = {}) => {
+    const { workerSrc, ...pdfjsLibConfigs } = config;
     if (!config.isDefaultWorker) {
-      pdfjsLib.GlobalWorkerOptions.workerPort = null;
-      pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerSrc;
+      this.pdfjs.lib.GlobalWorkerOptions.workerPort = null;
+      this.pdfjs.lib.GlobalWorkerOptions.workerSrc = workerSrc;
     }
 
+    Object.assign(this.pdfjs, pdfjsLibConfigs);
     this.container =
       config.container ||
-      window.document.getElementById(config.containerId || 'pdfViewerContent');
+      window.document.getElementById(config.containerId || "pdfViewerContent");
 
     this.eventBus = new EventBus();
   };
 
+  /**
+   * Load a single page
+   *
+   * @param {string} pdfSource
+   * @param {number} page
+   * @param {boolean} disableRange
+   * @param {any} params
+   * @returns Promise<PDFPageProxy>
+   */
   open = (pdfSource, page = 1, disableRange = false, params = {}) => {
-    this.pdfLoadingTask = pdfjsLib.getDocument({
+    this.pdfLoadingTask = this.pdfjs.getDocument({
       url: pdfSource,
       disableRange,
+      onPassword: this.onPassword,
+      onProgress: this.onProgress,
     });
-    this.pdfLoadingTask.onPassword = this.onPassword;
-    this.pdfLoadingTask.onProgress = this.onProgress;
 
-    return this.pdfLoadingTask.promise.then((pdfDocument) =>
-      pdfDocument.getPage(page).then((pdfPage) => {
-        const pdfPageView = new PDFPageView({
-          container: this.container,
-          id: page,
-          scale: SCALE,
-          defaultViewport: pdfPage.getViewport({ scale: SCALE }),
-          eventBus: this.eventBus,
-          ...params,
-        });
+    return this.pdfLoadingTask.then((pdfDocument) => pdfDocument.getPage(page));
+  };
 
-        pdfPageView.setPdfPage(pdfPage);
-        return pdfPageView.draw();
-      })
-    );
+  /**
+   * Draws a single page
+   *
+   * @param {string} pdfSource
+   * @param {number} page
+   * @param {boolean} disableRange
+   * @param {any} params
+   * @returns Promise
+   */
+  draw = (pdfSource, page = 1, disableRange = false, params = {}) => {
+    return this.open(pdfSource, page, disableRange, params).then((pdfPage) => {
+      const pdfPageView = new PDFPageView({
+        container: this.container,
+        id: page,
+        scale: SCALE,
+        defaultViewport: pdfPage.getViewport({ scale: SCALE }),
+        eventBus: this.eventBus,
+        ...params,
+      });
+
+      pdfPageView.setPdfPage(pdfPage);
+      return pdfPageView.draw();
+    });
   };
 }
 
