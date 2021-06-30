@@ -5,7 +5,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve --mode development",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "build-copy": "npm run build && cp build/* ../relayto-frontend/vendor/rt-pdfjs/node_modules/rt-pdf-viewer/build/"
   },
   "eslintConfig": {
     "extends": "preact",
@@ -24,14 +25,15 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.1.3",
     "html-webpack-plugin": "^5.3.1",
+    "pdfjs-dist": "^2.7.570",
     "style-loader": "^2.0.0",
     "webpack": "^5.26.2",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "webpack-node-externals": "^3.0.0",
+    "worker-loader": "^3.0.7"
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.10",
-    "worker-loader": "^3.0.7",
-    "pdfjs-dist": "^2.7.570"
+    "@babel/runtime": "^7.13.10"
   }
 }
