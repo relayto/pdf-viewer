@@ -6,7 +6,7 @@
     "build": "webpack --mode production",
     "dev": "webpack serve --mode development",
     "lint": "eslint src",
-    "build-copy": "npm run build && cp build/* ../relayto-frontend/vendor/rt-pdfjs/node_modules/rt-pdf-viewer/build/"
+    "build-copy": "npm run build && mkdir -p ../relayto-frontend/vendor/rt-pdfjs/node_modules/rt-pdf-viewer/build && cp -v ./build/* ../relayto-frontend/vendor/rt-pdfjs/node_modules/rt-pdf-viewer/build/"
   },
   "eslintConfig": {
     "extends": "preact",

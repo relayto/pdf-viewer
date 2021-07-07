@@ -23,7 +23,7 @@ class PDFPageViewerApplication {
       this.pdfjs.lib.GlobalWorkerOptions.workerSrc = workerSrc;
     }
 
-    Object.assign(this.pdfjs, pdfjsLibConfigs);
+    Object.assign(this.pdfjs.lib, pdfjsLibConfigs);
     this.container =
       config.container ||
       window.document.getElementById(config.containerId || "pdfViewerContent");

@@ -39,6 +39,12 @@ var update = injectStylesIntoStyleTag_default()(style/* default */.Z, options);
 /* harmony default export */ const src_style = (style/* default.locals */.Z.locals || {});
 // EXTERNAL MODULE: ./node_modules/pdfjs-dist/webpack.js
 var webpack = __webpack_require__(2372);
+// EXTERNAL MODULE: ./node_modules/pdfjs-dist/lib/web/annotation_layer_builder.js
+var annotation_layer_builder = __webpack_require__(3515);
+// EXTERNAL MODULE: ./node_modules/pdfjs-dist/lib/web/text_layer_builder.js
+var text_layer_builder = __webpack_require__(7516);
+// EXTERNAL MODULE: ./node_modules/pdfjs-dist/lib/web/pdf_page_view.js
+var pdf_page_view = __webpack_require__(4514);
 ;// CONCATENATED MODULE: ./src/lib/pdfjs-lib-facade.js
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -49,6 +55,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
+
+
+
+
 var docPromises = [];
 var PDFJsFacade = function PDFJsFacade() {
   var _this = this;
@@ -56,6 +66,17 @@ var PDFJsFacade = function PDFJsFacade() {
   _classCallCheck(this, PDFJsFacade);
 
   _defineProperty(this, "lib", webpack);
+
+  _defineProperty(this, "viewer", {
+    AnnotationLayerBuilder: annotation_layer_builder.AnnotationLayerBuilder,
+    DefaultTextLayerFactory: text_layer_builder.DefaultTextLayerFactory,
+    TextLayerBuilder: text_layer_builder.TextLayerBuilder
+  });
+
+  _defineProperty(this, "getNewPDFPageView", function () {
+    var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    return new pdf_page_view.PDFPageView(params);
+  });
 
   _defineProperty(this, "getDocument", function () {
     var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
