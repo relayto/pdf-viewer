@@ -1,12 +1,25 @@
 import * as pdfjsLib from "pdfjs-dist/webpack";
+import { AnnotationLayerBuilder } from "pdfjs-dist/lib/web/annotation_layer_builder";
+import { DefaultTextLayerFactory } from "pdfjs-dist/lib/web/text_layer_builder";
+import { TextLayerBuilder } from "pdfjs-dist/lib/web/text_layer_builder";
+import { PDFPageView } from "pdfjs-dist/lib/web/pdf_page_view";
 
 const docPromises = [];
 
 export class PDFJsFacade {
   lib = pdfjsLib;
+  viewer = {
+    AnnotationLayerBuilder,
+    DefaultTextLayerFactory,
+    TextLayerBuilder,
+  };
+
+  getNewPDFPageView = (params = {}) => {
+    return new PDFPageView(params);
+  };
 
   /**
-   * Starts loading a PDF doc with cache support.
+   * Loads a PDF doc with session cache support.
    * @param {{onProgress?:function, onPassword?:function, url:string}} params
    * @returns Promise
    */
