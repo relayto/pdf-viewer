@@ -26,11 +26,11 @@ export class PDFJsFacade {
   getDocument = (params = {}) => {
     if (params.url == null) {
       throw new Error("[pdfjs] Missing url parameter");
-    } else if (!docPromises[url]) {
-      docPromises[url] = this.createDocLoadingTask(params);
+    } else if (!docPromises[params.url]) {
+      docPromises[params.url] = this.createDocLoadingTask(params);
     }
 
-    return docPromises[url];
+    return docPromises[params.url];
   };
 
   /**
