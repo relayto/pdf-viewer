@@ -1,7 +1,6 @@
 import { PDFJsFacade } from "./pdfjs-lib-facade";
 import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
 import { EventBus, RendererType } from "pdfjs-dist/lib/web/ui_utils";
-import { PDFRenderingQueue } from "pdfjs-dist/lib/web/pdf_rendering_queue";
 import { PDFViewer } from "pdfjs-dist/lib/web/pdf_viewer";
 
 const DEFAULT_SCALE_VALUE = "auto";
@@ -53,9 +52,6 @@ class PDFViewerApplication {
   _initializeViewer = () => {
     this.eventBus = new EventBus();
 
-    this.pdfRenderingQueue = new PDFRenderingQueue();
-    this.pdfRenderingQueue.onIdle = this.cleanup;
-
     this.pdfLinkService = new PDFLinkService({
       eventBus: this.eventBus,
     });
@@ -64,14 +60,20 @@ class PDFViewerApplication {
       container: this.container,
       eventBus: this.eventBus,
       linkService: this.pdfLinkService,
-      renderingQueue: this.pdfRenderingQueue,
     });
 
-    this.pdfRenderingQueue.setViewer(this.pdfViewer);
+    this.pdfRenderingQueue = this.getRenderingQueueFromViewer(this.pdfViewer);
+
     this.pdfLinkService.setDocument(this.pdfDocument);
     this.pdfViewer.setDocument(this.pdfDocument);
 
     this.pdfViewer.spreadMode = this.spreadMode;
+  };
+
+  getRenderingQueueFromViewer = (pdfViewer) => {
+    const pdfRenderingQueue = pdfViewer.renderingQueue;
+    pdfRenderingQueue.onIdle = this.cleanup;
+    return pdfRenderingQueue;
   };
 
   initialize = (config = {}) => {
