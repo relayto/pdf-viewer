@@ -1,10 +1,14 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <title>PDF Single Page viewer Example</title>
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>PDF Single Page viewer Example</title>
+  <script defer="defer" src="pdf.js"></script>
+  <script defer="defer" src="pdf_viewer.js"></script>
+</head>
+
+<body>
 
   <div id="pdfViewerContent" class="viewerContainer">
     <div class="pdfViewer">
@@ -19,5 +23,6 @@
       window.rtPDFPageViewer.draw('example.pdf', 2);
     }, 1000);
   </script>
-  </body>
+</body>
+
 </html>
