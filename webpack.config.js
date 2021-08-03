@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   devServer: {
@@ -10,6 +11,22 @@ module.exports = {
     hot: true,
     inline: true,
   },
+  externals: [
+    function ({ context, request }, callback) {
+      if (/^pdfjs-dist\/webpack$/.test(request)) {
+        console.log("External", request, "pdfjsLib");
+        return callback(null, "pdfjsLib");
+      }
+
+      if (/^pdfjs-dist\/lib\/web.+$/.test(request)) {
+        console.log("External", request, "pdfjsViewer");
+        return callback(null, "pdfjsViewer");
+      }
+      console.log("Internal", request);
+      // Continue without externalizing the import
+      callback();
+    },
+  ],
   devtool: "source-map",
   entry: {
     "main-viewer": "./src/main-viewer",
@@ -55,6 +72,30 @@ module.exports = {
     ],
   },
   plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: "node_modules/pdfjs-dist/es5/build/pdf.js",
+          to: "pdf.js",
+        },
+        {
+          from: "node_modules/pdfjs-dist/es5/build/pdf.js.map",
+          to: "pdf.js.map",
+        },
+        {
+          from: "node_modules/pdfjs-dist/es5/build/pdf.worker.js",
+          to: "pdf.worker.js",
+        },
+        {
+          from: "node_modules/pdfjs-dist/es5/build/pdf.worker.js.map",
+          to: "pdf.worker.js.map",
+        },
+        {
+          from: "node_modules/pdfjs-dist/es5/web/pdf_viewer.js",
+          to: "pdf_viewer.js",
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, "build/index.html"),
       template: path.resolve(__dirname, "dist/index.html"),
