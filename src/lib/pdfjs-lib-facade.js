@@ -44,8 +44,7 @@ export class PDFJsFacade {
         pdfjsLib.disableStream = true;
         pdfjsLib.disableCreateObjectURL = true;
       }
-
-      const loadingTask = pdfjsLib.getDocument(getParams);
+      const loadingTask = pdfjsLib.getDocument(url);
       loadingTask.onPassword = onPassword;
       loadingTask.onProgress = onProgress;
 
