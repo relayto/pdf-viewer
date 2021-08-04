@@ -34,7 +34,7 @@ class PDFPageViewerApplication {
   /**
    * Load a single page
    *
-   * @param {string} pdfSource
+   * @param {string} pdfSource,
    * @param {number} page
    * @param {boolean} disableRange
    * @param {any} params
@@ -62,18 +62,22 @@ class PDFPageViewerApplication {
    */
   draw = (pdfSource, page = 1, disableRange = false, params = {}) => {
     return this.open(pdfSource, page, disableRange, params).then((pdfPage) => {
-      const pdfPageView = new PDFPageView({
+      const pdfPageView = this.getNewPDFPageView({
         container: this.container,
         id: page,
         scale: SCALE,
         defaultViewport: pdfPage.getViewport({ scale: SCALE }),
-        eventBus: this.eventBus,
         ...params,
       });
 
       pdfPageView.setPdfPage(pdfPage);
       return pdfPageView.draw();
     });
+  };
+
+  getNewPDFPageView = (params) => {
+    params.eventBus = this.eventBus;
+    return new PDFPageView(params);
   };
 }
 
