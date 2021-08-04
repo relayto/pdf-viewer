@@ -88,7 +88,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 var docPromises = [];
 var PDFJsFacade = function PDFJsFacade() {
   var _this = this;
@@ -101,11 +100,6 @@ var PDFJsFacade = function PDFJsFacade() {
     AnnotationLayerBuilder: external_pdfjsViewer_.AnnotationLayerBuilder,
     DefaultTextLayerFactory: external_pdfjsViewer_.DefaultTextLayerFactory,
     TextLayerBuilder: external_pdfjsViewer_.TextLayerBuilder
-  });
-
-  _defineProperty(this, "getNewPDFPageView", function () {
-    var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    return new external_pdfjsViewer_.PDFPageView(params);
   });
 
   _defineProperty(this, "getDocument", function () {
@@ -135,7 +129,7 @@ var PDFJsFacade = function PDFJsFacade() {
         external_pdfjsLib_.disableCreateObjectURL = true;
       }
 
-      var loadingTask = external_pdfjsLib_.getDocument(getParams);
+      var loadingTask = external_pdfjsLib_.getDocument(url);
       loadingTask.onPassword = onPassword;
       loadingTask.onProgress = onProgress;
       loadingTask.promise.then(function (pdfDoc) {

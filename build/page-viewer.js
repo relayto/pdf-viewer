@@ -611,7 +611,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 var docPromises = [];
 var PDFJsFacade = function PDFJsFacade() {
   var _this = this;
@@ -624,11 +623,6 @@ var PDFJsFacade = function PDFJsFacade() {
     AnnotationLayerBuilder: external_pdfjsViewer_.AnnotationLayerBuilder,
     DefaultTextLayerFactory: external_pdfjsViewer_.DefaultTextLayerFactory,
     TextLayerBuilder: external_pdfjsViewer_.TextLayerBuilder
-  });
-
-  _defineProperty(this, "getNewPDFPageView", function () {
-    var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    return new external_pdfjsViewer_.PDFPageView(params);
   });
 
   _defineProperty(this, "getDocument", function () {
@@ -658,7 +652,7 @@ var PDFJsFacade = function PDFJsFacade() {
         external_pdfjsLib_.disableCreateObjectURL = true;
       }
 
-      var loadingTask = external_pdfjsLib_.getDocument(getParams);
+      var loadingTask = external_pdfjsLib_.getDocument(url);
       loadingTask.onPassword = onPassword;
       loadingTask.onProgress = onProgress;
       loadingTask.promise.then(function (pdfDoc) {
@@ -745,18 +739,23 @@ var PDFPageViewerApplication = function PDFPageViewerApplication() {
     var disableRange = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
     var params = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
     return _this.open(pdfSource, page, disableRange, params).then(function (pdfPage) {
-      var pdfPageView = new external_pdfjsViewer_.PDFPageView(_objectSpread({
+      var pdfPageView = _this.getNewPDFPageView(_objectSpread({
         container: _this.container,
         id: page,
         scale: SCALE,
         defaultViewport: pdfPage.getViewport({
           scale: SCALE
-        }),
-        eventBus: _this.eventBus
+        })
       }, params));
+
       pdfPageView.setPdfPage(pdfPage);
       return pdfPageView.draw();
     });
+  });
+
+  page_viewer_application_defineProperty(this, "getNewPDFPageView", function (params) {
+    params.eventBus = _this.eventBus;
+    return new external_pdfjsViewer_.PDFPageView(params);
   });
 };
 
