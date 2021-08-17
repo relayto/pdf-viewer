@@ -94,6 +94,10 @@ module.exports = {
           from: "node_modules/pdfjs-dist/es5/web/pdf_viewer.js",
           to: "pdf_viewer.js",
         },
+        {
+          from: "node_modules/pdfjs-dist/es5/web/pdf_viewer.css",
+          to: "pdf_viewer.css",
+        },
       ],
     }),
     new HtmlWebpackPlugin({
