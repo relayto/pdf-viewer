@@ -1,6 +1,6 @@
 import { PDFJsFacade } from "./pdfjs-lib-facade";
 import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
-import { EventBus, RendererType } from "pdfjs-dist/lib/web/ui_utils";
+import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 import { PDFViewer } from "pdfjs-dist/lib/web/pdf_viewer";
 
 const DEFAULT_SCALE_VALUE = "auto";
@@ -166,7 +166,7 @@ class PDFViewerApplication {
 
     this.pdfViewer.cleanup();
 
-    if (this.pdfViewer.renderer !== RendererType.SVG) {
+    if (this.pdfViewer.renderer !== "svg") {
       this.pdfDocument.cleanup();
     }
   };

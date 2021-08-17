@@ -862,7 +862,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
       _this.pdfViewer.cleanup();
 
-      if (_this.pdfViewer.renderer !== external_pdfjsViewer_.RendererType.SVG) {
+      if (_this.pdfViewer.renderer !== "svg") {
         _this.pdfDocument.cleanup();
       }
     });
