@@ -828,8 +828,13 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     });
 
     main_viewer_application_defineProperty(this, "load", function (pdfDocument) {
-      _this.pdfDocument = pdfDocument; // Since the `setInitialView` call below depends on this being resolved,
+      _this.pdfDocument = pdfDocument;
+
+      _this.pdfLinkService.setDocument(pdfDocument);
+
+      _this.pdfLinkService.setViewer(_this.pdfViewer); // Since the `setInitialView` call below depends on this being resolved,
       // fetch it early to avoid delaying initial rendering of the PDF document.
+
 
       var pageLayoutPromise = pdfDocument.getPageLayout()["catch"](function () {
         /* Avoid breaking initial rendering; ignoring errors. */
@@ -882,6 +887,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
           _this.pdfViewer.setDocument(null);
 
           _this.pdfLinkService.setDocument(null);
+
+          _this.pdfLinkService.setViewer(null);
         }
       });
     });

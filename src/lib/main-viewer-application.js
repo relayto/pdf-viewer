@@ -36,9 +36,13 @@ function webViewerPageRendered({ pageNumber, error }) {
 class PDFViewerApplication {
   pdfjs = new PDFJsFacade();
   pdfRenderingQueue = null;
+  /** @type {PDFLinkService}*/
   pdfDocument = null;
   pdfLoadingTask = null;
   pdfViewer = null;
+  /**
+   *
+   */
   pdfLinkService = null;
   eventBus = null;
   preferences = null;
@@ -132,6 +136,8 @@ class PDFViewerApplication {
 
   load = (pdfDocument) => {
     this.pdfDocument = pdfDocument;
+    this.pdfLinkService.setDocument(pdfDocument);
+    this.pdfLinkService.setViewer(this.pdfViewer);
 
     // Since the `setInitialView` call below depends on this being resolved,
     // fetch it early to avoid delaying initial rendering of the PDF document.
@@ -183,6 +189,7 @@ class PDFViewerApplication {
         this.pdfDocument = null;
         this.pdfViewer.setDocument(null);
         this.pdfLinkService.setDocument(null);
+        this.pdfLinkService.setViewer(null);
       }
     });
   };
