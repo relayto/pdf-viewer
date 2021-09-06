@@ -20,7 +20,7 @@
  * Javascript code in this page
  */
 
-(function webpackUniversalModuleDefinition(root, factory) {
+ (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -6724,6 +6724,17 @@ var BaseViewer = /*#__PURE__*/function () {
         var textLayerFactory = _this2.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this2 : null;
 
         for (var pageNum = 1; pageNum <= pagesCount; ++pageNum) {
+          var renderer = _this2.renderer;
+          var settingPage = window.rtPDFViewer.settingPages[pageNum];
+          if (settingPage) {
+            if (
+              (settingPage.embed && settingPage.embed.pdfSvg) ||
+              (settingPage.style && settingPage.style.embed && settingPage.style.type === "video" && settingPage.style.embed.url)
+            ) {
+              renderer = 'svg';
+            }
+          }
+          
           var pageView = new _pdf_page_view.PDFPageView({
             container: _this2._viewerElement,
             eventBus: _this2.eventBus,
@@ -6738,7 +6749,7 @@ var BaseViewer = /*#__PURE__*/function () {
             annotationLayerFactory: _this2,
             imageResourcesPath: _this2.imageResourcesPath,
             renderInteractiveForms: _this2.renderInteractiveForms,
-            renderer: _this2.renderer,
+            renderer: renderer,
             enableWebGL: _this2.enableWebGL,
             useOnlyCssZoom: _this2.useOnlyCssZoom,
             maxCanvasPixels: _this2.maxCanvasPixels,
@@ -7883,4 +7894,3 @@ exports.PDFViewer = PDFViewer;
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=pdf_viewer.js.map

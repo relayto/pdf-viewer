@@ -91,7 +91,7 @@ module.exports = {
           to: "pdf.worker.js.map",
         },
         {
-          from: "node_modules/pdfjs-dist/es5/web/pdf_viewer.js",
+          from: "monkey-path/pdf.js/web/pdf_viewer.js",
           to: "pdf_viewer.js",
         },
         {
