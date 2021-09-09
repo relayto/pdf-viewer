@@ -1,51 +1,82 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>PDF Viewer Example</title>
-    <script defer="defer" src="pdf.js"></script>
-    <script defer="defer" src="pdf_viewer.js"></script>
-    <link rel="stylesheet" href="swiper-bundle.css" />
-  </head>
+    <head>
+        <meta charset="utf-8" />
+        <title>PDF Viewer Example</title>
+        <script defer="defer" src="pdf.js"></script>
+        <script defer="defer" src="pdf_viewer.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/swiper/swiper-bundle.min.css"
+        />
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <style>
+            .viewerContainer {
+                overflow: visible !important;
+            }
+            .pdfViewer .page {
+                border: 0 !important;
+                margin: 0 !important;
+            }
 
-  <body>
-    <div id="pdfViewerContent" class="viewerContainer">
-      <div class="pdfViewer"></div>
-    </div>
+            .textLayer {
+                display: none;
+            }
+        </style>
+    </head>
 
-    <!-- If we need navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <body>
+        <div>
+            <div id="pdfViewerContent" class="swiper viewerContainer">
+                <div class="pdfViewer swiper-wrapper"></div>
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
 
-    <!-- <div id="rt-presentation-container"></div> -->
+        <!-- <div id="rt-presentation-container"></div> -->
 
-    <script>
-      setTimeout(() => {
-        window.rtPDFViewer.initialize({
-          isDefaultWorker: true,
-          spreadMode: 0,
-          scale: "page-fit",
-        });
+        <script>
+            setTimeout(() => {
+                window.rtPDFViewer.initialize({
+                    isDefaultWorker: true,
+                    spreadMode: 0,
+                    scale: 'page-fit',
+                });
 
-        window.rtPDFViewer.open("tech.pdf");
+                window.rtPDFViewer.open('tech.pdf');
 
-        setTimeout(() => {
-          new Swiper(document.querySelector(".viewerContainer"), {
-            centeredSlides: true,
-            slidesPerView: "auto",
-            keyboard: {
-              enabled: true,
-            },
+                setTimeout(() => {
+                    var swiper = document.querySelector('.swiper');
+                    var pages = document.querySelectorAll('.page');
 
-            navigation: {
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            },
-            wrapperClass: "pdfViewer",
-            slideClass: "page",
-          });
-        }, 1000);
-      }, 1000);
-    </script>
-  </body>
+                    console.log('debug pages', pages);
+                    pages.forEach((page) => {
+                        page.classList.add('swiper-slide');
+                        swiper.style.width = page.style.width;
+                        swiper.style.height = page.style.height;
+                    });
+
+                    setTimeout(() => {
+                        new Swiper('.swiper', {
+                            effect: 'cards',
+                            grabCursor: true,
+                            centeredSlides: true,
+                            // slidesPerView: "auto",
+                            // keyboard: {
+                            //   enabled: true,
+                            // },
+                            // grabCursor: true,
+                            // effect: 'fade',
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                        });
+                    }, 1000);
+                }, 1500);
+            }, 1000);
+        </script>
+    </body>
 </html>
