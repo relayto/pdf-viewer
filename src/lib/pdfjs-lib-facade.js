@@ -7,6 +7,7 @@ const docPromises = [];
 
 export class PDFJsFacade {
   lib = pdfjsLib;
+  
   viewer = {
     AnnotationLayerBuilder,
     DefaultTextLayerFactory,
@@ -63,3 +64,4 @@ export class PDFJsFacade {
 }
 
 window.rtPDFJsLib = new PDFJsFacade();
+window.pdfjsLib = pdfjsLib;

@@ -663,6 +663,7 @@ var PDFJsFacade = function PDFJsFacade() {
   });
 };
 window.rtPDFJsLib = new PDFJsFacade();
+window.pdfjsLib = external_pdfjsLib_;
 ;// CONCATENATED MODULE: ./src/lib/main-viewer-application.js
 function main_viewer_application_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = main_viewer_application_objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -852,6 +853,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
             source: _this
           });
         }).then(function () {
+          //setTimeout(() => this.pdfViewer.forceRendering(this.pdfViewer._pages), 100);
           _this.pdfViewer.update();
         });
       });

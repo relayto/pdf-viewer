@@ -70,7 +70,7 @@ class PDFViewerApplication {
 
     this.pdfLinkService.setDocument(this.pdfDocument);
     this.pdfViewer.setDocument(this.pdfDocument);
-
+    
     this.pdfViewer.spreadMode = this.spreadMode;
   };
 
@@ -160,6 +160,7 @@ class PDFViewerApplication {
           this.eventBus.dispatch("documentinit", { source: this });
         })
         .then(() => {
+          //setTimeout(() => this.pdfViewer.forceRendering(this.pdfViewer._pages), 100);
           this.pdfViewer.update();
         });
     });
