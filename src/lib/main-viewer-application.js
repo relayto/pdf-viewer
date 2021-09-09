@@ -3,7 +3,7 @@ import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
 import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 import { PDFViewer } from "pdfjs-dist/lib/web/pdf_viewer";
 
-const DEFAULT_SCALE_VALUE = "auto";
+const DEFAULT_SCALE_VALUE = "page-fit";
 const DEFAULT_SCALE_DELTA = 1.1;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
@@ -67,7 +67,7 @@ class PDFViewerApplication {
     });
 
     this.pdfRenderingQueue = this.getRenderingQueueFromViewer(this.pdfViewer);
-
+    this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
     this.pdfLinkService.setDocument(this.pdfDocument);
     this.pdfViewer.setDocument(this.pdfDocument);
 
@@ -160,6 +160,7 @@ class PDFViewerApplication {
           this.eventBus.dispatch("documentinit", { source: this });
         })
         .then(() => {
+          this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
           this.pdfViewer.update();
         });
     });

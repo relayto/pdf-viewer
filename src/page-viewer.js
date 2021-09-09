@@ -1,2 +1,2 @@
-import './style.css';
-import './lib/page-viewer-application';
+import "./style.css";
+import "./lib/page-viewer-application";
