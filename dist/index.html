@@ -27,56 +27,59 @@
 
   <body>
     <div>
-      <div id="pdfViewerContent" class="swiper viewerContainer">
+      <div id="rt-cards-wrapper-container" class="swiper viewerContainer">
         <div class="pdfViewer swiper-wrapper"></div>
-        <!-- If we need navigation buttons -->
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </div>
 
-    <!-- <div id="rt-presentation-container"></div> -->
-
     <script>
-      setTimeout(() => {
-        window.rtPDFViewer.initialize({
-          isDefaultWorker: true,
-          spreadMode: 0,
-          scale: "page-fit",
-        });
-
-        window.rtPDFViewer.open("tech.pdf");
-
-        setTimeout(() => {
-          var swiper = document.querySelector(".swiper");
-          var pages = document.querySelectorAll(".page");
-
-          console.log("debug pages", pages);
-          pages.forEach((page) => {
-            page.classList.add("swiper-slide");
-            swiper.style.width = page.style.width;
-            swiper.style.height = page.style.height;
-          });
-
+      class SwiperPDF {
+        constructor(effect) {
           setTimeout(() => {
-            new Swiper(".swiper", {
-              effect: "cards",
-              grabCursor: true,
-              centeredSlides: true,
-              // slidesPerView: "auto",
-              // keyboard: {
-              //   enabled: true,
-              // },
-              // grabCursor: true,
-              // effect: 'fade',
-              navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              },
+            window.rtPDFViewer.initialize({
+              containerId: "rt-" + effect + "-wrapper-container",
+              isDefaultWorker: true,
+              spreadMode: 0,
+              scale: "page-fit",
             });
+
+            window.rtPDFViewer.open("tech.pdf");
+
+            setTimeout(() => {
+              var swiper = document.querySelector(".swiper");
+              var pages = document.querySelectorAll(".page");
+
+              pages.forEach((page) => {
+                page.classList.add("swiper-slide");
+                swiper.style.width = page.style.width;
+                swiper.style.height = page.style.height;
+              });
+
+              setTimeout(() => {
+                new Swiper(".swiper", {
+                  effect: effect,
+                  grabCursor: true,
+                  centeredSlides: true,
+                  // slidesPerView: "auto",
+                  // keyboard: {
+                  //   enabled: true,
+                  // },
+                  // grabCursor: true,
+                  // effect: 'fade',
+                  navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  },
+                });
+              }, 1000);
+            }, 1500);
           }, 1000);
-        }, 1500);
-      }, 1000);
+        }
+      }
+
+      new SwiperPDF("cards");
     </script>
   </body>
 </html>
