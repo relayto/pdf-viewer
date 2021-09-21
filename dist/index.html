@@ -26,60 +26,96 @@
   </head>
 
   <body>
-    <div>
+    <div style="position: relative; width: 100%; height: 100%">
       <div id="rt-cards-wrapper-container" class="swiper viewerContainer">
         <div class="pdfViewer swiper-wrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+    </div>
+
+    <div style="position: relative; width: 100%; height: 100%; top: 800px">
+      <div id="rt-slide-wrapper-container" class="swiper viewerContainer">
+        <div class="pdfViewer swiper-wrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
     </div>
 
     <script>
       class SwiperPDF {
-        constructor(effect) {
-          setTimeout(() => {
-            window.rtPDFViewer.initialize({
-              containerId: "rt-" + effect + "-wrapper-container",
-              isDefaultWorker: true,
-              spreadMode: 0,
-              scale: "page-fit",
+        containerId = null;
+        effect = null;
+        constructor(conf = {}) {
+          this.containerId = conf.containerId;
+          this.effect = conf.effect;
+
+          this.initPDFViewer();
+        }
+
+        render = async () => {
+          return await new Promise((resolve) => {
+            window.rtPDFViewer.eventBus.on("pagesloaded", (val) => {
+              if (val.source.container.id === this.containerId) {
+                this.initSwiper(resolve);
+              }
             });
+          });
+        };
 
-            window.rtPDFViewer.open("tech.pdf");
+        initPDFViewer() {
+          window.rtPDFViewer.initialize({
+            containerId: this.containerId,
+            isDefaultWorker: true,
+            spreadMode: 0,
+            scale: "page-fit",
+          });
 
-            setTimeout(() => {
-              var swiper = document.querySelector(".swiper");
-              var pages = document.querySelectorAll(".page");
+          window.rtPDFViewer.open("tech.pdf");
+        }
 
-              pages.forEach((page) => {
-                page.classList.add("swiper-slide");
-                swiper.style.width = page.style.width;
-                swiper.style.height = page.style.height;
-              });
+        initSwiper(resolve) {
+          const swiper = document.querySelector(`#${this.containerId}.swiper`);
+          const pages = document.querySelectorAll(
+            `#${this.containerId}>.pdfViewer>.page`
+          );
 
-              setTimeout(() => {
-                new Swiper(".swiper", {
-                  effect: effect,
-                  grabCursor: true,
-                  centeredSlides: true,
-                  // slidesPerView: "auto",
-                  // keyboard: {
-                  //   enabled: true,
-                  // },
-                  // grabCursor: true,
-                  // effect: 'fade',
-                  navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                  },
-                });
-              }, 1000);
-            }, 1500);
-          }, 1000);
+          pages.forEach((page) => {
+            page.classList.add("swiper-slide");
+            swiper.style.width = page.style.width;
+            swiper.style.height = page.style.height;
+          });
+
+          new Swiper(`#${this.containerId}.swiper`, {
+            on: {
+              afterInit: resolve,
+            },
+            effect: this.effect,
+            grabCursor: true,
+            centeredSlides: true,
+            navigation: {
+              nextEl: `#${this.containerId}>.swiper-button-next`,
+              prevEl: `#${this.containerId}>.swiper-button-prev`,
+            },
+          });
         }
       }
 
-      new SwiperPDF("cards");
+      const effects = [
+        {
+          containerId: "rt-cards-wrapper-container",
+          effect: "cards",
+        },
+        {
+          containerId: "rt-slide-wrapper-container",
+          effect: "slide",
+        },
+      ];
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await new SwiperPDF(effects[0]).render();
+        await new SwiperPDF(effects[1]).render();
+      });
     </script>
   </body>
 </html>
