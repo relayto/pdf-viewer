@@ -26,7 +26,7 @@
   </head>
 
   <body>
-    <div style="position: relative; width: 100%; height: 100%">
+    <div>
       <div id="rt-cards-wrapper-container" class="swiper viewerContainer">
         <div class="pdfViewer swiper-wrapper"></div>
         <div class="swiper-button-prev"></div>
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div style="position: relative; width: 100%; height: 100%; top: 800px">
+    <div style="position: relative; top: 800px">
       <div id="rt-slide-wrapper-container" class="swiper viewerContainer">
         <div class="pdfViewer swiper-wrapper"></div>
         <div class="swiper-button-prev"></div>
@@ -42,20 +42,52 @@
       </div>
     </div>
 
+    <!-- <div style="position: relative; top: 1600px">
+      <div id="rt-fade-wrapper-container" class="swiper viewerContainer">
+        <div class="pdfViewer swiper-wrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div> 
+
+    <div style="position: relative; top: 3200px">
+      <div id="rt-cube-wrapper-container" class="swiper viewerContainer">
+        <div class="pdfViewer swiper-wrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+
+    <div style="position: relative; top: 4800px">
+      <div id="rt-flip-wrapper-container" class="swiper viewerContainer">
+        <div class="pdfViewer swiper-wrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+
+    <div style="position: relative; top: 6400px">
+      <div id="rt-coverflow-wrapper-container" class="swiper viewerContainer">
+        <div class="pdfViewer swiper-wrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div> -->
+
     <script>
       class SwiperPDF {
+        PDFViewer = window.rtPDFViewer;
         containerId = null;
         effect = null;
-        constructor(conf = {}) {
-          this.containerId = conf.containerId;
-          this.effect = conf.effect;
-
+        constructor(effect = "slide") {
+          this.effect = effect;
+          this.containerId = `rt-${this.effect}-wrapper-container`;
           this.initPDFViewer();
         }
 
         render = async () => {
           return await new Promise((resolve) => {
-            window.rtPDFViewer.eventBus.on("pagesloaded", (val) => {
+            this.PDFViewer.eventBus.on("pagesloaded", (val) => {
               if (val.source.container.id === this.containerId) {
                 this.initSwiper(resolve);
               }
@@ -64,14 +96,11 @@
         };
 
         initPDFViewer() {
-          window.rtPDFViewer.initialize({
+          this.PDFViewer.initialize({
             containerId: this.containerId,
-            isDefaultWorker: true,
-            spreadMode: 0,
-            scale: "page-fit",
           });
 
-          window.rtPDFViewer.open("tech.pdf");
+          this.PDFViewer.open("tech.pdf");
         }
 
         initSwiper(resolve) {
@@ -101,20 +130,13 @@
         }
       }
 
-      const effects = [
-        {
-          containerId: "rt-cards-wrapper-container",
-          effect: "cards",
-        },
-        {
-          containerId: "rt-slide-wrapper-container",
-          effect: "slide",
-        },
-      ];
-
       document.addEventListener("DOMContentLoaded", async () => {
-        await new SwiperPDF(effects[0]).render();
-        await new SwiperPDF(effects[1]).render();
+        await new SwiperPDF("cards").render();
+        // await new SwiperPDF("slide").render();
+        // await new SwiperPDF("fade").render();
+        // await new SwiperPDF("cube").render();
+        // await new SwiperPDF("flip").render();
+        // await new SwiperPDF("coverflow").render();
       });
     </script>
   </body>
