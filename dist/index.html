@@ -132,7 +132,9 @@
           return await new Promise((resolve) => {
             this.PDFViewer.eventBus.on("pagesloaded", (val) => {
               if (val.source.container.id === this.containerId) {
-                this.initSwiper(resolve);
+                this.initSwiper({
+                  afterInit: resolve,
+                });
               }
             });
           });
@@ -146,7 +148,7 @@
           this.PDFViewer.open("tech.pdf");
         }
 
-        initSwiper(resolve) {
+        initSwiper(eventBus) {
           const swiper = document.querySelector(`#${this.containerId}.swiper`);
           const pages = document.querySelectorAll(
             `#${this.containerId}>.pdfViewer>.page`
@@ -159,9 +161,7 @@
           });
 
           const conf = {
-            on: {
-              afterInit: resolve,
-            },
+            on: eventBus,
             effect: this.effect,
             grabCursor: true,
             navigation: {
