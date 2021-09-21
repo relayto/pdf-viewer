@@ -11,10 +11,8 @@
     />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <style>
-      html,
       body {
-        position: relative;
-        height: 100%;
+        overflow-x: hidden;
       }
 
       .viewerContainer {
@@ -167,6 +165,10 @@
             navigation: {
               nextEl: `#${this.rtContainerId}>.swiper-button-next`,
               prevEl: `#${this.rtContainerId}>.swiper-button-prev`,
+            },
+            keyboard: {
+              enabled: true,
+              onlyInViewport: true,
             },
           };
 
