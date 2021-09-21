@@ -11,6 +11,12 @@
     />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <style>
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
       .viewerContainer {
         overflow: visible !important;
       }
@@ -31,7 +37,8 @@
       #rt-fade-wrapper,
       #rt-cube-wrapper,
       #rt-flip-wrapper,
-      #rt-coverflow-wrapper {
+      #rt-coverflow-wrapper,
+      #rt-creative-wrapper {
         position: relative;
         height: 400px;
         display: block;
@@ -97,6 +104,17 @@
       <div class="swiper-button-next"></div>
     </div>
 
+    <div id="rt-creative-wrapper">
+      <div
+        id="pdfviewer-creative-wrapper-container"
+        class="swiper viewerContainer"
+      >
+        <div class="pdfViewer swiper-wrapper"></div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
     <script>
       class SwiperPDF {
         PDFViewer = window.rtPDFViewer;
@@ -140,18 +158,37 @@
             swiper.style.height = page.style.height;
           });
 
-          new Swiper(`#${this.containerId}.swiper`, {
+          const conf = {
             on: {
               afterInit: resolve,
             },
             effect: this.effect,
             grabCursor: true,
-            centeredSlides: true,
             navigation: {
               nextEl: `#${this.rtContainerId}>.swiper-button-next`,
               prevEl: `#${this.rtContainerId}>.swiper-button-prev`,
             },
-          });
+          };
+
+          if (this.effect === "creative") {
+            conf.creativeEffect = {
+              prev: {
+                shadow: true,
+                origin: "left center",
+                translate: ["-5%", 0, -200],
+                rotate: [0, 100, 0],
+              },
+              next: {
+                origin: "right center",
+                translate: ["5%", 0, -200],
+                rotate: [0, -100, 0],
+              },
+            };
+          }
+
+          console.log("conf", conf);
+
+          new Swiper(`#${this.containerId}.swiper`, conf);
         }
       }
 
@@ -162,6 +199,7 @@
         await new SwiperPDF("cube").render();
         await new SwiperPDF("flip").render();
         await new SwiperPDF("coverflow").render();
+        await new SwiperPDF("creative").render();
       });
     </script>
   </body>
