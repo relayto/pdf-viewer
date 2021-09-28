@@ -29,8 +29,17 @@
 
       #rt-slide-wrapper > #pdfviewer-slide-wrapper-container {
         overflow: hidden !important;
+        width: 100% !important;
       }
-      #rt-slide-wrapper,
+
+      #rt-slide-wrapper
+        > #pdfviewer-slide-wrapper-container
+        .page.swiper-slide
+        .canvasWrapper {
+        margin: 0 auto;
+      }
+
+      /* #rt-slide-wrapper,
       #rt-cards-wrapper,
       #rt-fade-wrapper,
       #rt-cube-wrapper,
@@ -40,6 +49,10 @@
         position: relative;
         height: 400px;
         display: block;
+      } */
+
+      .swiper-slide.swiper-slide-active:nth-child(1) {
+        width: 100% !important;
       }
     </style>
   </head>
@@ -56,7 +69,7 @@
       <div class="swiper-button-next"></div>
     </div>
 
-    <div id="rt-cards-wrapper">
+    <!-- <div id="rt-cards-wrapper">
       <div
         id="pdfviewer-cards-wrapper-container"
         class="swiper viewerContainer"
@@ -111,7 +124,7 @@
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
-    </div>
+    </div> -->
 
     <script>
       class SwiperPDF {
@@ -196,12 +209,12 @@
 
       document.addEventListener("DOMContentLoaded", async () => {
         await new SwiperPDF("slide").render();
-        await new SwiperPDF("cards").render();
-        await new SwiperPDF("fade").render();
-        await new SwiperPDF("cube").render();
-        await new SwiperPDF("flip").render();
-        await new SwiperPDF("coverflow").render();
-        await new SwiperPDF("creative").render();
+        // await new SwiperPDF("cards").render();
+        // await new SwiperPDF("fade").render();
+        // await new SwiperPDF("cube").render();
+        // await new SwiperPDF("flip").render();
+        // await new SwiperPDF("coverflow").render();
+        // await new SwiperPDF("creative").render();
       });
     </script>
   </body>
