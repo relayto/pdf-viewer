@@ -1,5 +1,5 @@
 import { PDFJsFacade } from "./pdfjs-lib-facade";
-import { PDFPageView } from "pdfjs-dist/lib/web/pdf_page_view";
+import { PDFPageView } from "pdfjs-dist/lib/web/pdf_viewer";
 import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 
 const SCALE = 1.0;

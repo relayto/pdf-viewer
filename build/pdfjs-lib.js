@@ -8,19 +8,19 @@
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
 })(self, function(__WEBPACK_EXTERNAL_MODULE__544__, __WEBPACK_EXTERNAL_MODULE__231__) {
-return /******/ (function() { // webpackBootstrap
+return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 544:
-/***/ (function(module) {
+/***/ ((module) => {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__544__;
 
 /***/ }),
 
 /***/ 231:
-/***/ (function(module) {
+/***/ ((module) => {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__231__;
 
@@ -54,20 +54,20 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__231__;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
+(() => {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
@@ -145,7 +145,8 @@ var PDFJsFacade = function PDFJsFacade() {
 window.rtPDFJsLib = new PDFJsFacade();
 ;// CONCATENATED MODULE: ./src/pdfjs-lib.js
 
-}();
+})();
+
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;

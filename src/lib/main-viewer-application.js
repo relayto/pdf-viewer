@@ -9,7 +9,7 @@ const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
 function webViewerResize() {
-  const { pdfDocument, pdfViewer } = PDFViewerApplication;
+  const { pdfDocument, pdfViewer } = window.rtPDFViewer;
   if (!pdfDocument) {
     return;
   }
@@ -45,6 +45,7 @@ class PDFViewerApplication {
    */
   pdfLinkService = null;
   eventBus = null;
+  _boundEvents = Object.create(null);
   preferences = null;
 
   container = null;
@@ -96,6 +97,7 @@ class PDFViewerApplication {
     this._initializeViewer();
 
     this.bindEvents();
+    this.bindWindowEvents();
 
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
@@ -107,6 +109,16 @@ class PDFViewerApplication {
   bindEvents = () => {
     this.eventBus._on("resize", webViewerResize);
     this.eventBus._on("pagerendered", webViewerPageRendered);
+  };
+
+  bindWindowEvents = () => {
+    const { _boundEvents, eventBus } = this;
+    _boundEvents.windowResize = () => {
+      eventBus.dispatch("resize", {
+        source: window,
+      });
+    };
+    window.addEventListener("resize", _boundEvents.windowResize);
   };
 
   unbindEvents = () => {
