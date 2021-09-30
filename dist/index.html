@@ -18,13 +18,14 @@
       .viewerContainer {
         overflow: visible !important;
       }
-      .pdfViewer .page {
-        border: 0 !important;
-        margin: 0 !important;
-      }
 
       .textLayer {
         display: none;
+      }
+
+      .pdfViewer .page {
+        border: 0 !important;
+        margin: 0 !important;
       }
 
       #rt-slide-wrapper > #pdfviewer-slide-wrapper-container {
@@ -33,12 +34,23 @@
         height: 100% !important;
       }
 
-      /* #rt-slide-wrapper
-        > #pdfviewer-slide-wrapper-container
-        .page.swiper-slide
-        .canvasWrapper {
-        margin: 0 auto;
-      } */
+      .swiper-slide.swiper-slide-active:nth-child(1) {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      #rt-slide-wrapper > #pdfviewer-slide-wrapper-container .canvasWrapper {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative !important;
+      }
+
+      .loadingIcon {
+        display: none !important;
+      }
 
       /* #rt-slide-wrapper,
       #rt-cards-wrapper,
@@ -51,11 +63,6 @@
         height: 400px;
         display: block;
       } */
-
-      .swiper-slide.swiper-slide-active:nth-child(1) {
-        width: 100% !important;
-        height: 100% !important;
-      }
     </style>
   </head>
 
@@ -175,6 +182,8 @@
           });
 
           const conf = {
+            centeredSlides: true,
+            centeredSlidesBounds: true,
             on: eventBus,
             effect: this.effect,
             grabCursor: true,
