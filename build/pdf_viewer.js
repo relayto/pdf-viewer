@@ -8896,8 +8896,6 @@
                 this._currentScaleValue = newValue.toString();
 
                 if (isSameScale(this._currentScale, newScale)) {
-                  
-
                   if (preset) {
                     this.eventBus.dispatch("scalechanging", {
                       source: this,
@@ -9031,8 +9029,6 @@
                       return;
                   }
 
-                  console.log("currentScaleValue", scale);
-                  
                   this._setScaleUpdatePages(scale, value, noScroll, true);
                 }
               },
@@ -9329,12 +9325,24 @@
             {
               key: "_getVisiblePages",
               value: function _getVisiblePages() {
-                return (0, _ui_utils.getVisibleElements)(
-                  this.container,
-                  this._pages,
-                  true,
-                  this._isScrollModeHorizontal
-                );
+                let visible = [];
+                let currentPage = this._pages[this._currentPageNumber - 1];
+                for (let i = 0; i < this.pagesCount; i++) {
+                  let aPage = this._pages[i];
+                  visible.push({ id: aPage.id, view: aPage });
+                }
+                return {
+                  first: currentPage,
+                  last: currentPage,
+                  views: visible,
+                };
+
+                // return (0, _ui_utils.getVisibleElements)(
+                //   this.container,
+                //   this._pages,
+                //   true,
+                //   this._isScrollModeHorizontal
+                // );
               },
             },
             {

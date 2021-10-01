@@ -5,25 +5,38 @@
       .viewerContainer {
         overflow: visible !important;
       }
-      .pdfViewer .page {
-        border: 0 !important;
-        margin: 0 !important;
-      }
 
       .textLayer {
         display: none;
       }
 
+      .pdfViewer .page {
+        border: 0 !important;
+        margin: 0 !important;
+      }
+
       #rt-slide-wrapper > #pdfviewer-slide-wrapper-container {
         overflow: hidden !important;
         width: 100% !important;
+        height: 100% !important;
       }
 
-      #rt-slide-wrapper
-        > #pdfviewer-slide-wrapper-container
-        .page.swiper-slide
-        .canvasWrapper {
-        margin: 0 auto;
+      .swiper-slide.swiper-slide-active:nth-child(1) {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      #rt-slide-wrapper > #pdfviewer-slide-wrapper-container .canvasWrapper {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative !important;
+      }
+
+      .loadingIcon {
+        display: none !important;
       }
 
       /* #rt-slide-wrapper,
@@ -36,15 +49,12 @@
         position: relative;
         height: 400px;
         display: block;
-      } */
-
-      .swiper-slide.swiper-slide-active:nth-child(1) {
-        width: 100% !important;
-      }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="rt-slide-wrapper"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
-        PDFViewer = rtPDFViewer;
+      } */</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="rt-slide-wrapper"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
+        PDFViewer = window.rtPDFViewer;
         rtContainerId = null;
         containerId = null;
         effect = null;
+        swiper = null;
         constructor(effect = "slide") {
           this.effect = effect;
           this.rtContainerId = `rt-${this.effect}-wrapper`;
@@ -85,6 +95,8 @@
           });
 
           const conf = {
+            centeredSlides: true,
+            centeredSlidesBounds: true,
             on: eventBus,
             effect: this.effect,
             grabCursor: true,
@@ -116,12 +128,13 @@
 
           console.log("conf", conf);
 
-          new Swiper(`#${this.containerId}.swiper`, conf);
+          this.swiper = new Swiper(`#${this.containerId}.swiper`, conf);
         }
       }
 
       document.addEventListener("DOMContentLoaded", async () => {
         await new SwiperPDF("slide").render();
+
         // await new SwiperPDF("cards").render();
         // await new SwiperPDF("fade").render();
         // await new SwiperPDF("cube").render();

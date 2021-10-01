@@ -686,7 +686,7 @@ function main_viewer_application_defineProperty(obj, key, value) { if (key in ob
 var DEFAULT_SCALE_VALUE = "page-fit";
 var DEFAULT_SCALE_DELTA = 1.1;
 var MIN_SCALE = 0.1;
-var MAX_SCALE = 10.0; //asd
+var MAX_SCALE = 10.0;
 
 function webViewerResize() {
   var _window$rtPDFViewer = window.rtPDFViewer,
@@ -700,8 +700,7 @@ function webViewerResize() {
   var currentScaleValue = pdfViewer.currentScaleValue;
 
   if (currentScaleValue === "auto" || currentScaleValue === "page-fit" || currentScaleValue === "page-width") {
-    console.log("webViewerResize"); // Note: the scale is constant for 'page-actual'.
-
+    // Note: the scale is constant for 'page-actual'.
     pdfViewer.currentScaleValue = currentScaleValue;
   }
 
