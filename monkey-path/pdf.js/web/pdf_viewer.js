@@ -8666,7 +8666,7 @@
                           (settingPage.embed && settingPage.embed.pdfSvg) ||
                           (settingPage.style &&
                             settingPage.style.embed &&
-                            settingPage.style.type === "video" &&
+                            settingPage.style.embed.type === "video" &&
                             settingPage.style.embed.url)
                         ) {
                           renderer = "svg";

@@ -62,8 +62,8 @@
           this.initPDFViewer();
         }
 
-        render = async () => {
-          return await new Promise((resolve) => {
+        render = () => {
+          return new Promise((resolve) => {
             this.PDFViewer.eventBus.on("pagesloaded", (val) => {
               if (val.source.container.id === this.containerId) {
                 this.initSwiper({
