@@ -1183,7 +1183,8 @@
 
           for (var i = firstVisibleElementInd; i < numViews; i++) {
             var view = views[i],
-              element = view.div;
+              element = view.div.parentNode;
+              
             var currentWidth = element.offsetLeft + element.clientLeft;
             var currentHeight = element.offsetTop + element.clientTop;
             var viewWidth = element.clientWidth,
@@ -6933,8 +6934,15 @@
             div.style.width = Math.floor(this.viewport.width) + "px";
             div.style.height = Math.floor(this.viewport.height) + "px";
             div.setAttribute("data-page-number", this.id);
-            this.div = div;
-            container.appendChild(div);
+
+            var pageSlide = document.createElement("div");
+            pageSlide.className = "page-slide";
+            pageSlide.setAttribute("data-page-number", this.id);
+
+            pageSlide.appendChild(div)
+       
+            this.div = pageSlide.firstChild;
+            container.appendChild(pageSlide);
           }
 
           _createClass(PDFPageView, [
@@ -9325,24 +9333,24 @@
             {
               key: "_getVisiblePages",
               value: function _getVisiblePages() {
-                let visible = [];
-                let currentPage = this._pages[this._currentPageNumber - 1];
-                for (let i = 0; i < this.pagesCount; i++) {
-                  let aPage = this._pages[i];
-                  visible.push({ id: aPage.id, view: aPage });
-                }
-                return {
-                  first: currentPage,
-                  last: currentPage,
-                  views: visible,
-                };
+                // let visible = [];
+                // let currentPage = this._pages[this._currentPageNumber - 1];
+                // for (let i = 0; i < this.pagesCount; i++) {
+                //   let aPage = this._pages[i];
+                //   visible.push({ id: aPage.id, view: aPage });
+                // }
+                // return {
+                //   first: currentPage,
+                //   last: currentPage,
+                //   views: visible,
+                // };
 
-                // return (0, _ui_utils.getVisibleElements)(
-                //   this.container,
-                //   this._pages,
-                //   true,
-                //   this._isScrollModeHorizontal
-                // );
+                return (0, _ui_utils.getVisibleElements)(
+                  this.container,
+                  this._pages,
+                  true,
+                  this._isScrollModeHorizontal
+                );
               },
             },
             {
