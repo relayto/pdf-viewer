@@ -7128,6 +7128,9 @@
             {
               key: "update",
               value: function update(scale, rotation) {
+                // console.clear()
+                console.log("update after clear")
+                console.log("update", 1)
                 var optionalContentConfigPromise =
                   arguments.length > 2 && arguments[2] !== undefined
                     ? arguments[2]
@@ -9266,11 +9269,14 @@
             {
               key: "update",
               value: function update() {
+                
                 var visible = this._getVisiblePages();
 
                 var visiblePages = visible.views,
                   numVisiblePages = visiblePages.length;
 
+
+                  
                 if (numVisiblePages === 0) {
                   return;
                 }
@@ -9279,6 +9285,8 @@
                   DEFAULT_CACHE_SIZE,
                   2 * numVisiblePages + 1
                 );
+
+                console.log("update ==>", 2, visiblePages, numVisiblePages)
 
                 this._buffer.resize(newCacheSize, visiblePages);
 

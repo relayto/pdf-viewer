@@ -118,8 +118,9 @@
                 }
 
                 initSwiper(eventBus) {
-                    const swiper = document.querySelector(`#${this.containerId}.swiper`);
-                    const pages = document.querySelectorAll(`#${this.containerId} .page-slide`);
+                    let that = this;
+                    const swiper = document.querySelector(`#${that.containerId}.swiper`);
+                    const pages = document.querySelectorAll(`#${that.containerId} .page-slide`);
 
                     pages.forEach((page) => {
                         page.classList.add('swiper-slide');
@@ -131,7 +132,7 @@
                         centeredSlides: true,
                         centeredSlidesBounds: true,
                         on: eventBus,
-                        effect: this.effect,
+                        effect: that.effect,
                         grabCursor: true,
                         navigation: {
                             nextEl: `.swiper-button-next`,
@@ -140,10 +141,18 @@
                         keyboard: {
                             enabled: true,
                             onlyInViewport: true
+                        },
+                        on: {
+                            slideChange: function () {
+                                console.log('this.swiper', that.swiper);
+                                that.PDFViewer.page = that.swiper.activeIndex + 1;
+
+                                that.PDFViewer.updateSlide();
+                            }
                         }
                     };
 
-                    if (this.effect === 'creative') {
+                    if (that.effect === 'creative') {
                         conf.creativeEffect = {
                             prev: {
                                 shadow: true,
@@ -161,7 +170,7 @@
 
                     console.log('conf', conf);
 
-                    this.swiper = new Swiper(`#${this.containerId}.swiper`, conf);
+                    that.swiper = new Swiper(`#${this.containerId}.swiper`, conf);
                 }
             }
 
