@@ -5,40 +5,52 @@
         <title>PDF Viewer Example</title>
         <script defer="defer" src="pdf.js"></script>
         <script defer="defer" src="pdf_viewer.js"></script>
-        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <style>
             #pdfviewer-slide-wrapper-container {
                 width: 100% !important;
+                overflow: hidden !important;
+            }
+            #pdfviewer-slide-wrapper-container div {
+                margin: 0 auto !important;
             }
 
-            .page {
-                border: 0 !important;
-                margin: 0 auto !important;
+            #pdfviewer-slide-wrapper-container .page > div > canvas,
+            #pdfviewer-slide-wrapper-container .page > div {
+                position: relative !important;
             }
 
             .viewerContainer {
                 overflow: visible !important;
+                height: 100% !important;
             }
 
+            .page {
+                border: 0 !important;
+                height: 100% !important;
+            }
+
+            .page > div > canvas,
             .page > div {
-                margin: 0 auto !important;
+                margin: 0 !important;
+                height: 100% !important;
             }
         </style>
     </head>
 
     <body>
-        <!-- <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
-            <div class="pdfViewer swiper-wrapper"></div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div> -->
-
-        <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
+        <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
             <div class="pdfViewer swiper-wrapper"></div>
         </div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
+
+        <!-- <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
+            <div class="pdfViewer swiper-wrapper"></div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div> -->
 
         <!-- <div id="rt-cards-wrapper">
       <div
@@ -178,13 +190,13 @@
             }
 
             document.addEventListener('DOMContentLoaded', async () => {
-                // await new SwiperPDF('slide').render();
+                await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
                 // await new SwiperPDF("fade").render();
                 // await new SwiperPDF("cube").render();
                 // await new SwiperPDF("flip").render();
-                await new SwiperPDF('coverflow').render();
-                // await new SwiperPDF("creative").render();
+                // await new SwiperPDF('coverflow').render();
+                // await new SwiperPDF('creative').render();
             });
         </script>
     </body>
