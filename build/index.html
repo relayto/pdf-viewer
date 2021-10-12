@@ -5,7 +5,15 @@
             .page {
                 border: 0 !important;
                 margin: 0 auto !important;
-            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><script>class SwiperPDF {
+            }
+
+            .viewerContainer {
+                overflow: visible !important;
+            }
+
+            .page > div {
+                margin: 0 auto !important;
+            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><script>class SwiperPDF {
                 PDFViewer = window.rtPDFViewer;
                 rtContainerId = null;
                 containerId = null;
@@ -41,7 +49,7 @@
                 initSwiper(eventBus) {
                     let that = this;
                     const swiper = document.querySelector(`#${that.containerId}.swiper`);
-                    const pages = document.querySelectorAll(`#${that.containerId} .page-slide`);
+                    const pages = document.querySelectorAll(`#${that.containerId} .page`);
 
                     pages.forEach((page) => {
                         page.classList.add('swiper-slide');
@@ -96,12 +104,11 @@
             }
 
             document.addEventListener('DOMContentLoaded', async () => {
-                await new SwiperPDF('slide').render();
-
+                // await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
                 // await new SwiperPDF("fade").render();
                 // await new SwiperPDF("cube").render();
                 // await new SwiperPDF("flip").render();
-                // await new SwiperPDF("coverflow").render();
+                await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF("creative").render();
             });</script></body></html>

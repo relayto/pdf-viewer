@@ -1183,7 +1183,7 @@
 
           for (var i = firstVisibleElementInd; i < numViews; i++) {
             var view = views[i],
-              element = view.div.parentNode;
+              element = view.div;
               
             var currentWidth = element.offsetLeft + element.clientLeft;
             var currentHeight = element.offsetTop + element.clientTop;
@@ -6934,15 +6934,8 @@
             div.style.width = Math.floor(this.viewport.width) + "px";
             div.style.height = Math.floor(this.viewport.height) + "px";
             div.setAttribute("data-page-number", this.id);
-
-            var pageSlide = document.createElement("div");
-            pageSlide.className = "page-slide";
-            pageSlide.setAttribute("data-page-number", this.id);
-
-            pageSlide.appendChild(div)
-       
-            this.div = pageSlide.firstChild;
-            container.appendChild(pageSlide);
+            this.div = div;
+            container.appendChild(div);
           }
 
           _createClass(PDFPageView, [
