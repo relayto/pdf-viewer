@@ -183,6 +183,9 @@ class PDFViewerApplication {
       return undefined;
     }
 
+    this.unbindEvents();
+    this.pdfViewer.eventBus = this.eventBus = new EventBus();
+
     this.pdfLoadingTask.destroy().then(() => {
       this.pdfLoadingTask = null;
       if (this.pdfDocument) {

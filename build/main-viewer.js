@@ -876,6 +876,10 @@ var PDFViewerApplication = /*#__PURE__*/function () {
         return undefined;
       }
 
+      _this.unbindEvents();
+
+      _this.pdfViewer.eventBus = _this.eventBus = new external_pdfjsViewer_.EventBus();
+
       _this.pdfLoadingTask.destroy().then(function () {
         _this.pdfLoadingTask = null;
 
