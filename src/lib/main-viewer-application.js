@@ -5,7 +5,7 @@ import {PDFViewer} from 'pdfjs-dist/lib/web/pdf_viewer';
 
 const DEFAULT_SCALE_VALUE = 'page-fit';
 const DEFAULT_SCALE_DELTA = 1.1;
-const DEFAULT_CACHE_SIZE = 10;
+const DEFAULT_CACHE_SIZE = 5;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
@@ -247,24 +247,33 @@ class PDFViewerApplication {
     updateSlide = () => {
         const {pdfViewer} = this;
 
+        // Improve update visible pages
+        // Why ? Not rendered in slides view
         let currentPageNumber = pdfViewer.currentPageNumber;
         let activeIndex = currentPageNumber - 1;
-        let activePage = pdfViewer._pages[activeIndex];
+
+        let views = [];
+        for (var i = activeIndex; i < pdfViewer._pages.length; i++) {
+            let view = pdfViewer._pages[i];
+            views.push({
+                id: view.id,
+                view: view
+            });
+        }
+
         let visible = {
-            first: activePage,
-            last: activePage,
-            views: [
-                {
-                    id: currentPageNumber,
-                    view: activePage
-                }
-            ]
+            first: views[0],
+            last: views[views.length - 1],
+            views: views,
+            percent: 100,
+            widthPercent: 100
         };
 
         console.log('update', visible);
 
-        let visiblePages = visible.views,
-            numVisiblePages = visiblePages.length;
+        let visiblePages = visible.views;
+
+        let numVisiblePages = visiblePages.length;
 
         let newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
 

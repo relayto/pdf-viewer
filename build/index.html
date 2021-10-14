@@ -23,7 +23,6 @@
 
             .page > div > canvas,
             .page > div {
-                margin: 0 !important;
                 height: 100% !important;
             }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><script>class SwiperPDF {
                 PDFViewer = window.rtPDFViewer;
@@ -84,9 +83,9 @@
                             onlyInViewport: true
                         },
                         on: {
-                            slideChange: function () {
-                                console.log('this.swiper', that.swiper);
-                                that.PDFViewer.page = that.swiper.activeIndex + 1;
+                            beforeTransitionStart: function (swiper) {
+                                console.log('this.swiper', swiper);
+                                that.PDFViewer.page = swiper.activeIndex + 1;
 
                                 that.PDFViewer.updateSlide();
                             }
@@ -118,7 +117,7 @@
             document.addEventListener('DOMContentLoaded', async () => {
                 await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
-                // await new SwiperPDF("fade").render();
+                // await new SwiperPDF('fade').render();
                 // await new SwiperPDF("cube").render();
                 // await new SwiperPDF("flip").render();
                 // await new SwiperPDF('coverflow').render();

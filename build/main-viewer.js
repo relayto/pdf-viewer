@@ -685,7 +685,7 @@ function main_viewer_application_defineProperty(obj, key, value) { if (key in ob
 
 var DEFAULT_SCALE_VALUE = 'page-fit';
 var DEFAULT_SCALE_DELTA = 1.1;
-var DEFAULT_CACHE_SIZE = 10;
+var DEFAULT_CACHE_SIZE = 5;
 var MIN_SCALE = 0.1;
 var MAX_SCALE = 10.0;
 
@@ -955,21 +955,31 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     });
 
     main_viewer_application_defineProperty(this, "updateSlide", function () {
-      var pdfViewer = _this.pdfViewer;
+      var pdfViewer = _this.pdfViewer; // Improve update visible pages
+      // Why ? Not rendered in slides view
+
       var currentPageNumber = pdfViewer.currentPageNumber;
       var activeIndex = currentPageNumber - 1;
-      var activePage = pdfViewer._pages[activeIndex];
+      var views = [];
+
+      for (var i = activeIndex; i < pdfViewer._pages.length; i++) {
+        var view = pdfViewer._pages[i];
+        views.push({
+          id: view.id,
+          view: view
+        });
+      }
+
       var visible = {
-        first: activePage,
-        last: activePage,
-        views: [{
-          id: currentPageNumber,
-          view: activePage
-        }]
+        first: views[0],
+        last: views[views.length - 1],
+        views: views,
+        percent: 100,
+        widthPercent: 100
       };
       console.log('update', visible);
-      var visiblePages = visible.views,
-          numVisiblePages = visiblePages.length;
+      var visiblePages = visible.views;
+      var numVisiblePages = visiblePages.length;
       var newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
 
       pdfViewer._buffer.resize(newCacheSize, visiblePages);

@@ -33,7 +33,6 @@
 
             .page > div > canvas,
             .page > div {
-                margin: 0 !important;
                 height: 100% !important;
             }
         </style>
@@ -52,6 +51,12 @@
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div> -->
 
+        <!-- <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
+            <div class="pdfViewer swiper-wrapper"></div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div> -->
+
         <!-- <div id="rt-cards-wrapper">
       <div
         id="pdfviewer-cards-wrapper-container"
@@ -63,13 +68,7 @@
       <div class="swiper-button-next"></div>
     </div>
 
-    <div id="rt-fade-wrapper">
-      <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
-        <div class="pdfViewer swiper-wrapper"></div>
-      </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
+    
 
     <div id="rt-cube-wrapper">
       <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
@@ -158,9 +157,9 @@
                             onlyInViewport: true
                         },
                         on: {
-                            slideChange: function () {
-                                console.log('this.swiper', that.swiper);
-                                that.PDFViewer.page = that.swiper.activeIndex + 1;
+                            beforeTransitionStart: function (swiper) {
+                                console.log('this.swiper', swiper);
+                                that.PDFViewer.page = swiper.activeIndex + 1;
 
                                 that.PDFViewer.updateSlide();
                             }
@@ -192,7 +191,7 @@
             document.addEventListener('DOMContentLoaded', async () => {
                 await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
-                // await new SwiperPDF("fade").render();
+                // await new SwiperPDF('fade').render();
                 // await new SwiperPDF("cube").render();
                 // await new SwiperPDF("flip").render();
                 // await new SwiperPDF('coverflow').render();
