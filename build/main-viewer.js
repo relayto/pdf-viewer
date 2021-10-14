@@ -962,7 +962,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       var activeIndex = currentPageNumber - 1;
       var views = [];
 
-      for (var i = activeIndex; i < pdfViewer._pages.length; i++) {
+      for (var i = 0; i < pdfViewer._pages.length; i++) {
         var view = pdfViewer._pages[i];
         views.push({
           id: view.id,
