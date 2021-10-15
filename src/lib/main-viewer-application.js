@@ -36,13 +36,10 @@ function webViewerPageRendered({ pageNumber, error }) {
 class PDFViewerApplication {
   pdfjs = new PDFJsFacade();
   pdfRenderingQueue = null;
-  /** @type {PDFLinkService}*/
   pdfDocument = null;
   pdfLoadingTask = null;
   pdfViewer = null;
-  /**
-   *
-   */
+  /** @type {PDFLinkService}*/
   pdfLinkService = null;
   eventBus = null;
   preferences = null;
