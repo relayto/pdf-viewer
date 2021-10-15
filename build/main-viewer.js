@@ -928,6 +928,22 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       _this.pdfViewer.currentScaleValue = newScale;
     });
 
+    main_viewer_application_defineProperty(this, "redrawPage", function (pageNumber, renderer) {
+      var pdfViewer = _this.pdfViewer;
+
+      if (pdfViewer && pdfViewer._pages && pdfViewer._pages.length > 0) {
+        var pageIndex = pageNumber - 1;
+
+        if (renderer) {
+          pdfViewer._pages[pageIndex].renderer = renderer;
+        }
+
+        pdfViewer._pages[pageIndex].reset();
+
+        pdfViewer.update();
+      }
+    });
+
     main_viewer_application_defineProperty(this, "zoomReset", function () {
       if (!_this.pdfViewer || _this.pdfViewer.isInPresentationMode) {
         return;

@@ -70,7 +70,7 @@ class PDFViewerApplication {
 
     this.pdfLinkService.setDocument(this.pdfDocument);
     this.pdfViewer.setDocument(this.pdfDocument);
-    
+
     this.pdfViewer.spreadMode = this.spreadMode;
   };
 
@@ -224,6 +224,18 @@ class PDFViewerApplication {
       newScale = Math.max(MIN_SCALE, newScale);
     } while (--ticks > 0 && newScale > MIN_SCALE);
     this.pdfViewer.currentScaleValue = newScale;
+  };
+
+  redrawPage = (pageNumber, renderer) => {
+    const { pdfViewer } = this;
+    if (pdfViewer && pdfViewer._pages && pdfViewer._pages.length > 0) {
+      const pageIndex = pageNumber - 1;
+      if (renderer) {
+        pdfViewer._pages[pageIndex].renderer = renderer;
+      }
+      pdfViewer._pages[pageIndex].reset();
+      pdfViewer.update();
+    }
   };
 
   zoomReset = () => {
