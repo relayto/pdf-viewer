@@ -7052,6 +7052,7 @@
             {
               key: "reset",
               value: function reset() {
+                
                 var keepZoomLayer =
                   arguments.length > 0 && arguments[0] !== undefined
                     ? arguments[0]
@@ -7830,6 +7831,29 @@
                   this.idleTimeout = null;
                 }
 
+              
+                if(!currentlyVisiblePages){
+                  // Refactored this because do not working in slides view for go to page
+                  let views = [];
+                  for (var i = 0; i < this.pdfViewer._pages.length; i++) {
+                      if(i > this.pdfViewer._currentPageNumber + 1) {
+                        continue;
+                      }
+
+                      let view = this.pdfViewer._pages[i];
+                      views.push({
+                          id: view.id,
+                          view: view
+                      });
+                  }
+
+                  currentlyVisiblePages = {
+                      first: views[0],
+                      last: views[views.length - 1],
+                      views: views
+                  };
+                }
+
                 if (this.pdfViewer.forceRendering(currentlyVisiblePages)) {
                   return;
                 }
@@ -7919,6 +7943,7 @@
 
                   case RenderingStates.INITIAL:
                     this.highestPriorityPage = view.renderingId;
+                    
                     view
                       .draw()
                       ["finally"](function () {
@@ -9279,9 +9304,31 @@
                   2 * numVisiblePages + 1
                 );
 
-                console.log("update ==>", 2, visiblePages, numVisiblePages)
-
                 this._buffer.resize(newCacheSize, visiblePages);
+
+              
+
+                // if(!visible) {
+                //   let views = [];
+                //   for (var i = 0; i < pdfViewer._pages.length; i++) {
+                //       let view = pdfViewer._pages[i];
+                //       views.push({
+                //           id: view.id,
+                //           view: view
+                //       });
+                //   }
+
+                //   visible = {
+                //       first: views[0],
+                //       last: views[views.length - 1],
+                //       views: views,
+                //       percent: 100,
+                //       widthPercent: 100
+                //   };
+                // }
+
+                console.log('renderHighestPriority visible 1', visible)
+                
 
                 this.renderingQueue.renderHighestPriority(visible);
 

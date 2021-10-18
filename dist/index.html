@@ -56,6 +56,12 @@
         </div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div> -->
+        <!-- 
+        <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
+            <div class="pdfViewer swiper-wrapper"></div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div> -->
 
         <!-- <div id="rt-cards-wrapper">
       <div
@@ -70,13 +76,7 @@
 
     
 
-    <div id="rt-cube-wrapper">
-      <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
-        <div class="pdfViewer swiper-wrapper"></div>
-      </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
+
 
     <div id="rt-flip-wrapper">
       <div id="pdfviewer-flip-wrapper-container" class="swiper viewerContainer">
@@ -115,8 +115,10 @@
                     return new Promise((resolve) => {
                         this.PDFViewer.eventBus.on('pagesloaded', (val) => {
                             if (val.source.container.id === this.containerId) {
-                                this.initSwiper({
-                                    afterInit: resolve
+                                setTimeout(() => {
+                                    this.initSwiper({
+                                        afterInit: resolve
+                                    });
                                 });
                             }
                         });
@@ -143,8 +145,8 @@
                     });
 
                     const conf = {
-                        centeredSlides: true,
-                        centeredSlidesBounds: true,
+                        // centeredSlides: true,
+                        // centeredSlidesBounds: true,
                         on: eventBus,
                         effect: that.effect,
                         grabCursor: true,
@@ -157,12 +159,15 @@
                             onlyInViewport: true
                         },
                         on: {
-                            beforeTransitionStart: function (swiper) {
+                            init: (swiper) => {
+                                swiper.slideTo(2, 0);
+                            },
+                            beforeTransitionStart: (swiper) => {
                                 console.log('this.swiper', swiper);
-                                that.PDFViewer.page = swiper.activeIndex + 1;
-
+                                rtPDFViewer.page = swiper.activeIndex + 1;
                                 that.PDFViewer.updateSlide();
-                            }
+                            },
+                            slideChangeTransitionEnd: (swiper) => {}
                         }
                     };
 
@@ -192,7 +197,7 @@
                 await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
                 // await new SwiperPDF('fade').render();
-                // await new SwiperPDF("cube").render();
+                // await new SwiperPDF('cube').render();
                 // await new SwiperPDF("flip").render();
                 // await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF('creative').render();
