@@ -6,8 +6,7 @@
                 margin: 0 auto !important;
             }
 
-            #pdfviewer-slide-wrapper-container .page > div > canvas,
-            #pdfviewer-slide-wrapper-container .page > div {
+            #pdfviewer-slide-wrapper-container .page > div > canvas {
                 position: relative !important;
             }
 
@@ -18,11 +17,6 @@
 
             .page {
                 border: 0 !important;
-                height: 100% !important;
-            }
-
-            .page > div > canvas,
-            .page > div {
                 height: 100% !important;
             }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><script>class SwiperPDF {
                 PDFViewer = window.rtPDFViewer;
@@ -53,7 +47,8 @@
 
                 initPDFViewer() {
                     this.PDFViewer.initialize({
-                        containerId: this.containerId
+                        containerId: this.containerId,
+                        removePageBorders: true
                     });
 
                     this.PDFViewer.open('tech.pdf');

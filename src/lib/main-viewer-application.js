@@ -41,6 +41,7 @@ class PDFViewerApplication {
     pdfDocument = null;
     pdfLoadingTask = null;
     pdfViewer = null;
+
     /**
      *
      */
@@ -53,6 +54,7 @@ class PDFViewerApplication {
 
     spreadMode = 0;
     initialized = false;
+    removePageBorders = false;
     settingPages = [];
 
     _initializeViewer = () => {
@@ -65,7 +67,8 @@ class PDFViewerApplication {
         this.pdfViewer = new PDFViewer({
             container: this.container,
             eventBus: this.eventBus,
-            linkService: this.pdfLinkService
+            linkService: this.pdfLinkService,
+            removePageBorders: this.removePageBorders
         });
 
         this.pdfRenderingQueue = this.getRenderingQueueFromViewer(this.pdfViewer);
@@ -94,6 +97,8 @@ class PDFViewerApplication {
         this.container =
             config.container ||
             window.document.getElementById(config.containerId || 'pdfViewerContent');
+
+        this.removePageBorders = config.removePageBorders || false;
 
         this._initializeViewer();
 
