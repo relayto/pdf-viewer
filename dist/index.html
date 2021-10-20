@@ -27,20 +27,29 @@
 
             .page {
                 border: 0 !important;
-                height: 100% !important;
             }
             .page div {
                 margin: 0 auto;
+            }
+
+            .annotationLayer {
+                position: absolute;
             }
         </style>
     </head>
 
     <body>
-        <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
+        <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
             <div class="pdfViewer swiper-wrapper"></div>
         </div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
+
+        <!-- <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
+            <div class="pdfViewer swiper-wrapper"></div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div> -->
 
         <!-- <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
             <div class="pdfViewer swiper-wrapper"></div>
@@ -49,12 +58,6 @@
         <div class="swiper-button-next"></div> -->
 
         <!-- <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
-            <div class="pdfViewer swiper-wrapper"></div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div> -->
-        <!-- 
-        <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
             <div class="pdfViewer swiper-wrapper"></div>
         </div>
         <div class="swiper-button-prev"></div>
@@ -125,8 +128,8 @@
                 initPDFViewer() {
                     this.PDFViewer.initialize({
                         containerId: this.containerId,
-                        removePageBorders: true,
-                        currentScaleValue: 'page-fit'
+                        // removePageBorders: true,
+                        currentScaleValue: 'auto'
                     });
 
                     this.PDFViewer.open('tech.pdf');
@@ -139,8 +142,8 @@
 
                     pages.forEach((page) => {
                         page.classList.add('swiper-slide');
-                        // swiper.style.width = page.style.width;
-                        // swiper.style.height = page.style.height;
+                        swiper.style.width = page.style.width;
+                        swiper.style.height = page.style.height;
                     });
 
                     const conf = {
@@ -193,10 +196,10 @@
             }
 
             document.addEventListener('DOMContentLoaded', async () => {
-                await new SwiperPDF('slide').render();
+                // await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
                 // await new SwiperPDF('fade').render();
-                // await new SwiperPDF('cube').render();
+                await new SwiperPDF('cube').render();
                 // await new SwiperPDF("flip").render();
                 // await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF('creative').render();
