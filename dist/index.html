@@ -12,7 +12,7 @@
                 width: 100% !important;
                 overflow: hidden !important;
             }
-            #pdfviewer-slide-wrapper-container div {
+            #pdfviewer-slide-wrapper-container .swiper-wrapper {
                 margin: 0 auto !important;
             }
 
@@ -28,6 +28,9 @@
             .page {
                 border: 0 !important;
                 height: 100% !important;
+            }
+            .page div {
+                margin: 0 auto;
             }
         </style>
     </head>
@@ -122,7 +125,8 @@
                 initPDFViewer() {
                     this.PDFViewer.initialize({
                         containerId: this.containerId,
-                        removePageBorders: true
+                        removePageBorders: true,
+                        currentScaleValue: 'page-fit'
                     });
 
                     this.PDFViewer.open('tech.pdf');
@@ -135,8 +139,8 @@
 
                     pages.forEach((page) => {
                         page.classList.add('swiper-slide');
-                        swiper.style.width = page.style.width;
-                        swiper.style.height = page.style.height;
+                        // swiper.style.width = page.style.width;
+                        // swiper.style.height = page.style.height;
                     });
 
                     const conf = {
@@ -155,7 +159,7 @@
                         },
                         on: {
                             init: (swiper) => {
-                                swiper.slideTo(2, 0);
+                                // swiper.slideTo(2, 0);
                             },
                             beforeTransitionStart: (swiper) => {
                                 console.log('this.swiper', swiper);

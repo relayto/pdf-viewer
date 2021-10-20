@@ -749,6 +749,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
     main_viewer_application_defineProperty(this, "removePageBorders", false);
 
+    main_viewer_application_defineProperty(this, "currentScaleValue", DEFAULT_SCALE_VALUE);
+
     main_viewer_application_defineProperty(this, "settingPages", []);
 
     main_viewer_application_defineProperty(this, "_initializeViewer", function () {
@@ -760,10 +762,10 @@ var PDFViewerApplication = /*#__PURE__*/function () {
         container: _this.container,
         eventBus: _this.eventBus,
         linkService: _this.pdfLinkService,
-        removePageBorders: _this.removePageBorders
+        removePageBorders: _this.removePageBorders,
+        currentScaleValue: _this.currentScaleValue
       });
       _this.pdfRenderingQueue = _this.getRenderingQueueFromViewer(_this.pdfViewer);
-      _this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
 
       _this.pdfLinkService.setDocument(_this.pdfDocument);
 
@@ -791,7 +793,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
       Object.assign(_this.pdfjs.lib, pdfjsLibConfigs);
       _this.container = config.container || window.document.getElementById(config.containerId || 'pdfViewerContent');
-      _this.removePageBorders = config.removePageBorders || false;
+      if (config.hasOwnProperty('removePageBorders')) _this.removePageBorders = config.removePageBorders;
+      if (config.hasOwnProperty('currentScaleValue')) _this.currentScaleValue = config.currentScaleValue;
 
       _this._initializeViewer();
 

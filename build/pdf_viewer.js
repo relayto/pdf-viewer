@@ -9782,7 +9782,6 @@
                 if (!this.pdfDocument) {
                   return;
                 }
-
                 this._setScale(val, false);
               },
             },
