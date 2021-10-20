@@ -6,13 +6,14 @@
                 margin: 0 auto !important;
             }
 
-            #pdfviewer-slide-wrapper-container .page > div > canvas {
+            /* #pdfviewer-slide-wrapper-container .page > div > canvas {
                 position: relative !important;
-            }
+            } */
 
             .viewerContainer {
                 overflow: visible !important;
                 height: 100% !important;
+                width: 100% !important;
             }
 
             .page {
@@ -24,7 +25,7 @@
 
             .annotationLayer {
                 position: absolute;
-            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div><script>class SwiperPDF {
+            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div>--><script>class SwiperPDF {
                 PDFViewer = window.rtPDFViewer;
                 rtContainerId = null;
                 containerId = null;
@@ -39,6 +40,9 @@
 
                 render = () => {
                     return new Promise((resolve) => {
+                        this.PDFViewer.eventBus.on('resize', (val) => {
+                            this.PDFViewer.redrawPage(this.swiper.activeIndex + 1);
+                        });
                         this.PDFViewer.eventBus.on('pagesloaded', (val) => {
                             if (val.source.container.id === this.containerId) {
                                 setTimeout(() => {
@@ -122,10 +126,10 @@
             }
 
             document.addEventListener('DOMContentLoaded', async () => {
-                // await new SwiperPDF('slide').render();
+                await new SwiperPDF('slide').render();
                 // await new SwiperPDF("cards").render();
                 // await new SwiperPDF('fade').render();
-                await new SwiperPDF('cube').render();
+                // await new SwiperPDF('cube').render();
                 // await new SwiperPDF("flip").render();
                 // await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF('creative').render();

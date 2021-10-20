@@ -254,6 +254,18 @@ class PDFViewerApplication {
         this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
     };
 
+    redrawPage = (pageNumber, renderer) => {
+        const {pdfViewer} = this;
+        if (pdfViewer && pdfViewer._pages && pdfViewer._pages.length > 0) {
+            const pageIndex = pageNumber - 1;
+            if (renderer) {
+                pdfViewer._pages[pageIndex].renderer = renderer;
+            }
+            pdfViewer._pages[pageIndex].reset();
+            pdfViewer.update();
+        }
+    };
+
     updateSlide = () => {
         const {pdfViewer} = this;
 
