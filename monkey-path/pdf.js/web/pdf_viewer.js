@@ -400,6 +400,7 @@
                     };
 
                     if (_this.div) {
+                      console.log('bu_',1)
                       _pdfjsLib.AnnotationLayer.update(parameters);
                     } else {
                       _this.div = document.createElement("div");
@@ -8243,7 +8244,7 @@
                   this._currentPageNumber >= this._previousPageNumber;
 
                 this._ensurePageViewVisible();
-
+                console.log('bu_',2)
                 this.update();
 
                 _get(
@@ -8815,6 +8816,7 @@
                     });
 
                     if (_this2.defaultRenderingQueue) {
+                      console.log('bu_',3)
                       _this2.update();
                     }
                   })
@@ -8902,6 +8904,7 @@
                   return;
                 }
 
+                console.log('bu_',4)
                 this.update();
               },
             },
@@ -8943,6 +8946,7 @@
                 }
 
                 for (var i = 0, ii = this._pages.length; i < ii; i++) {
+                  console.log('bu_',5)
                   this._pages[i].update(newScale);
                 }
 
@@ -8985,6 +8989,7 @@
                 });
 
                 if (this.defaultRenderingQueue) {
+                  console.log('bu_',6)
                   this.update();
                 }
               },
@@ -8999,6 +9004,7 @@
                 var scale = parseFloat(value);
 
                 if (scale > 0) {
+                  console.log('_setScaleUpdatePages', 1)
                   this._setScaleUpdatePages(scale, value, noScroll, false);
                 } else {
                   var currentPage = this._pages[this._currentPageNumber - 1];
@@ -9063,7 +9069,7 @@
                       );
                       return;
                   }
-
+                  console.log('_setScaleUpdatePages', 2)
                   this._setScaleUpdatePages(scale, value, noScroll, true);
                 }
               },
@@ -9630,7 +9636,7 @@
                 }
 
                 this._setCurrentPageNumber(pageNumber, true);
-
+                console.log('bu_',7)
                 this.update();
               },
             },
@@ -9677,7 +9683,7 @@
                 }
 
                 this._setCurrentPageNumber(pageNumber, true);
-
+                console.log('bu_',8)
                 this.update();
               },
             },
@@ -9808,6 +9814,7 @@
 
                 for (var i = 0, ii = this._pages.length; i < ii; i++) {
                   var pageView = this._pages[i];
+                  console.log('bu_',9)
                   pageView.update(pageView.scale, rotation);
                 }
 
@@ -9822,6 +9829,7 @@
                 });
 
                 if (this.defaultRenderingQueue) {
+                  console.log('bu_',10)
                   this.update();
                 }
               },
@@ -9951,6 +9959,7 @@
                 try {
                   for (_iterator.s(); !(_step = _iterator.n()).done; ) {
                     var pageView = _step.value;
+                    console.log('bu_',11)
                     pageView.update(pageView.scale, pageView.rotation, promise);
                   }
                 } catch (err) {
@@ -9958,7 +9967,7 @@
                 } finally {
                   _iterator.f();
                 }
-
+                console.log('bu_',12)
                 this.update();
                 this.eventBus.dispatch("optionalcontentconfigchanged", {
                   source: this,
