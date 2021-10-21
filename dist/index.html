@@ -8,22 +8,83 @@
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            html,
+            body {
+                height: 100%;
+                position: relative;
+            }
+
+            .layout-fill {
+                margin: 0;
+                width: 100%;
+                min-height: 100%;
+                height: 100%;
+            }
+            .layout-column {
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                flex-direction: column;
+            }
+            .layout,
+            .layout-column,
+            .layout-row {
+                box-sizing: border-box;
+                display: -webkit-box;
+                display: flex;
+            }
+            .flex {
+                -webkit-box-flex: 1;
+                flex: 1;
+                box-sizing: border-box;
+            }
+            .layout-align-start-center,
+            .layout-align-center-center,
+            .layout-align-end-center,
+            .layout-align-space-between-center,
+            .layout-align-space-around-center {
+                -webkit-box-align: center;
+                align-items: center;
+                align-content: center;
+                max-width: 100%;
+            }
+
+            .layout-align-center,
+            .layout-align-center-start,
+            .layout-align-center-center,
+            .layout-align-center-end,
+            .layout-align-center-stretch {
+                -webkit-box-pack: center;
+                justify-content: center;
+            }
+
             #pdfviewer-slide-wrapper-container {
                 width: 100% !important;
                 overflow: hidden !important;
             }
+
             #pdfviewer-slide-wrapper-container .swiper-wrapper {
                 margin: 0 auto !important;
             }
 
-            /* #pdfviewer-slide-wrapper-container .page > div > canvas {
-                position: relative !important;
-            } */
+            #pdfviewer-slide-wrapper-container.viewerContainer {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+
+            #pdfviewer-coverflow-wrapper-container.viewerContainer {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
 
             .viewerContainer {
                 overflow: visible !important;
-                height: 100% !important;
-                width: 100% !important;
             }
 
             .page {
@@ -46,18 +107,21 @@
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div> -->
 
-        <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
-            <div class="pdfViewer swiper-wrapper"></div>
+        <div class="flex layout-fill layout-column layout-align-center-center">
+            <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
+                <div class="pdfViewer swiper-wrapper"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
         </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-        -->
 
-        <!-- <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
-            <div class="pdfViewer swiper-wrapper"></div>
+        <div class="flex layout-fill layout-column layout-align-center-center">
+            <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
+                <div class="pdfViewer swiper-wrapper"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
         </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div> -->
 
         <!-- <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
             <div class="pdfViewer swiper-wrapper"></div>
@@ -132,8 +196,8 @@
 
                 initPDFViewer() {
                     this.PDFViewer.initialize({
+                        removePageBorders: true,
                         containerId: this.containerId,
-                        // removePageBorders: true,
                         currentScaleValue: 'auto'
                     });
 
