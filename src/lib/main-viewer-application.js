@@ -269,39 +269,36 @@ class PDFViewerApplication {
     updateSlide = () => {
         const {pdfViewer} = this;
 
-        // Improve update visible pages
-        // Why ? Not rendered in slides view
         let currentPageNumber = pdfViewer.currentPageNumber;
         let activeIndex = currentPageNumber - 1;
 
         let views = [];
-        for (var i = 0; i < pdfViewer._pages.length; i++) {
+        for (var i = activeIndex; i < activeIndex + 1; i++) {
             let view = pdfViewer._pages[i];
+            let w = parseInt(view.div.style.width, 10);
             views.push({
                 id: view.id,
-                view: view
+                view: view,
+                x: w,
+                y: 0,
+                percent: 100
             });
         }
 
         let visible = {
             first: views[0],
             last: views[views.length - 1],
-            views: views,
-            percent: 100,
-            widthPercent: 100
+            views: views
         };
 
-        console.log('update', visible);
-
-        let visiblePages = visible.views;
-
-        let numVisiblePages = visiblePages.length;
+        let visiblePages = visible.views,
+            numVisiblePages = visiblePages.length;
 
         let newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
 
         pdfViewer._buffer.resize(newCacheSize, visiblePages);
 
-        pdfViewer.renderingQueue.renderHighestPriority(visible);
+        pdfViewer.forceRendering(visible);
 
         pdfViewer._updateHelper(visiblePages);
 
