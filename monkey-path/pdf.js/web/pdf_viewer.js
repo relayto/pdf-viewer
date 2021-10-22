@@ -7366,8 +7366,8 @@
                 this.renderingState =
                   _pdf_rendering_queue.RenderingStates.RUNNING;
                 var canvasWrapper = document.createElement("div");
-                canvasWrapper.style.width = Math.floor(this.viewport.width) + "px";
-                canvasWrapper.style.height = Math.floor(this.viewport.height) + "px";
+                canvasWrapper.style.width = div.style.width + "px";
+                canvasWrapper.style.height = div.style.height + "px";
                 canvasWrapper.classList.add("canvasWrapper");
 
                 if (this.annotationLayer && this.annotationLayer.div) {

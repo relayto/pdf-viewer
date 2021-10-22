@@ -71,6 +71,20 @@
                 margin: 0 auto !important;
             }
 
+            #pdfviewer-slide-wrapper-container .pdfViewer .page canvas {
+                margin: 0 auto;
+            }
+
+            #pdfviewer-slide-wrapper-container .page {
+                height: 100% !important;
+            }
+
+            #pdfviewer-slide-wrapper-container .canvasWrapper {
+                height: 100%;
+                align-items: center;
+                display: flex;
+            }
+
             #pdfviewer-slide-wrapper-container.viewerContainer {
                 position: relative;
                 width: 100%;
@@ -90,6 +104,7 @@
             .page {
                 border: 0 !important;
             }
+
             .page div {
                 margin: 0 auto;
             }
@@ -105,11 +120,13 @@
     </head>
 
     <body>
-        <!-- <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
-            <div class="pdfViewer swiper-wrapper"></div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div> -->
+        <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+            <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
+                <div class="pdfViewer swiper-wrapper"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div> -->
 
         <div class="flex layout-fill layout-column layout-align-center-center">
             <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
@@ -119,7 +136,7 @@
             <div class="swiper-button-next"></div>
         </div>
 
-        <!-- <div class="flex layout-fill layout-column layout-align-center-center">
+        <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
@@ -127,45 +144,41 @@
             <div class="swiper-button-next"></div>
         </div> -->
 
-        <!-- <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
-            <div class="pdfViewer swiper-wrapper"></div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div> -->
+        <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+            <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
+                <div class="pdfViewer swiper-wrapper"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div> -->
 
-        <!-- <div id="rt-cards-wrapper">
-      <div
-        id="pdfviewer-cards-wrapper-container"
-        class="swiper viewerContainer"
-      >
-        <div class="pdfViewer swiper-wrapper"></div>
-      </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
+        <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+            <div id="rt-cards-wrapper">
+                <div id="pdfviewer-cards-wrapper-container" class="swiper viewerContainer">
+                    <div class="pdfViewer swiper-wrapper"></div>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div> -->
 
-    
-
-
-
-    <div id="rt-flip-wrapper">
+        <!-- <div id="rt-flip-wrapper">
       <div id="pdfviewer-flip-wrapper-container" class="swiper viewerContainer">
         <div class="pdfViewer swiper-wrapper"></div>
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
-    </div>
-
-    <div id="rt-creative-wrapper">
-      <div
-        id="pdfviewer-creative-wrapper-container"
-        class="swiper viewerContainer"
-      >
-        <div class="pdfViewer swiper-wrapper"></div>
-      </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
     </div> -->
+
+        <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+            <div id="rt-creative-wrapper">
+                <div id="pdfviewer-creative-wrapper-container" class="swiper viewerContainer">
+                    <div class="pdfViewer swiper-wrapper"></div>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div> -->
 
         <script>
             class SwiperPDF {
@@ -188,19 +201,34 @@
                         // swiper.style.width = page.style.width;
                         // swiper.style.height = page.style.height;
                         //
+
+                        const redraw = () => {
+                            let self = this;
+
+                            const swiper = document.querySelector(`#${this.containerId}.swiper`);
+
+                            console.log('resize fired ! 0', swiper.style.width);
+
+                            swiper.style.width = '';
+                            swiper.style.height = '';
+
+                            self.PDFViewer.pdfViewer.eventBus.dispatch('resize', {ignoreLocalEvent: true});
+
+                            console.log('resize fired ! 1', swiper.style.width);
+
+                            var pageDiv = self.swiper.slides[self.swiper.activeIndex];
+                            var pageCanvasDiv = pageDiv.querySelector('.canvasWrapper');
+                            swiper.style.height = pageCanvasDiv.clientHeight + 'px';
+                            swiper.style.width = pageCanvasDiv.clientWidth + 'px';
+
+                            console.log('resize fired ! 2', swiper.style.width);
+                        };
+
                         // this.PDFViewer.eventBus.on('resize', (val) => {
-                        //     const swiper = document.querySelector(`#${this.containerId}.swiper`);
-                        //     swiper.style.width = '';
-                        //     swiper.style.height = '';
-                        //     swiper.style.opacity = 0;
-                        //     let self = this;
-                        //     setTimeout(function () {
-                        //         swiper.style.height = self.swiper.slides[self.swiper.activeIndex].clientHeight + 'px';
-                        //         swiper.style.width = self.swiper.slides[self.swiper.activeIndex].clientWidth + 'px';
-                        //         swiper.style.opacity = 1;
-                        //     }, 200);
-                        //     console.log('w_h', this.swiper, this.PDFViewer);
+                        //     console.log('resize fired !');
+                        //     if (!val.ignoreLocalEvent) redraw();
                         // });
+
                         this.PDFViewer.eventBus.on('pagesloaded', (val) => {
                             if (val.source.container.id === this.containerId) {
                                 setTimeout(() => {
@@ -230,13 +258,13 @@
 
                     pages.forEach((page) => {
                         page.classList.add('swiper-slide');
-                        //swiper.style.width = page.style.width;
-                        //swiper.style.height = page.style.height;
+                        // swiper.style.width = page.style.width;
+                        // swiper.style.height = page.style.height;
                     });
 
                     const conf = {
-                        // centeredSlides: true,
-                        // centeredSlidesBounds: true,
+                        centeredSlides: true,
+                        centeredSlidesBounds: true,
                         on: eventBus,
                         effect: that.effect,
                         grabCursor: true,
@@ -285,10 +313,10 @@
 
             document.addEventListener('DOMContentLoaded', async () => {
                 await new SwiperPDF('slide').render();
-                // await new SwiperPDF("cards").render();
                 // await new SwiperPDF('fade').render();
-                // await new SwiperPDF('cube').render();
                 // await new SwiperPDF("flip").render();
+                // await new SwiperPDF('cards').render();
+                // await new SwiperPDF('cube').render();
                 // await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF('creative').render();
             });
