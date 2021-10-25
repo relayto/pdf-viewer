@@ -978,15 +978,14 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     });
 
     main_viewer_application_defineProperty(this, "updateSlide", function () {
-      var pdfViewer = _this.pdfViewer; // Improve update visible pages
-      // Why ? Not rendered in slides view
-
+      var pdfViewer = _this.pdfViewer;
       var currentPageNumber = pdfViewer.currentPageNumber;
       var activeIndex = currentPageNumber - 1;
       var views = [];
 
-      for (var i = 0; i < pdfViewer._pages.length; i++) {
+      for (var i = activeIndex; i < activeIndex + 1; i++) {
         var view = pdfViewer._pages[i];
+        console.log('view__', view);
         views.push({
           id: view.id,
           view: view
@@ -996,18 +995,15 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       var visible = {
         first: views[0],
         last: views[views.length - 1],
-        views: views,
-        percent: 100,
-        widthPercent: 100
+        views: views
       };
-      console.log('update', visible);
-      var visiblePages = visible.views;
-      var numVisiblePages = visiblePages.length;
+      var visiblePages = visible.views,
+          numVisiblePages = visiblePages.length;
       var newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
 
       pdfViewer._buffer.resize(newCacheSize, visiblePages);
 
-      pdfViewer.renderingQueue.renderHighestPriority(visible);
+      pdfViewer.forceRendering(visible);
 
       pdfViewer._updateHelper(visiblePages);
 
