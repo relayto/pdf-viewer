@@ -134,13 +134,13 @@
     </head>
 
     <body>
-        <!-- <div class="flex layout-fill layout-column layout-align-center-center">
+        <div class="flex layout-fill layout-column layout-align-center-center">
             <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-button-next"></div>
-        </div> -->
+        </div>
         <!-- 
         <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
@@ -166,13 +166,13 @@
             <div class="swiper-button-next"></div>
         </div> -->
 
-        <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+        <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-cards-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
 
         <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-flip-wrapper-container" class="swiper viewerContainer">
@@ -326,10 +326,10 @@
             }
 
             document.addEventListener('DOMContentLoaded', async () => {
-                // await new SwiperPDF('slide').render();
+                await new SwiperPDF('slide').render();
                 // await new SwiperPDF('fade').render();
                 // await new SwiperPDF('flip').render();
-                await new SwiperPDF('cards').render();
+                // await new SwiperPDF('cards').render();
                 // await new SwiperPDF('cube').render();
                 // await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF('creative').render();

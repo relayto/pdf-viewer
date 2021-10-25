@@ -119,7 +119,7 @@
 
             .swiper-wrapper {
                 align-items: center; /* add this will all relevant prefixes */
-            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden"><div id="pdfviewer-cards-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
+            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
                 PDFViewer = window.rtPDFViewer;
                 rtContainerId = null;
                 containerId = null;
@@ -252,10 +252,10 @@
             }
 
             document.addEventListener('DOMContentLoaded', async () => {
-                // await new SwiperPDF('slide').render();
+                await new SwiperPDF('slide').render();
                 // await new SwiperPDF('fade').render();
                 // await new SwiperPDF('flip').render();
-                await new SwiperPDF('cards').render();
+                // await new SwiperPDF('cards').render();
                 // await new SwiperPDF('cube').render();
                 // await new SwiperPDF('coverflow').render();
                 // await new SwiperPDF('creative').render();
