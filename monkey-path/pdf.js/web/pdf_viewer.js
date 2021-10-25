@@ -7062,18 +7062,19 @@
                   arguments.length > 1 && arguments[1] !== undefined
                     ? arguments[1]
                     : false;
+              
                 this.cancelRendering(keepAnnotations);
                 this.renderingState =
                   _pdf_rendering_queue.RenderingStates.INITIAL;
                 var div = this.div;
-                // 
-                // was before
+                
+                
+                // Get container width on slides reset with slide effect
+                // Because slide effect uses full width page
                 // div.style.width = Math.floor(this.viewport.width) + "px";
-                // div.style.height = Math.floor(this.viewport.height) + "px";
-                // 
-                // 
-                div.style.width = Math.floor(this.div.parentNode.width) + "px";
+                div.style.width = Math.floor(this.div.className.indexOf('swiper-slide') > -1 ? this.div.parentNode.width : this.viewport.width) + "px";
                 div.style.height = Math.floor(this.viewport.height) + "px";
+                
                 var childNodes = div.childNodes;
                 var currentZoomLayerNode =
                   (keepZoomLayer && this.zoomLayer) || null;

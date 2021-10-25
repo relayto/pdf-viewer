@@ -275,13 +275,11 @@ class PDFViewerApplication {
         let views = [];
         for (var i = activeIndex; i < activeIndex + 1; i++) {
             let view = pdfViewer._pages[i];
-            let w = parseInt(view.div.style.width, 10);
+
+            console.log('view__', view);
             views.push({
                 id: view.id,
-                view: view,
-                x: w,
-                y: 0,
-                percent: 100
+                view: view
             });
         }
 
