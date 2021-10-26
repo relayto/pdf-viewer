@@ -3,9 +3,9 @@ import {PDFLinkService} from 'pdfjs-dist/lib/web/pdf_link_service';
 import {EventBus} from 'pdfjs-dist/lib/web/ui_utils';
 import {PDFViewer} from 'pdfjs-dist/lib/web/pdf_viewer';
 
-const DEFAULT_SCALE_VALUE = 'page-fit';
+const DEFAULT_SCALE_VALUE = 'auto';
 const DEFAULT_SCALE_DELTA = 1.1;
-const DEFAULT_CACHE_SIZE = 5;
+const DEFAULT_CACHE_SIZE = 10;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
@@ -37,14 +37,10 @@ function webViewerPageRendered({pageNumber, error}) {
 class PDFViewerApplication {
     pdfjs = new PDFJsFacade();
     pdfRenderingQueue = null;
-    /** @type {PDFLinkService}*/
     pdfDocument = null;
     pdfLoadingTask = null;
     pdfViewer = null;
-
-    /**
-     *
-     */
+    /** @type {PDFLinkService}*/
     pdfLinkService = null;
     eventBus = null;
     _boundEvents = Object.create(null);
@@ -205,6 +201,9 @@ class PDFViewerApplication {
         if (!this.pdfLoadingTask) {
             return undefined;
         }
+
+        this.unbindEvents();
+        this.pdfViewer.eventBus = this.eventBus = new EventBus();
 
         this.pdfLoadingTask.destroy().then(() => {
             this.pdfLoadingTask = null;

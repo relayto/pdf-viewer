@@ -143,6 +143,7 @@ var PDFJsFacade = function PDFJsFacade() {
   });
 };
 window.rtPDFJsLib = new PDFJsFacade();
+window.pdfjsLib = external_pdfjsLib_;
 ;// CONCATENATED MODULE: ./src/pdfjs-lib.js
 
 })();

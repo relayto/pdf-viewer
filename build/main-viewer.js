@@ -666,6 +666,7 @@ var PDFJsFacade = function PDFJsFacade() {
   });
 };
 window.rtPDFJsLib = new PDFJsFacade();
+window.pdfjsLib = external_pdfjsLib_;
 ;// CONCATENATED MODULE: ./src/lib/main-viewer-application.js
 function main_viewer_application_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = main_viewer_application_objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -683,9 +684,9 @@ function main_viewer_application_defineProperty(obj, key, value) { if (key in ob
 
 
 
-var DEFAULT_SCALE_VALUE = 'page-fit';
+var DEFAULT_SCALE_VALUE = 'auto';
 var DEFAULT_SCALE_DELTA = 1.1;
-var DEFAULT_CACHE_SIZE = 5;
+var DEFAULT_CACHE_SIZE = 10;
 var MIN_SCALE = 0.1;
 var MAX_SCALE = 10.0;
 
@@ -904,6 +905,10 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       if (!_this.pdfLoadingTask) {
         return undefined;
       }
+
+      _this.unbindEvents();
+
+      _this.pdfViewer.eventBus = _this.eventBus = new external_pdfjsViewer_.EventBus();
 
       _this.pdfLoadingTask.destroy().then(function () {
         _this.pdfLoadingTask = null;
