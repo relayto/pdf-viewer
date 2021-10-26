@@ -890,8 +890,6 @@ var PDFViewerApplication = /*#__PURE__*/function () {
             source: _this
           });
         }).then(function () {
-          _this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
-
           _this.pdfViewer.update();
         });
       });

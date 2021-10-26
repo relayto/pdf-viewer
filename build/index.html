@@ -165,6 +165,12 @@
               if (!val.ignoreLocalEvent) redraw();
             });
 
+            this.PDFViewer.eventBus.on("pagesloaded", () => {
+              this.PDFViewer.pdfViewer.removePageBorders = true;
+              this.PDFViewer.pdfViewer.currentScaleValue = "page-fit";
+              this.PDFViewer.pdfViewer.update();
+            });
+
             this.PDFViewer.eventBus.on("pagesloaded", (val) => {
               if (val.source.container.id === this.containerId) {
                 setTimeout(() => {

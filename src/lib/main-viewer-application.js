@@ -179,7 +179,6 @@ class PDFViewerApplication {
           this.eventBus.dispatch("documentinit", { source: this });
         })
         .then(() => {
-          this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
           this.pdfViewer.update();
         });
     });
