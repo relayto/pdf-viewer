@@ -5593,7 +5593,10 @@ var PDFPageView = /*#__PURE__*/function () {
       this.cancelRendering(keepAnnotations);
       this.renderingState = _pdf_rendering_queue.RenderingStates.INITIAL;
       var div = this.div;
-      div.style.width = Math.floor(this.viewport.width) + "px";
+      // Get container width on slides reset with slide effect
+      // Because slide effect uses full width page
+      // div.style.width = Math.floor(this.viewport.width) + "px";
+      div.style.width = Math.floor(this.div.className.indexOf('swiper-slide') > -1 ? this.div.parentNode.width : this.viewport.width) + "px";
       div.style.height = Math.floor(this.viewport.height) + "px";
       var childNodes = div.childNodes;
       var currentZoomLayerNode = keepZoomLayer && this.zoomLayer || null;
@@ -5824,8 +5827,8 @@ var PDFPageView = /*#__PURE__*/function () {
 
       this.renderingState = _pdf_rendering_queue.RenderingStates.RUNNING;
       var canvasWrapper = document.createElement("div");
-      canvasWrapper.style.width = div.style.width;
-      canvasWrapper.style.height = div.style.height;
+      canvasWrapper.style.width = Math.floor(this.viewport.width) + "px";
+      canvasWrapper.style.height = Math.floor(this.viewport.height) + "px";
       canvasWrapper.classList.add("canvasWrapper");
 
       if (this.annotationLayer && this.annotationLayer.div) {

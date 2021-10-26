@@ -11,7 +11,7 @@ module.exports = {
     hot: true,
     inline: true,
   },
-  target: ['es5'],
+  // target: ['es5'],
   externals: [
     function ({ context, request }, callback) {
       if (/^pdfjs-dist\/webpack$/.test(request)) {
