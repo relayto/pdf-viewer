@@ -83,7 +83,7 @@
         justify-content: center;
       }
 
-      #pdfviewer-cards-wrapper-container .canvasWrapp,
+      #pdfviewer-cards-wrapper-container .canvasWrapper,
       #pdfviewer-slide-wrapper-container .canvasWrapper {
         height: 100%;
         align-items: center;
@@ -91,6 +91,7 @@
       }
 
       #pdfviewer-cards-wrapper-container.viewerContainer,
+      #pdfviewer-cube-wrapper-container.viewerContainer,
       #pdfviewer-slide-wrapper-container.viewerContainer {
         position: relative;
         width: 100%;
@@ -134,7 +135,7 @@
   </head>
 
   <body>
-    <div class="flex layout-fill layout-column layout-align-center-center">
+    <!-- <div class="flex layout-fill layout-column layout-align-center-center">
       <div
         id="pdfviewer-slide-wrapper-container"
         class="swiper viewerContainer"
@@ -143,15 +144,18 @@
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
+    </div> -->
+
+    <div
+      class="flex layout-fill layout-column layout-align-center-center"
+      style="overflow: hidden"
+    >
+      <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
+        <div class="pdfViewer swiper-wrapper"></div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
     </div>
-    <!-- 
-        <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
-            <div id="pdfviewer-cube-wrapper-container" class="swiper viewerContainer">
-                <div class="pdfViewer swiper-wrapper"></div>
-            </div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div> -->
 
     <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
@@ -265,10 +269,10 @@
             // scrollMode: 1, // 1-horizontal 0-vertical
             removePageBorders: true,
             containerId: this.containerId,
-            currentScaleValue: "auto",
+            currentScaleValue: "page-fit",
           });
 
-          this.PDFViewer.open("example.pdf");
+          this.PDFViewer.open("test.pdf");
         }
 
         initSwiper(eventBus) {
@@ -333,11 +337,11 @@
       }
 
       document.addEventListener("DOMContentLoaded", async () => {
-        await new SwiperPDF("slide").render();
+        // await new SwiperPDF("slide").render();
         // await new SwiperPDF('fade').render();
         // await new SwiperPDF('flip').render();
         // await new SwiperPDF('cards').render();
-        // await new SwiperPDF('cube').render();
+        await new SwiperPDF("cube").render();
         // await new SwiperPDF('coverflow').render();
         // await new SwiperPDF('creative').render();
       });
