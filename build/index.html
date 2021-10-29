@@ -73,7 +73,7 @@
         justify-content: center;
       }
 
-      #pdfviewer-cards-wrapper-container .canvasWrapp,
+      #pdfviewer-cards-wrapper-container .canvasWrapper,
       #pdfviewer-slide-wrapper-container .canvasWrapper {
         height: 100%;
         align-items: center;
@@ -81,6 +81,7 @@
       }
 
       #pdfviewer-cards-wrapper-container.viewerContainer,
+      #pdfviewer-cube-wrapper-container.viewerContainer,
       #pdfviewer-slide-wrapper-container.viewerContainer {
         position: relative;
         width: 100%;
@@ -102,11 +103,17 @@
       }
 
       .page {
-        border: 0 !important;
+        position: relative !important;
+        border: none !important;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
       }
 
       .page div {
-        margin: 0 auto;
+        /* margin: 0 auto; */
       }
 
       .annotationLayer {
@@ -117,8 +124,42 @@
         right: 0;
       }
 
+      .annotationLayer section {
+        position: absolute;
+      }
+
+      .annotationLayer > * {
+        z-index: 1;
+      }
+
       .swiper-wrapper {
         align-items: center; /* add this will all relevant prefixes */
+      }
+
+      /* Styles for multiple pages in slide */
+      #pdfviewer-slide-wrapper-container .rt-page-components,
+      #pdfviewer-slide-wrapper-container .annotationLayer,
+      #pdfviewer-slide-wrapper-container .textLayer {
+        position: absolute;
+        left: unset;
+        top: unset;
+        right: unset;
+        bottom: unset;
+      }
+
+      #pdfviewer-slide-wrapper-container
+        .swiper-slide-layout-align.swiper-slide-active {
+        justify-content: flex-end;
+      }
+
+      #pdfviewer-slide-wrapper-container
+        .swiper-slide-layout-align.swiper-slide-next {
+        justify-content: flex-start;
+      }
+
+      #pdfviewer-slide-wrapper-container
+        .swiper-slide-layout-align.swiper-slide-active:not(:nth-child(1)) {
+        justify-content: flex-end;
       }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
         PDFViewer = window.rtPDFViewer;
         rtContainerId = null;
@@ -188,10 +229,10 @@
             // scrollMode: 1, // 1-horizontal 0-vertical
             removePageBorders: true,
             containerId: this.containerId,
-            currentScaleValue: "auto",
+            currentScaleValue: "page-fit",
           });
 
-          this.PDFViewer.open("example.pdf");
+          this.PDFViewer.open("test.pdf");
         }
 
         initSwiper(eventBus) {
@@ -200,14 +241,15 @@
           const pages = document.querySelectorAll(`#${that.containerId} .page`);
 
           pages.forEach((page) => {
-            page.classList.add("swiper-slide");
+            page.classList.add("swiper-slide", "swiper-slide-layout-align");
             swiper.style.width = page.style.width;
             swiper.style.height = page.style.height;
           });
 
           const conf = {
-            centeredSlides: true,
-            centeredSlidesBounds: true,
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            slidesPerGroupSkip: 1,
             on: eventBus,
             effect: that.effect,
             grabCursor: true,
@@ -222,12 +264,13 @@
             on: {
               afterInit: function (swiper) {},
               init: (swiper) => {
-                // swiper.slideTo(10, 0);
+                swiper.slideTo(4, 0);
               },
               beforeTransitionStart: (swiper) => {
                 console.log("this.swiper", swiper);
                 rtPDFViewer.page = swiper.activeIndex + 1;
-                that.PDFViewer.updateSlide();
+                let slidesPerView = 2;
+                that.PDFViewer.updateSlide(slidesPerView);
               },
               slideChangeTransitionEnd: (swiper) => {},
             },
@@ -260,7 +303,7 @@
         // await new SwiperPDF('fade').render();
         // await new SwiperPDF('flip').render();
         // await new SwiperPDF('cards').render();
-        // await new SwiperPDF('cube').render();
+        // await new SwiperPDF("cube").render();
         // await new SwiperPDF('coverflow').render();
         // await new SwiperPDF('creative').render();
       });</script></body></html>

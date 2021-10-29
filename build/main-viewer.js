@@ -988,42 +988,41 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       }
     });
 
-    main_viewer_application_defineProperty(this, "updateSlide", function () {
+    main_viewer_application_defineProperty(this, "updateSlide", function (slidesPerView) {
+      slidesPerView = slidesPerView || 1;
       var pdfViewer = _this.pdfViewer;
       var currentPageNumber = pdfViewer.currentPageNumber;
       var activeIndex = currentPageNumber - 1;
-      var views = [];
 
-      for (var i = activeIndex; i < activeIndex + 1; i++) {
+      for (var i = activeIndex; i < activeIndex + slidesPerView; i++) {
+        var views = [];
         var view = pdfViewer._pages[i];
-        console.log("view__", view);
         views.push({
           id: view.id,
           view: view
         });
+        var visible = {
+          first: views[0],
+          last: views[views.length - 1],
+          views: views
+        };
+        var visiblePages = visible.views,
+            numVisiblePages = visiblePages.length;
+        var newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
+
+        pdfViewer._buffer.resize(newCacheSize, visiblePages);
+
+        pdfViewer.forceRendering(visible);
+
+        pdfViewer._updateHelper(visiblePages);
+
+        pdfViewer._updateLocation(visible.first);
+
+        pdfViewer.eventBus.dispatch("updateviewarea", {
+          source: _this.pdfViewer,
+          location: _this.pdfViewer._location
+        });
       }
-
-      var visible = {
-        first: views[0],
-        last: views[views.length - 1],
-        views: views
-      };
-      var visiblePages = visible.views,
-          numVisiblePages = visiblePages.length;
-      var newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
-
-      pdfViewer._buffer.resize(newCacheSize, visiblePages);
-
-      pdfViewer.forceRendering(visible);
-
-      pdfViewer._updateHelper(visiblePages);
-
-      pdfViewer._updateLocation(visible.first);
-
-      pdfViewer.eventBus.dispatch("updateviewarea", {
-        source: _this.pdfViewer,
-        location: _this.pdfViewer._location
-      });
     });
   }
 
