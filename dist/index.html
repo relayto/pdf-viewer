@@ -113,11 +113,17 @@
       }
 
       .page {
-        border: 0 !important;
+        position: relative !important;
+        border: none !important;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
       }
 
       .page div {
-        margin: 0 auto;
+        /* margin: 0 auto; */
       }
 
       .annotationLayer {
@@ -128,14 +134,48 @@
         right: 0;
       }
 
+      .annotationLayer section {
+        position: absolute;
+      }
+
+      .annotationLayer > * {
+        z-index: 1;
+      }
+
       .swiper-wrapper {
         align-items: center; /* add this will all relevant prefixes */
+      }
+
+      /* Styles for multiple pages in slide */
+      #pdfviewer-slide-wrapper-container .rt-page-components,
+      #pdfviewer-slide-wrapper-container .annotationLayer,
+      #pdfviewer-slide-wrapper-container .textLayer {
+        position: absolute;
+        left: unset;
+        top: unset;
+        right: unset;
+        bottom: unset;
+      }
+
+      #pdfviewer-slide-wrapper-container
+        .swiper-slide-layout-align.swiper-slide-active {
+        justify-content: flex-end;
+      }
+
+      #pdfviewer-slide-wrapper-container
+        .swiper-slide-layout-align.swiper-slide-next {
+        justify-content: flex-start;
+      }
+
+      #pdfviewer-slide-wrapper-container
+        .swiper-slide-layout-align.swiper-slide-active:not(:nth-child(1)) {
+        justify-content: flex-end;
       }
     </style>
   </head>
 
   <body>
-    <!-- <div class="flex layout-fill layout-column layout-align-center-center">
+    <div class="flex layout-fill layout-column layout-align-center-center">
       <div
         id="pdfviewer-slide-wrapper-container"
         class="swiper viewerContainer"
@@ -144,9 +184,9 @@
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
-    </div> -->
+    </div>
 
-    <div
+    <!-- <div
       class="flex layout-fill layout-column layout-align-center-center"
       style="overflow: hidden"
     >
@@ -155,7 +195,7 @@
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
-    </div>
+    </div> -->
 
     <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
@@ -281,14 +321,15 @@
           const pages = document.querySelectorAll(`#${that.containerId} .page`);
 
           pages.forEach((page) => {
-            page.classList.add("swiper-slide");
+            page.classList.add("swiper-slide", "swiper-slide-layout-align");
             swiper.style.width = page.style.width;
             swiper.style.height = page.style.height;
           });
 
           const conf = {
-            centeredSlides: true,
-            centeredSlidesBounds: true,
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            slidesPerGroupSkip: 1,
             on: eventBus,
             effect: that.effect,
             grabCursor: true,
@@ -303,12 +344,13 @@
             on: {
               afterInit: function (swiper) {},
               init: (swiper) => {
-                // swiper.slideTo(10, 0);
+                swiper.slideTo(4, 0);
               },
               beforeTransitionStart: (swiper) => {
                 console.log("this.swiper", swiper);
                 rtPDFViewer.page = swiper.activeIndex + 1;
-                that.PDFViewer.updateSlide();
+                let slidesPerView = 2;
+                that.PDFViewer.updateSlide(slidesPerView);
               },
               slideChangeTransitionEnd: (swiper) => {},
             },
@@ -337,11 +379,11 @@
       }
 
       document.addEventListener("DOMContentLoaded", async () => {
-        // await new SwiperPDF("slide").render();
+        await new SwiperPDF("slide").render();
         // await new SwiperPDF('fade').render();
         // await new SwiperPDF('flip').render();
         // await new SwiperPDF('cards').render();
-        await new SwiperPDF("cube").render();
+        // await new SwiperPDF("cube").render();
         // await new SwiperPDF('coverflow').render();
         // await new SwiperPDF('creative').render();
       });

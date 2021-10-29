@@ -264,46 +264,46 @@ class PDFViewerApplication {
     }
   };
 
-  updateSlide = () => {
+  updateSlide = (slidesPerView) => {
+    slidesPerView = slidesPerView || 1;
+
     const { pdfViewer } = this;
 
     let currentPageNumber = pdfViewer.currentPageNumber;
     let activeIndex = currentPageNumber - 1;
-
-    let views = [];
-    for (var i = activeIndex; i < activeIndex + 1; i++) {
+    for (var i = activeIndex; i < activeIndex + slidesPerView; i++) {
+      let views = [];
       let view = pdfViewer._pages[i];
 
-      console.log("view__", view);
       views.push({
         id: view.id,
         view: view,
       });
+
+      let visible = {
+        first: views[0],
+        last: views[views.length - 1],
+        views: views,
+      };
+
+      let visiblePages = visible.views,
+        numVisiblePages = visiblePages.length;
+
+      let newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
+
+      pdfViewer._buffer.resize(newCacheSize, visiblePages);
+
+      pdfViewer.forceRendering(visible);
+
+      pdfViewer._updateHelper(visiblePages);
+
+      pdfViewer._updateLocation(visible.first);
+
+      pdfViewer.eventBus.dispatch("updateviewarea", {
+        source: this.pdfViewer,
+        location: this.pdfViewer._location,
+      });
     }
-
-    let visible = {
-      first: views[0],
-      last: views[views.length - 1],
-      views: views,
-    };
-
-    let visiblePages = visible.views,
-      numVisiblePages = visiblePages.length;
-
-    let newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
-
-    pdfViewer._buffer.resize(newCacheSize, visiblePages);
-
-    pdfViewer.forceRendering(visible);
-
-    pdfViewer._updateHelper(visiblePages);
-
-    pdfViewer._updateLocation(visible.first);
-
-    pdfViewer.eventBus.dispatch("updateviewarea", {
-      source: this.pdfViewer,
-      location: this.pdfViewer._location,
-    });
   };
 
   get pagesCount() {

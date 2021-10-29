@@ -5859,16 +5859,18 @@ var PDFPageView = /*#__PURE__*/function () {
 
       if (this.renderingQueue) {
         renderContinueCallback = function renderContinueCallback(cont) {
-          if (!_this.renderingQueue.isHighestPriority(_this)) {
-            _this.renderingState = _pdf_rendering_queue.RenderingStates.PAUSED;
+          // Dont use it, page not loading
+          // For some reasons it pause page and not loading 
+          // if (!_this.renderingQueue.isHighestPriority(_this)) {
+          //   _this.renderingState = _pdf_rendering_queue.RenderingStates.PAUSED;
 
-            _this.resume = function () {
-              _this.renderingState = _pdf_rendering_queue.RenderingStates.RUNNING;
-              cont();
-            };
+          //   _this.resume = function () {
+          //     _this.renderingState = _pdf_rendering_queue.RenderingStates.RUNNING;
+          //     cont();
+          //   };
 
-            return;
-          }
+          //   return;
+          // }
 
           cont();
         };
