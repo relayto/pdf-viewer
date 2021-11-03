@@ -137,7 +137,7 @@
       }
 
       /* Styles for multiple pages in slide */
-      #pdfviewer-slide-wrapper-container .rt-page-components,
+      /* #pdfviewer-slide-wrapper-container .rt-page-components,
       #pdfviewer-slide-wrapper-container .annotationLayer,
       #pdfviewer-slide-wrapper-container .textLayer {
         position: absolute;
@@ -160,7 +160,7 @@
       #pdfviewer-slide-wrapper-container
         .swiper-slide-layout-align.swiper-slide-active:not(:nth-child(1)) {
         justify-content: flex-end;
-      }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
+      } */</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
         PDFViewer = window.rtPDFViewer;
         rtContainerId = null;
         containerId = null;
@@ -226,10 +226,7 @@
 
         initPDFViewer() {
           this.PDFViewer.initialize({
-            // scrollMode: 1, // 1-horizontal 0-vertical
-            removePageBorders: true,
             containerId: this.containerId,
-            currentScaleValue: "page-fit",
           });
 
           this.PDFViewer.open("test.pdf");
@@ -247,9 +244,6 @@
           });
 
           const conf = {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            slidesPerGroupSkip: 1,
             on: eventBus,
             effect: that.effect,
             grabCursor: true,
@@ -267,10 +261,8 @@
                 swiper.slideTo(4, 0);
               },
               beforeTransitionStart: (swiper) => {
-                console.log("this.swiper", swiper);
                 rtPDFViewer.page = swiper.activeIndex + 1;
-                let slidesPerView = 2;
-                that.PDFViewer.updateSlide(slidesPerView);
+                that.PDFViewer.updateSlide();
               },
               slideChangeTransitionEnd: (swiper) => {},
             },

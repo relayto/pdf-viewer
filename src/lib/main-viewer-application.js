@@ -48,10 +48,7 @@ class PDFViewerApplication {
 
   container = null;
 
-  spreadMode = 0;
   initialized = false;
-  removePageBorders = false;
-  currentScaleValue = DEFAULT_SCALE_VALUE;
   settingPages = [];
 
   _initializeViewer = () => {
@@ -65,15 +62,11 @@ class PDFViewerApplication {
       container: this.container,
       eventBus: this.eventBus,
       linkService: this.pdfLinkService,
-      removePageBorders: this.removePageBorders,
-      currentScaleValue: this.currentScaleValue,
     });
 
     this.pdfRenderingQueue = this.getRenderingQueueFromViewer(this.pdfViewer);
     this.pdfLinkService.setDocument(this.pdfDocument);
     this.pdfViewer.setDocument(this.pdfDocument);
-
-    this.pdfViewer.spreadMode = this.spreadMode;
   };
 
   getRenderingQueueFromViewer = (pdfViewer) => {
@@ -95,12 +88,6 @@ class PDFViewerApplication {
       config.container ||
       window.document.getElementById(config.containerId || "pdfViewerContent");
 
-    if (config.hasOwnProperty("removePageBorders"))
-      this.removePageBorders = config.removePageBorders;
-
-    if (config.hasOwnProperty("currentScaleValue"))
-      this.currentScaleValue = config.currentScaleValue;
-
     this._initializeViewer();
 
     this.bindEvents();
@@ -108,7 +95,6 @@ class PDFViewerApplication {
 
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
-    this.spreadMode = config.spreadMode || 0;
 
     this.initialized = true;
   };

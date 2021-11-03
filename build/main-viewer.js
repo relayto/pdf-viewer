@@ -752,13 +752,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
     main_viewer_application_defineProperty(this, "container", null);
 
-    main_viewer_application_defineProperty(this, "spreadMode", 0);
-
     main_viewer_application_defineProperty(this, "initialized", false);
-
-    main_viewer_application_defineProperty(this, "removePageBorders", false);
-
-    main_viewer_application_defineProperty(this, "currentScaleValue", DEFAULT_SCALE_VALUE);
 
     main_viewer_application_defineProperty(this, "settingPages", []);
 
@@ -770,17 +764,13 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       _this.pdfViewer = new external_pdfjsViewer_.PDFViewer({
         container: _this.container,
         eventBus: _this.eventBus,
-        linkService: _this.pdfLinkService,
-        removePageBorders: _this.removePageBorders,
-        currentScaleValue: _this.currentScaleValue
+        linkService: _this.pdfLinkService
       });
       _this.pdfRenderingQueue = _this.getRenderingQueueFromViewer(_this.pdfViewer);
 
       _this.pdfLinkService.setDocument(_this.pdfDocument);
 
       _this.pdfViewer.setDocument(_this.pdfDocument);
-
-      _this.pdfViewer.spreadMode = _this.spreadMode;
     });
 
     main_viewer_application_defineProperty(this, "getRenderingQueueFromViewer", function (pdfViewer) {
@@ -802,8 +792,6 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
       Object.assign(_this.pdfjs.lib, pdfjsLibConfigs);
       _this.container = config.container || window.document.getElementById(config.containerId || "pdfViewerContent");
-      if (config.hasOwnProperty("removePageBorders")) _this.removePageBorders = config.removePageBorders;
-      if (config.hasOwnProperty("currentScaleValue")) _this.currentScaleValue = config.currentScaleValue;
 
       _this._initializeViewer();
 
@@ -813,7 +801,6 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
       _this.preferences = {};
       _this.settingPages = config.relaytoPagesView || [];
-      _this.spreadMode = config.spreadMode || 0;
       _this.initialized = true;
     });
 
