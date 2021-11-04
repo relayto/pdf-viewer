@@ -11,7 +11,12 @@ const MAX_SCALE = 10.0;
 
 function webViewerResize() {
   const { pdfDocument, pdfViewer } = window.rtPDFViewer;
+
   if (!pdfDocument) {
+    return;
+  }
+  // Dont toggling on YT video goes to full screen mode - Breaks the view for page-fit
+  if (document.fullscreenElement && document.fullscreenElement.player) {
     return;
   }
 
