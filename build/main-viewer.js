@@ -684,7 +684,7 @@ function main_viewer_application_defineProperty(obj, key, value) { if (key in ob
 
 
 
-var DEFAULT_SCALE_VALUE = "page-fit";
+var DEFAULT_SCALE_VALUE = "auto";
 var DEFAULT_SCALE_DELTA = 1.1;
 var DEFAULT_CACHE_SIZE = 10;
 var MIN_SCALE = 0.1;
@@ -693,7 +693,8 @@ var MAX_SCALE = 10.0;
 function webViewerResize() {
   var _window$rtPDFViewer = window.rtPDFViewer,
       pdfDocument = _window$rtPDFViewer.pdfDocument,
-      pdfViewer = _window$rtPDFViewer.pdfViewer;
+      pdfViewer = _window$rtPDFViewer.pdfViewer,
+      currentScaleValue = _window$rtPDFViewer.currentScaleValue;
 
   if (!pdfDocument) {
     return;
@@ -703,8 +704,6 @@ function webViewerResize() {
   if (document.fullscreenElement && document.fullscreenElement.player) {
     return;
   }
-
-  var currentScaleValue = pdfViewer.currentScaleValue;
 
   if (currentScaleValue === "auto" || currentScaleValue === "page-fit" || currentScaleValue === "page-width") {
     // Note: the scale is constant for 'page-actual'.
@@ -748,6 +747,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     main_viewer_application_defineProperty(this, "preferences", null);
 
     main_viewer_application_defineProperty(this, "container", null);
+
+    main_viewer_application_defineProperty(this, "currentScaleValue", null);
 
     main_viewer_application_defineProperty(this, "initialized", false);
 
@@ -798,6 +799,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
       _this.preferences = {};
       _this.settingPages = config.relaytoPagesView || [];
+      _this.currentScaleValue = config.currentScaleValue || DEFAULT_SCALE_VALUE;
       _this.initialized = true;
     });
 
@@ -805,6 +807,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       _this.eventBus._on("resize", webViewerResize);
 
       _this.eventBus._on("pagerendered", webViewerPageRendered);
+
+      _this.eventBus._on("pagesinit", webViewerResize);
     });
 
     main_viewer_application_defineProperty(this, "bindWindowEvents", function () {

@@ -3,14 +3,14 @@ import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
 import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 import { PDFViewer } from "pdfjs-dist/lib/web/pdf_viewer";
 
-const DEFAULT_SCALE_VALUE = "page-fit";
+const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE_DELTA = 1.1;
 const DEFAULT_CACHE_SIZE = 10;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
 function webViewerResize() {
-  const { pdfDocument, pdfViewer } = window.rtPDFViewer;
+  const { pdfDocument, pdfViewer, currentScaleValue } = window.rtPDFViewer;
 
   if (!pdfDocument) {
     return;
@@ -20,7 +20,6 @@ function webViewerResize() {
     return;
   }
 
-  const currentScaleValue = pdfViewer.currentScaleValue;
   if (
     currentScaleValue === "auto" ||
     currentScaleValue === "page-fit" ||
@@ -52,7 +51,7 @@ class PDFViewerApplication {
   preferences = null;
 
   container = null;
-
+  currentScaleValue = null;
   initialized = false;
   settingPages = [];
 
@@ -100,13 +99,14 @@ class PDFViewerApplication {
 
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
-
+    this.currentScaleValue = config.currentScaleValue || DEFAULT_SCALE_VALUE;
     this.initialized = true;
   };
 
   bindEvents = () => {
     this.eventBus._on("resize", webViewerResize);
     this.eventBus._on("pagerendered", webViewerPageRendered);
+    this.eventBus._on("pagesinit", webViewerResize);
   };
 
   bindWindowEvents = () => {

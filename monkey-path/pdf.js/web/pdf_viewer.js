@@ -6763,9 +6763,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
           // Fix broking fonts after 30 sec
           // Stop execute clean timeout for pages that renders like SVG
-          if(renderer === 'svg'){
-            pageView.renderingQueue.onIdle = null;
-          }
+          pageView.renderingQueue.onIdle = null;
 
           _this2._pages.push(pageView);
         }
