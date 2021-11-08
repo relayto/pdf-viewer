@@ -694,7 +694,8 @@ function webViewerResize() {
   var _window$rtPDFViewer = window.rtPDFViewer,
       pdfDocument = _window$rtPDFViewer.pdfDocument,
       pdfViewer = _window$rtPDFViewer.pdfViewer,
-      currentScaleValue = _window$rtPDFViewer.currentScaleValue;
+      currentScaleValue = _window$rtPDFViewer.currentScaleValue,
+      removePageBorders = _window$rtPDFViewer.removePageBorders;
 
   if (!pdfDocument) {
     return;
@@ -707,6 +708,7 @@ function webViewerResize() {
 
   if (currentScaleValue === "auto" || currentScaleValue === "page-fit" || currentScaleValue === "page-width") {
     // Note: the scale is constant for 'page-actual'.
+    pdfViewer.removePageBorders = removePageBorders;
     pdfViewer.currentScaleValue = currentScaleValue;
   }
 
@@ -749,6 +751,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     main_viewer_application_defineProperty(this, "container", null);
 
     main_viewer_application_defineProperty(this, "currentScaleValue", null);
+
+    main_viewer_application_defineProperty(this, "removePageBorders", false);
 
     main_viewer_application_defineProperty(this, "initialized", false);
 
@@ -800,6 +804,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       _this.preferences = {};
       _this.settingPages = config.relaytoPagesView || [];
       _this.currentScaleValue = config.currentScaleValue || DEFAULT_SCALE_VALUE;
+      _this.removePageBorders = config.removePageBorders || false;
       _this.initialized = true;
     });
 

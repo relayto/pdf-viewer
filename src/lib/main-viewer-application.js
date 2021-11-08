@@ -10,7 +10,8 @@ const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
 function webViewerResize() {
-  const { pdfDocument, pdfViewer, currentScaleValue } = window.rtPDFViewer;
+  const { pdfDocument, pdfViewer, currentScaleValue, removePageBorders } =
+    window.rtPDFViewer;
 
   if (!pdfDocument) {
     return;
@@ -26,6 +27,7 @@ function webViewerResize() {
     currentScaleValue === "page-width"
   ) {
     // Note: the scale is constant for 'page-actual'.
+    pdfViewer.removePageBorders = removePageBorders;
     pdfViewer.currentScaleValue = currentScaleValue;
   }
 
@@ -52,6 +54,7 @@ class PDFViewerApplication {
 
   container = null;
   currentScaleValue = null;
+  removePageBorders = false;
   initialized = false;
   settingPages = [];
 
@@ -100,6 +103,7 @@ class PDFViewerApplication {
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
     this.currentScaleValue = config.currentScaleValue || DEFAULT_SCALE_VALUE;
+    this.removePageBorders = config.removePageBorders || false;
     this.initialized = true;
   };
 
