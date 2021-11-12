@@ -259,14 +259,10 @@ class PDFViewerApplication {
     }
   };
 
-  updateSlide = (slidesPerView) => {
-    slidesPerView = slidesPerView || 1;
-
+  updateSlide = (from, to) => {
     const { pdfViewer } = this;
 
-    let currentPageNumber = pdfViewer.currentPageNumber;
-    let activeIndex = currentPageNumber - 1;
-    for (var i = activeIndex; i < activeIndex + slidesPerView; i++) {
+    for (var i = from; i < to; i++) {
       let views = [];
       let view = pdfViewer._pages[i];
 

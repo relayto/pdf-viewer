@@ -253,11 +253,17 @@
             on: {
               afterInit: function (swiper) {},
               init: (swiper) => {
-                swiper.slideTo(4, 0);
+                swiper.slideTo(9, 0);
               },
               beforeTransitionStart: (swiper) => {
-                rtPDFViewer.page = swiper.activeIndex + 1;
-                that.PDFViewer.updateSlide();
+                for (
+                  var i = swiper.activeIndex;
+                  i < swiper.activeIndex + 3;
+                  i++
+                ) {
+                  rtPDFViewer.page = i;
+                  rtPDFViewer.updateSlide();
+                }
               },
               slideChangeTransitionEnd: (swiper) => {},
             },

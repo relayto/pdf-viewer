@@ -7,22 +7,22 @@
 		var a = typeof exports === 'object' ? factory(require("pdfjsLib"), require("pdfjsViewer")) : factory(root["pdfjsLib"], root["pdfjsViewer"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(self, function(__WEBPACK_EXTERNAL_MODULE__544__, __WEBPACK_EXTERNAL_MODULE__231__) {
+})(self, function(__WEBPACK_EXTERNAL_MODULE__23__, __WEBPACK_EXTERNAL_MODULE__626__) {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 544:
+/***/ 23:
 /***/ ((module) => {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__544__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__23__;
 
 /***/ }),
 
-/***/ 231:
+/***/ 626:
 /***/ ((module) => {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__231__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__626__;
 
 /***/ })
 
@@ -72,10 +72,12 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: external "pdfjsLib"
-var external_pdfjsLib_ = __webpack_require__(544);
+var external_pdfjsLib_ = __webpack_require__(23);
 // EXTERNAL MODULE: external "pdfjsViewer"
-var external_pdfjsViewer_ = __webpack_require__(231);
+var external_pdfjsViewer_ = __webpack_require__(626);
 ;// CONCATENATED MODULE: ./src/lib/pdfjs-lib-facade.js
+var _excluded = ["onPassword", "onProgress"];
+
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
@@ -117,7 +119,7 @@ var PDFJsFacade = function PDFJsFacade() {
   _defineProperty(this, "createDocLoadingTask", function (params) {
     var onPassword = params.onPassword,
         onProgress = params.onProgress,
-        getParams = _objectWithoutProperties(params, ["onPassword", "onProgress"]);
+        getParams = _objectWithoutProperties(params, _excluded);
 
     var url = getParams.url;
     return new Promise(function (resolve, reject) {
