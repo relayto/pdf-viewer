@@ -262,10 +262,10 @@ class PDFViewerApplication {
   updateSlide = (from, to) => {
     const { pdfViewer } = this;
 
-    for (var i = from; i < to; i++) {
+    for (var i = from; i <= to; i++) {
       let views = [];
       let view = pdfViewer._pages[i];
-
+      if (!view) continue;
       views.push({
         id: view.id,
         view: view,

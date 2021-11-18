@@ -981,9 +981,10 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     main_viewer_application_defineProperty(this, "updateSlide", function (from, to) {
       var pdfViewer = _this.pdfViewer;
 
-      for (var i = from; i < to; i++) {
+      for (var i = from; i <= to; i++) {
         var views = [];
         var view = pdfViewer._pages[i];
+        if (!view) continue;
         views.push({
           id: view.id,
           view: view
