@@ -664,6 +664,81 @@ var PDFJsFacade = function PDFJsFacade() {
 };
 window.rtPDFJsLib = new PDFJsFacade();
 window.pdfjsLib = external_pdfjsLib_;
+;// CONCATENATED MODULE: ./src/lib/svg-fix.js
+/**
+ *
+ * @param {HTMLElement} htmlElement
+ */
+function svgFix(htmlElement) {
+  var gElements = selectGraphicElementsFrom(htmlElement);
+
+  if (gElements.length > 0) {
+    var getCP = getClipPathFinder(htmlElement);
+    fixClipPathRefs(gElements, getCP);
+  }
+}
+/**
+ * Selects all the <g> with clip-path attribute. This is needed
+ * for handling the nested clip-path references:
+ * ```
+ *
+ */
+
+var selectGraphicElementsFrom = function selectGraphicElementsFrom(htmlElement) {
+  return htmlElement.querySelectorAll("g[clip-path]");
+};
+/**
+ *
+ * @param {NodeList} gElements
+ * @param {Function} getCP
+ */
+
+
+function fixClipPathRefs(gElements, getCP) {
+  gElements.forEach(function (element) {
+    var oldId = extractClipPathId(element.getAttribute("clip-path"));
+    var fixedId = getCP(oldId).id;
+    element.setAttribute("clip-path", createCSSPathRef(fixedId));
+  });
+}
+/**
+ *
+ * @param {HTMLElement} htmlElement
+ */
+
+
+function getClipPathFinder(htmlElement) {
+  var selector = function selector(clipPathId) {
+    return htmlElement.querySelector("clipPath#".concat(clipPathId));
+  };
+
+  var rootClipPath = function rootClipPath(clipPathId) {
+    var el = selector(clipPathId);
+
+    if (el.hasAttribute("clip-path")) {
+      var nestedId = extractClipPathId(el.getAttribute("clip-path"));
+      el = rootClipPath(nestedId);
+    }
+
+    return el;
+  };
+
+  return rootClipPath;
+}
+
+function extractClipPathId(idSelector) {
+  var reId = /\#([\w\-]+)/gi;
+  var r = reId.exec(idSelector);
+  console.log("[extractClipPathId]", {
+    idSelector: idSelector,
+    r: r
+  });
+  return r[1];
+}
+
+var createCSSPathRef = function createCSSPathRef(id) {
+  return "url(#".concat(id, ")");
+};
 ;// CONCATENATED MODULE: ./src/lib/page-viewer-application.js
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -676,6 +751,7 @@ function page_viewer_application_objectWithoutPropertiesLoose(source, excluded) 
 function page_viewer_application_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function page_viewer_application_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -714,7 +790,19 @@ var PDFPageViewerApplication = function PDFPageViewerApplication() {
 
     Object.assign(_this.pdfjs.lib, pdfjsLibConfigs);
     _this.container = config.container || window.document.getElementById(config.containerId || "pdfViewerContent");
+
+    _this.initEventBus();
+  });
+
+  page_viewer_application_defineProperty(this, "initEventBus", function () {
     _this.eventBus = new external_pdfjsViewer_.EventBus();
+
+    _this.eventBus._on("pagerendered", _this.pageRendered);
+  });
+
+  page_viewer_application_defineProperty(this, "pageRendered", function (_ref2) {
+    var source = _ref2.source;
+    svgFix(source.div);
   });
 
   page_viewer_application_defineProperty(this, "open", function (pdfSource) {

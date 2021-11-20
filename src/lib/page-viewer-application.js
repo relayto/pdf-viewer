@@ -1,6 +1,7 @@
 import { PDFJsFacade } from "./pdfjs-lib-facade";
 import { PDFPageView } from "pdfjs-dist/lib/web/pdf_page_view";
 import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
+import { svgFix } from "./svg-fix";
 
 const SCALE = 1.0;
 
@@ -28,7 +29,16 @@ class PDFPageViewerApplication {
       config.container ||
       window.document.getElementById(config.containerId || "pdfViewerContent");
 
+    this.initEventBus();
+  };
+
+  initEventBus = () => {
     this.eventBus = new EventBus();
+    this.eventBus._on("pagerendered", this.pageRendered);
+  };
+
+  pageRendered = ({ source }) => {
+    svgFix(source.div);
   };
 
   /**

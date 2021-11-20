@@ -664,6 +664,81 @@ var PDFJsFacade = function PDFJsFacade() {
 };
 window.rtPDFJsLib = new PDFJsFacade();
 window.pdfjsLib = external_pdfjsLib_;
+;// CONCATENATED MODULE: ./src/lib/svg-fix.js
+/**
+ *
+ * @param {HTMLElement} htmlElement
+ */
+function svgFix(htmlElement) {
+  var gElements = selectGraphicElementsFrom(htmlElement);
+
+  if (gElements.length > 0) {
+    var getCP = getClipPathFinder(htmlElement);
+    fixClipPathRefs(gElements, getCP);
+  }
+}
+/**
+ * Selects all the <g> with clip-path attribute. This is needed
+ * for handling the nested clip-path references:
+ * ```
+ *
+ */
+
+var selectGraphicElementsFrom = function selectGraphicElementsFrom(htmlElement) {
+  return htmlElement.querySelectorAll("g[clip-path]");
+};
+/**
+ *
+ * @param {NodeList} gElements
+ * @param {Function} getCP
+ */
+
+
+function fixClipPathRefs(gElements, getCP) {
+  gElements.forEach(function (element) {
+    var oldId = extractClipPathId(element.getAttribute("clip-path"));
+    var fixedId = getCP(oldId).id;
+    element.setAttribute("clip-path", createCSSPathRef(fixedId));
+  });
+}
+/**
+ *
+ * @param {HTMLElement} htmlElement
+ */
+
+
+function getClipPathFinder(htmlElement) {
+  var selector = function selector(clipPathId) {
+    return htmlElement.querySelector("clipPath#".concat(clipPathId));
+  };
+
+  var rootClipPath = function rootClipPath(clipPathId) {
+    var el = selector(clipPathId);
+
+    if (el.hasAttribute("clip-path")) {
+      var nestedId = extractClipPathId(el.getAttribute("clip-path"));
+      el = rootClipPath(nestedId);
+    }
+
+    return el;
+  };
+
+  return rootClipPath;
+}
+
+function extractClipPathId(idSelector) {
+  var reId = /\#([\w\-]+)/gi;
+  var r = reId.exec(idSelector);
+  console.log("[extractClipPathId]", {
+    idSelector: idSelector,
+    r: r
+  });
+  return r[1];
+}
+
+var createCSSPathRef = function createCSSPathRef(id) {
+  return "url(#".concat(id, ")");
+};
 ;// CONCATENATED MODULE: ./src/lib/main-viewer-application.js
 function main_viewer_application_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = main_viewer_application_objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -676,6 +751,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function main_viewer_application_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -705,8 +781,10 @@ function webViewerResize() {
 }
 
 function webViewerPageRendered(_ref) {
-  var pageNumber = _ref.pageNumber,
+  var source = _ref.source,
+      pageNumber = _ref.pageNumber,
       error = _ref.error;
+  svgFix(source.div);
 
   if (error && error.name === "RenderingCancelledException") {
     console.log(pageNumber, error);
