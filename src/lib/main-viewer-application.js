@@ -6,22 +6,29 @@ import { svgFix } from "./svg-fix";
 
 const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE_DELTA = 1.1;
+const DEFAULT_CACHE_SIZE = 10;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
 function webViewerResize() {
-  const { pdfDocument, pdfViewer } = PDFViewerApplication;
+  const { pdfDocument, pdfViewer, currentScaleValue, removePageBorders } =
+    window.rtPDFViewer;
+
   if (!pdfDocument) {
     return;
   }
+  // Dont toggling on YT video goes to full screen mode - Breaks the view for page-fit
+  if (document.fullscreenElement && document.fullscreenElement.player) {
+    return;
+  }
 
-  const currentScaleValue = pdfViewer.currentScaleValue;
   if (
     currentScaleValue === "auto" ||
     currentScaleValue === "page-fit" ||
     currentScaleValue === "page-width"
   ) {
     // Note: the scale is constant for 'page-actual'.
+    pdfViewer.removePageBorders = removePageBorders;
     pdfViewer.currentScaleValue = currentScaleValue;
   }
 
@@ -44,11 +51,12 @@ class PDFViewerApplication {
   /** @type {PDFLinkService}*/
   pdfLinkService = null;
   eventBus = null;
+  _boundEvents = Object.create(null);
   preferences = null;
 
   container = null;
-
-  spreadMode = 0;
+  currentScaleValue = null;
+  removePageBorders = false;
   initialized = false;
   settingPages = [];
 
@@ -66,11 +74,8 @@ class PDFViewerApplication {
     });
 
     this.pdfRenderingQueue = this.getRenderingQueueFromViewer(this.pdfViewer);
-
     this.pdfLinkService.setDocument(this.pdfDocument);
     this.pdfViewer.setDocument(this.pdfDocument);
-
-    this.pdfViewer.spreadMode = this.spreadMode;
   };
 
   getRenderingQueueFromViewer = (pdfViewer) => {
@@ -95,17 +100,29 @@ class PDFViewerApplication {
     this._initializeViewer();
 
     this.bindEvents();
+    this.bindWindowEvents();
 
     this.preferences = {};
     this.settingPages = config.relaytoPagesView || [];
-    this.spreadMode = config.spreadMode || 0;
-
+    this.currentScaleValue = config.currentScaleValue || DEFAULT_SCALE_VALUE;
+    this.removePageBorders = config.removePageBorders || false;
     this.initialized = true;
   };
 
   bindEvents = () => {
     this.eventBus._on("resize", webViewerResize);
     this.eventBus._on("pagerendered", webViewerPageRendered);
+    this.eventBus._on("pagesinit", webViewerResize);
+  };
+
+  bindWindowEvents = () => {
+    const { _boundEvents, eventBus } = this;
+    _boundEvents.windowResize = () => {
+      eventBus.dispatch("resize", {
+        source: window,
+      });
+    };
+    window.addEventListener("resize", _boundEvents.windowResize);
   };
 
   unbindEvents = () => {
@@ -119,7 +136,7 @@ class PDFViewerApplication {
     const level = loaded / total;
     const percent = Math.round(level * 100);
 
-    console.log(percent);
+    // console.log(percent);
   };
 
   open = (pdfSource, disableRange = false) => {
@@ -159,7 +176,6 @@ class PDFViewerApplication {
           this.eventBus.dispatch("documentinit", { source: this });
         })
         .then(() => {
-          //setTimeout(() => this.pdfViewer.forceRendering(this.pdfViewer._pages), 100);
           this.pdfViewer.update();
         });
     });
@@ -225,6 +241,14 @@ class PDFViewerApplication {
     this.pdfViewer.currentScaleValue = newScale;
   };
 
+  zoomReset = () => {
+    if (!this.pdfViewer || this.pdfViewer.isInPresentationMode) {
+      return;
+    }
+
+    this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
+  };
+
   redrawPage = (pageNumber, renderer) => {
     const { pdfViewer } = this;
     if (pdfViewer && pdfViewer._pages && pdfViewer._pages.length > 0) {
@@ -237,12 +261,42 @@ class PDFViewerApplication {
     }
   };
 
-  zoomReset = () => {
-    if (!this.pdfViewer || this.pdfViewer.isInPresentationMode) {
-      return;
-    }
+  updateSlide = (from, to) => {
+    const { pdfViewer } = this;
 
-    this.pdfViewer.currentScaleValue = DEFAULT_SCALE_VALUE;
+    for (var i = from; i <= to; i++) {
+      let views = [];
+      let view = pdfViewer._pages[i];
+      if (!view) continue;
+      views.push({
+        id: view.id,
+        view: view,
+      });
+
+      let visible = {
+        first: views[0],
+        last: views[views.length - 1],
+        views: views,
+      };
+
+      let visiblePages = visible.views,
+        numVisiblePages = visiblePages.length;
+
+      let newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
+
+      pdfViewer._buffer.resize(newCacheSize, visiblePages);
+
+      pdfViewer.forceRendering(visible);
+
+      pdfViewer._updateHelper(visiblePages);
+
+      pdfViewer._updateLocation(visible.first);
+
+      pdfViewer.eventBus.dispatch("updateviewarea", {
+        source: this.pdfViewer,
+        location: this.pdfViewer._location,
+      });
+    }
   };
 
   get pagesCount() {
