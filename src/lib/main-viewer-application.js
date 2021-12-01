@@ -2,6 +2,7 @@ import { PDFJsFacade } from "./pdfjs-lib-facade";
 import { PDFLinkService } from "pdfjs-dist/lib/web/pdf_link_service";
 import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 import { PDFViewer } from "pdfjs-dist/lib/web/pdf_viewer";
+import { svgFix } from "./svg-fix";
 
 const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE_DELTA = 1.1;
@@ -34,7 +35,8 @@ function webViewerResize() {
   pdfViewer.update();
 }
 
-function webViewerPageRendered({ pageNumber, error }) {
+function webViewerPageRendered({ source, pageNumber, error }) {
+  svgFix(source.div);
   if (error && error.name === "RenderingCancelledException") {
     console.log(pageNumber, error);
   }
