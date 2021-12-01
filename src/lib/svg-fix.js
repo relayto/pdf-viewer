@@ -45,8 +45,10 @@ const selectGraphicElementsFrom = (htmlElement) =>
 function fixClipPathRefs(gElements, getCP) {
   gElements.forEach((element) => {
     const oldId = extractClipPathId(element.getAttribute("clip-path"));
-    const fixedId = getCP(oldId).id;
-    element.setAttribute("clip-path", createCSSPathRef(fixedId));
+    if (oldId) {
+      const fixedId = getCP(oldId).id;
+      element.setAttribute("clip-path", createCSSPathRef(fixedId));
+    }
   });
 }
 
@@ -62,9 +64,11 @@ function getClipPathFinder(htmlElement) {
 
   const rootClipPath = (clipPathId) => {
     let el = selector(clipPathId);
-    if (el.hasAttribute("clip-path")) {
+    if (el && el.hasAttribute("clip-path")) {
       const nestedId = extractClipPathId(el.getAttribute("clip-path"));
-      el = rootClipPath(nestedId);
+      if (nestedId) {
+        el = rootClipPath(nestedId);
+      }
     }
 
     return el;
@@ -83,7 +87,8 @@ function extractClipPathId(idSelector) {
   const reId = /\#([\w\-]+)/gi;
   const r = reId.exec(idSelector);
   console.log("[extractClipPathId]", { idSelector, r });
-  return r[1];
+
+  return r && r[1] ? r[1] : null;
 }
 
 /**

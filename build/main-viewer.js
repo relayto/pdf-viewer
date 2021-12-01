@@ -715,8 +715,11 @@ var selectGraphicElementsFrom = function selectGraphicElementsFrom(htmlElement) 
 function fixClipPathRefs(gElements, getCP) {
   gElements.forEach(function (element) {
     var oldId = extractClipPathId(element.getAttribute("clip-path"));
-    var fixedId = getCP(oldId).id;
-    element.setAttribute("clip-path", createCSSPathRef(fixedId));
+
+    if (oldId) {
+      var fixedId = getCP(oldId).id;
+      element.setAttribute("clip-path", createCSSPathRef(fixedId));
+    }
   });
 }
 /**
@@ -735,9 +738,12 @@ function getClipPathFinder(htmlElement) {
   var rootClipPath = function rootClipPath(clipPathId) {
     var el = selector(clipPathId);
 
-    if (el.hasAttribute("clip-path")) {
+    if (el && el.hasAttribute("clip-path")) {
       var nestedId = extractClipPathId(el.getAttribute("clip-path"));
-      el = rootClipPath(nestedId);
+
+      if (nestedId) {
+        el = rootClipPath(nestedId);
+      }
     }
 
     return el;
@@ -760,7 +766,7 @@ function extractClipPathId(idSelector) {
     idSelector: idSelector,
     r: r
   });
-  return r[1];
+  return r && r[1] ? r[1] : null;
 }
 /**
  * Creates a clip-path attribute value using `url()` format
