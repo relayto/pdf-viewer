@@ -22,17 +22,31 @@ function webViewerResize() {
     return;
   }
 
-  if (
-    currentScaleValue === "auto" ||
-    currentScaleValue === "page-fit" ||
-    currentScaleValue === "page-width"
-  ) {
-    // Note: the scale is constant for 'page-actual'.
-    pdfViewer.removePageBorders = removePageBorders;
-    pdfViewer.currentScaleValue = currentScaleValue;
-  }
+  // Need timeout because webkitCurrentFullScreenElement is not setted in other case
+  let timerId = setTimeout(function () {
+    clearTimeout(timerId);
 
-  pdfViewer.update();
+    // When YT videos goes fullscreen in Safari
+    // need to check in special object called webkitCurrentFullScreenElement
+    if (
+      document.webkitCurrentFullScreenElement &&
+      document.webkitCurrentFullScreenElement.player
+    ) {
+      return;
+    }
+
+    if (
+      currentScaleValue === "auto" ||
+      currentScaleValue === "page-fit" ||
+      currentScaleValue === "page-width"
+    ) {
+      // Note: the scale is constant for 'page-actual'.
+      pdfViewer.removePageBorders = removePageBorders;
+      pdfViewer.currentScaleValue = currentScaleValue;
+    }
+
+    pdfViewer.update();
+  });
 }
 
 function webViewerPageRendered({ source, pageNumber, error }) {

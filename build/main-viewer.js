@@ -817,15 +817,25 @@ function webViewerResize() {
 
   if (document.fullscreenElement && document.fullscreenElement.player) {
     return;
-  }
+  } // Need timeout because webkitCurrentFullScreenElement is not setted in other case
 
-  if (currentScaleValue === "auto" || currentScaleValue === "page-fit" || currentScaleValue === "page-width") {
-    // Note: the scale is constant for 'page-actual'.
-    pdfViewer.removePageBorders = removePageBorders;
-    pdfViewer.currentScaleValue = currentScaleValue;
-  }
 
-  pdfViewer.update();
+  var timerId = setTimeout(function () {
+    clearTimeout(timerId); // When YT videos goes fullscreen in Safari
+    // need to check in special object called webkitCurrentFullScreenElement
+
+    if (document.webkitCurrentFullScreenElement && document.webkitCurrentFullScreenElement.player) {
+      return;
+    }
+
+    if (currentScaleValue === "auto" || currentScaleValue === "page-fit" || currentScaleValue === "page-width") {
+      // Note: the scale is constant for 'page-actual'.
+      pdfViewer.removePageBorders = removePageBorders;
+      pdfViewer.currentScaleValue = currentScaleValue;
+    }
+
+    pdfViewer.update();
+  });
 }
 
 function webViewerPageRendered(_ref) {
