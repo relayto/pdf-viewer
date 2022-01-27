@@ -1,159 +1,158 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PDF Viewer Example</title>
+    <script defer="defer" src="pdf.js"></script>
+    <script defer="defer" src="pdf_viewer.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <title>PDF Viewer Example</title>
-  <script defer="defer" src="pdf.js"></script>
-  <script defer="defer" src="pdf_viewer.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
+      html,
+      body {
+        height: 100%;
+        position: relative;
+      }
 
-    html,
-    body {
-      height: 100%;
-      position: relative;
-    }
+      .layout-fill {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        height: 100%;
+      }
 
-    .layout-fill {
-      margin: 0;
-      width: 100%;
-      min-height: 100%;
-      height: 100%;
-    }
+      .layout-column {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+      }
 
-    .layout-column {
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-      flex-direction: column;
-    }
+      .layout,
+      .layout-column,
+      .layout-row {
+        box-sizing: border-box;
+        display: -webkit-box;
+        display: flex;
+      }
 
-    .layout,
-    .layout-column,
-    .layout-row {
-      box-sizing: border-box;
-      display: -webkit-box;
-      display: flex;
-    }
+      .flex {
+        -webkit-box-flex: 1;
+        flex: 1;
+        box-sizing: border-box;
+      }
 
-    .flex {
-      -webkit-box-flex: 1;
-      flex: 1;
-      box-sizing: border-box;
-    }
+      .layout-align-start-center,
+      .layout-align-center-center,
+      .layout-align-end-center,
+      .layout-align-space-between-center,
+      .layout-align-space-around-center {
+        -webkit-box-align: center;
+        align-items: center;
+        align-content: center;
+        max-width: 100%;
+      }
 
-    .layout-align-start-center,
-    .layout-align-center-center,
-    .layout-align-end-center,
-    .layout-align-space-between-center,
-    .layout-align-space-around-center {
-      -webkit-box-align: center;
-      align-items: center;
-      align-content: center;
-      max-width: 100%;
-    }
+      .layout-align-center,
+      .layout-align-center-start,
+      .layout-align-center-center,
+      .layout-align-center-end,
+      .layout-align-center-stretch {
+        -webkit-box-pack: center;
+        justify-content: center;
+      }
 
-    .layout-align-center,
-    .layout-align-center-start,
-    .layout-align-center-center,
-    .layout-align-center-end,
-    .layout-align-center-stretch {
-      -webkit-box-pack: center;
-      justify-content: center;
-    }
+      #pdfviewer-slide-wrapper-container {
+        width: 100% !important;
+        overflow: hidden !important;
+      }
 
-    #pdfviewer-slide-wrapper-container {
-      width: 100% !important;
-      overflow: hidden !important;
-    }
+      #pdfviewer-cards-wrapper-container .swiper-wrapper,
+      #pdfviewer-slide-wrapper-container .swiper-wrapper {
+        margin: 0 auto !important;
+      }
 
-    #pdfviewer-cards-wrapper-container .swiper-wrapper,
-    #pdfviewer-slide-wrapper-container .swiper-wrapper {
-      margin: 0 auto !important;
-    }
+      #pdfviewer-slide-wrapper-container .pdfViewer.removePageBorders .page {
+        margin: 0;
+      }
 
-    #pdfviewer-slide-wrapper-container .pdfViewer.removePageBorders .page {
-      margin: 0;
-    }
+      #pdfviewer-cards-wrapper-container .page,
+      #pdfviewer-slide-wrapper-container .page {
+        height: 100% !important;
+        display: flex;
+        justify-content: center;
+      }
 
-    #pdfviewer-cards-wrapper-container .page,
-    #pdfviewer-slide-wrapper-container .page {
-      height: 100% !important;
-      display: flex;
-      justify-content: center;
-    }
+      #pdfviewer-cards-wrapper-container .canvasWrapper,
+      #pdfviewer-slide-wrapper-container .canvasWrapper {
+        height: 100%;
+        align-items: center;
+        display: flex;
+      }
 
-    #pdfviewer-cards-wrapper-container .canvasWrapper,
-    #pdfviewer-slide-wrapper-container .canvasWrapper {
-      height: 100%;
-      align-items: center;
-      display: flex;
-    }
+      #pdfviewer-cards-wrapper-container.viewerContainer,
+      #pdfviewer-cube-wrapper-container.viewerContainer,
+      #pdfviewer-slide-wrapper-container.viewerContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
 
-    #pdfviewer-cards-wrapper-container.viewerContainer,
-    #pdfviewer-cube-wrapper-container.viewerContainer,
-    #pdfviewer-slide-wrapper-container.viewerContainer {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
+      #pdfviewer-coverflow-wrapper-container.viewerContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
 
-    #pdfviewer-coverflow-wrapper-container.viewerContainer {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
+      #pdfviewer-cards-wrapper-container .page {
+        /* overflow: hidden; */
+      }
 
-    #pdfviewer-cards-wrapper-container .page {
-      /* overflow: hidden; */
-    }
+      .viewerContainer {
+        overflow: visible !important;
+      }
 
-    .viewerContainer {
-      overflow: visible !important;
-    }
+      .page {
+        position: relative !important;
+        border: none !important;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
 
-    .page {
-      position: relative !important;
-      border: none !important;
-      height: 100%;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-      display: flex;
-    }
+      .page div {
+        /* margin: 0 auto; */
+      }
 
-    .page div {
-      /* margin: 0 auto; */
-    }
+      .annotationLayer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+      }
 
-    .annotationLayer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-    }
+      .annotationLayer section {
+        position: absolute;
+      }
 
-    .annotationLayer section {
-      position: absolute;
-    }
+      .annotationLayer > * {
+        z-index: 1;
+      }
 
-    .annotationLayer>* {
-      z-index: 1;
-    }
+      .swiper-wrapper {
+        align-items: center;
+        /* add this will all relevant prefixes */
+      }
 
-    .swiper-wrapper {
-      align-items: center;
-      /* add this will all relevant prefixes */
-    }
-
-    /* Styles for multiple pages in slide */
-    /* #pdfviewer-slide-wrapper-container .rt-page-components,
+      /* Styles for multiple pages in slide */
+      /* #pdfviewer-slide-wrapper-container .rt-page-components,
       #pdfviewer-slide-wrapper-container .annotationLayer,
       #pdfviewer-slide-wrapper-container .textLayer {
         position: absolute;
@@ -177,19 +176,22 @@
         .swiper-slide-layout-align.swiper-slide-active:not(:nth-child(1)) {
         justify-content: flex-end;
       } */
-  </style>
-</head>
+    </style>
+  </head>
 
-<body>
-  <div class="flex layout-fill layout-column layout-align-center-center">
-    <div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer">
-      <div class="pdfViewer swiper-wrapper"></div>
+  <body>
+    <div class="flex layout-fill layout-column layout-align-center-center">
+      <div
+        id="pdfviewer-slide-wrapper-container"
+        class="swiper viewerContainer"
+      >
+        <div class="pdfViewer swiper-wrapper"></div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
     </div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
 
-  <!-- <div
+    <!-- <div
       class="flex layout-fill layout-column layout-align-center-center"
       style="overflow: hidden"
     >
@@ -200,7 +202,7 @@
       <div class="swiper-button-next"></div>
     </div> -->
 
-  <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+    <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-coverflow-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
@@ -208,7 +210,7 @@
             <div class="swiper-button-next"></div>
         </div> -->
 
-  <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+    <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-fade-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
@@ -216,7 +218,7 @@
             <div class="swiper-button-next"></div>
         </div> -->
 
-  <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+    <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-cards-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
@@ -224,7 +226,7 @@
             <div class="swiper-button-next"></div>
         </div> -->
 
-  <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+    <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="pdfviewer-flip-wrapper-container" class="swiper viewerContainer">
                 <div class="pdfViewer swiper-wrapper"></div>
             </div>
@@ -232,7 +234,7 @@
             <div class="swiper-button-next"></div>
         </div> -->
 
-  <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
+    <!-- <div class="flex layout-fill layout-column layout-align-center-center" style="overflow: hidden">
             <div id="rt-creative-wrapper">
                 <div id="pdfviewer-creative-wrapper-container" class="swiper viewerContainer">
                     <div class="pdfViewer swiper-wrapper"></div>
@@ -242,148 +244,147 @@
             </div>
         </div> -->
 
-  <script>
-    class SwiperPDF {
-      PDFViewer = window.rtPDFViewer;
-      rtContainerId = null;
-      containerId = null;
-      effect = null;
-      swiper = null;
-      constructor(effect = "slide") {
-        this.effect = effect;
-        this.rtContainerId = `rt-${this.effect}-wrapper`;
-        this.containerId = `pdfviewer-${this.effect}-wrapper-container`;
-        this.initPDFViewer();
-      }
-
-      render = () => {
-        return new Promise((resolve) => {
-          const redraw = () => {
-            let self = this;
-
-            const swiper = document.querySelector(
-              `#${this.containerId}.swiper`
-            );
-
-            console.log("resize fired ! 0", swiper.style.width);
-
-            swiper.style.width = "";
-            swiper.style.height = "";
-
-            self.PDFViewer.pdfViewer.eventBus.dispatch("resize", {
-              ignoreLocalEvent: true,
-            });
-
-            console.log("resize fired ! 1", swiper.style.width);
-
-            var pageDiv = self.swiper.slides[self.swiper.activeIndex];
-            var pageCanvasDiv = pageDiv.querySelector(".canvasWrapper");
-            swiper.style.height = pageCanvasDiv.clientHeight + "px";
-            swiper.style.width = pageCanvasDiv.clientWidth + "px";
-
-            console.log("resize fired ! 2", swiper.style.width);
-          };
-
-          this.PDFViewer.eventBus.on("resize", (val) => {
-            console.log("resize fired !");
-            if (!val.ignoreLocalEvent) redraw();
-          });
-
-          this.PDFViewer.eventBus.on("pagesloaded", (val) => {
-            if (val.source.container.id === this.containerId) {
-              setTimeout(() => {
-                this.initSwiper({
-                  afterInit: resolve,
-                });
-              });
-            }
-          });
-        });
-      };
-
-      initPDFViewer() {
-        this.PDFViewer.initialize({
-          containerId: this.containerId,
-          currentScaleValue: "page-fit",
-        });
-
-        this.PDFViewer.open("test.pdf");
-      }
-
-      initSwiper(eventBus) {
-        let that = this;
-        const swiper = document.querySelector(`#${that.containerId}.swiper`);
-        const pages = document.querySelectorAll(`#${that.containerId} .page`);
-
-        pages.forEach((page) => {
-          page.classList.add("swiper-slide", "swiper-slide-layout-align");
-          swiper.style.width = page.style.width;
-          swiper.style.height = page.style.height;
-        });
-
-        const conf = {
-          on: eventBus,
-          effect: that.effect,
-          grabCursor: true,
-          navigation: {
-            nextEl: `.swiper-button-next`,
-            prevEl: `.swiper-button-prev`,
-          },
-          keyboard: {
-            enabled: true,
-            onlyInViewport: true,
-          },
-          on: {
-            afterInit: function (swiper) { },
-            init: (swiper) => {
-              swiper.slideTo(9, 0);
-            },
-            beforeTransitionStart: (swiper) => {
-              for (
-                var i = swiper.activeIndex;
-                i < swiper.activeIndex + 3;
-                i++
-              ) {
-                rtPDFViewer.page = i;
-                rtPDFViewer.updateSlide();
-              }
-            },
-            slideChangeTransitionEnd: (swiper) => { },
-          },
-        };
-
-        if (that.effect === "creative") {
-          conf.creativeEffect = {
-            prev: {
-              shadow: true,
-              origin: "left center",
-              translate: ["-5%", 0, -200],
-              rotate: [0, 100, 0],
-            },
-            next: {
-              origin: "right center",
-              translate: ["5%", 0, -200],
-              rotate: [0, -100, 0],
-            },
-          };
+    <script>
+      class SwiperPDF {
+        PDFViewer = window.rtPDFViewer;
+        rtContainerId = null;
+        containerId = null;
+        effect = null;
+        swiper = null;
+        constructor(effect = "slide") {
+          this.effect = effect;
+          this.rtContainerId = `rt-${this.effect}-wrapper`;
+          this.containerId = `pdfviewer-${this.effect}-wrapper-container`;
+          this.initPDFViewer();
         }
 
-        console.log("conf", conf);
+        render = () => {
+          return new Promise((resolve) => {
+            const redraw = () => {
+              let self = this;
 
-        that.swiper = new Swiper(`#${this.containerId}.swiper`, conf);
+              const swiper = document.querySelector(
+                `#${this.containerId}.swiper`
+              );
+
+              console.log("resize fired ! 0", swiper.style.width);
+
+              swiper.style.width = "";
+              swiper.style.height = "";
+
+              self.PDFViewer.pdfViewer.eventBus.dispatch("resize", {
+                ignoreLocalEvent: true,
+              });
+
+              console.log("resize fired ! 1", swiper.style.width);
+
+              var pageDiv = self.swiper.slides[self.swiper.activeIndex];
+              var pageCanvasDiv = pageDiv.querySelector(".canvasWrapper");
+              swiper.style.height = pageCanvasDiv.clientHeight + "px";
+              swiper.style.width = pageCanvasDiv.clientWidth + "px";
+
+              console.log("resize fired ! 2", swiper.style.width);
+            };
+
+            this.PDFViewer.eventBus.on("resize", (val) => {
+              console.log("resize fired !");
+              if (!val.ignoreLocalEvent) redraw();
+            });
+
+            this.PDFViewer.eventBus.on("pagesloaded", (val) => {
+              if (val.source.container.id === this.containerId) {
+                setTimeout(() => {
+                  this.initSwiper({
+                    afterInit: resolve,
+                  });
+                });
+              }
+            });
+          });
+        };
+
+        initPDFViewer() {
+          this.PDFViewer.initialize({
+            containerId: this.containerId,
+            currentScaleValue: "page-fit",
+            cMapUrl: "/pdf-js/cmaps/",
+            cMapPacked: true,
+          });
+
+          this.PDFViewer.open("kr.pdf");
+        }
+
+        initSwiper(eventBus) {
+          let that = this;
+          const swiper = document.querySelector(`#${that.containerId}.swiper`);
+          const pages = document.querySelectorAll(`#${that.containerId} .page`);
+
+          pages.forEach((page) => {
+            page.classList.add("swiper-slide", "swiper-slide-layout-align");
+            swiper.style.width = page.style.width;
+            swiper.style.height = page.style.height;
+          });
+
+          const conf = {
+            on: eventBus,
+            effect: that.effect,
+            grabCursor: true,
+            navigation: {
+              nextEl: `.swiper-button-next`,
+              prevEl: `.swiper-button-prev`,
+            },
+            keyboard: {
+              enabled: true,
+              onlyInViewport: true,
+            },
+            on: {
+              afterInit: function (swiper) {},
+
+              beforeTransitionStart: (swiper) => {
+                for (
+                  var i = swiper.activeIndex;
+                  i < swiper.activeIndex + 3;
+                  i++
+                ) {
+                  rtPDFViewer.page = i;
+                  rtPDFViewer.updateSlide();
+                }
+              },
+              slideChangeTransitionEnd: (swiper) => {},
+            },
+          };
+
+          if (that.effect === "creative") {
+            conf.creativeEffect = {
+              prev: {
+                shadow: true,
+                origin: "left center",
+                translate: ["-5%", 0, -200],
+                rotate: [0, 100, 0],
+              },
+              next: {
+                origin: "right center",
+                translate: ["5%", 0, -200],
+                rotate: [0, -100, 0],
+              },
+            };
+          }
+
+          console.log("conf", conf);
+
+          that.swiper = new Swiper(`#${this.containerId}.swiper`, conf);
+        }
       }
-    }
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      await new SwiperPDF("slide").render();
-      // await new SwiperPDF('fade').render();
-      // await new SwiperPDF('flip').render();
-      // await new SwiperPDF('cards').render();
-      // await new SwiperPDF("cube").render();
-      // await new SwiperPDF('coverflow').render();
-      // await new SwiperPDF('creative').render();
-    });
-  </script>
-</body>
-
+      document.addEventListener("DOMContentLoaded", async () => {
+        await new SwiperPDF("slide").render();
+        // await new SwiperPDF('fade').render();
+        // await new SwiperPDF('flip').render();
+        // await new SwiperPDF('cards').render();
+        // await new SwiperPDF("cube").render();
+        // await new SwiperPDF('coverflow').render();
+        // await new SwiperPDF('creative').render();
+      });
+    </script>
+  </body>
 </html>

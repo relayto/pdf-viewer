@@ -73,6 +73,7 @@ class PDFViewerApplication {
   removePageBorders = false;
   initialized = false;
   settingPages = [];
+  config = {};
 
   _initializeViewer = () => {
     this.eventBus = new EventBus();
@@ -106,6 +107,7 @@ class PDFViewerApplication {
     }
 
     Object.assign(this.pdfjs.lib, pdfjsLibConfigs);
+    this.config = pdfjsLibConfigs;
 
     this.container =
       config.container ||
@@ -154,10 +156,12 @@ class PDFViewerApplication {
   };
 
   open = (pdfSource, disableRange = false) => {
-    this.pdfLoadingTask = this.pdfjs.lib.getDocument({
+    let opts = {
       url: pdfSource,
       disableRange,
-    });
+    };
+    Object.assign(opts, this.config);
+    this.pdfLoadingTask = this.pdfjs.lib.getDocument(opts);
     this.pdfLoadingTask.onPassword = this.onPassword;
     this.pdfLoadingTask.onProgress = this.onProgress;
 

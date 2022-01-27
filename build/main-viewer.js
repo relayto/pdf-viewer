@@ -883,6 +883,8 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
     main_viewer_application_defineProperty(this, "settingPages", []);
 
+    main_viewer_application_defineProperty(this, "config", {});
+
     main_viewer_application_defineProperty(this, "_initializeViewer", function () {
       _this.eventBus = new external_pdfjsViewer_.EventBus();
       _this.pdfLinkService = new external_pdfjsViewer_.PDFLinkService({
@@ -918,6 +920,7 @@ var PDFViewerApplication = /*#__PURE__*/function () {
       }
 
       Object.assign(_this.pdfjs.lib, pdfjsLibConfigs);
+      _this.config = pdfjsLibConfigs;
       _this.container = config.container || window.document.getElementById(config.containerId || "pdfViewerContent");
 
       _this._initializeViewer();
@@ -971,10 +974,12 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
     main_viewer_application_defineProperty(this, "open", function (pdfSource) {
       var disableRange = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      _this.pdfLoadingTask = _this.pdfjs.lib.getDocument({
+      var opts = {
         url: pdfSource,
         disableRange: disableRange
-      });
+      };
+      Object.assign(opts, _this.config);
+      _this.pdfLoadingTask = _this.pdfjs.lib.getDocument(opts);
       _this.pdfLoadingTask.onPassword = _this.onPassword;
       _this.pdfLoadingTask.onProgress = _this.onProgress;
       return _this.pdfLoadingTask.promise.then(_this.load);
