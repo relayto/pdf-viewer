@@ -311,7 +311,9 @@
             cMapPacked: true,
           });
 
-          this.PDFViewer.open("kr.pdf");
+          var self = this;
+
+          this.PDFViewer.open("2022-1-old.pdf");
         }
 
         initSwiper(eventBus) {
@@ -338,17 +340,15 @@
               onlyInViewport: true,
             },
             on: {
-              afterInit: function (swiper) {},
-
               beforeTransitionStart: (swiper) => {
-                for (
-                  var i = swiper.activeIndex;
-                  i < swiper.activeIndex + 3;
-                  i++
-                ) {
-                  rtPDFViewer.page = i;
-                  rtPDFViewer.updateSlide();
-                }
+                var activeIndex = swiper.activeIndex;
+                var slideBefore = activeIndex - 3 < 0 ? 0 : activeIndex - 3;
+                var slideAfter =
+                  activeIndex + 3 > swiper.slides.length
+                    ? swiper.slides.length - 1
+                    : activeIndex + 3;
+                rtPDFViewer.updateSlide(slideBefore, slideAfter);
+                rtPDFViewer.page = activeIndex + 1;
               },
               slideChangeTransitionEnd: (swiper) => {},
             },
