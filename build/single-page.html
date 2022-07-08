@@ -1,6 +1,28 @@
-<!doctype html><html><head><meta charset="utf-8"/><title>PDF Single Page viewer Example</title><script defer="defer" src="pdf.js"></script><script defer="defer" src="pdf_viewer.js"></script><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div id="pdfViewerContent" class="viewerContainer"><div class="pdfViewer"></div></div><script>setTimeout(() => {
-      window.rtPDFPageViewer.initialize({
+<!doctype html><html><head><meta charset="utf-8"/><title>PDF Single Page viewer Example</title><script defer="defer" src="pdf.js"></script><script defer="defer" src="pdf_viewer.js"></script><style>.page-container {
+      overflow: hidden;
+      width: 653px;
+      height: 845px;
+    }
+    .right .page {
+      transform: translateX(-50%);
+    }
+
+    .double-spread {
+      display: flex;
+      flex-direction: row;
+    }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div><h3>Page 1</h3><div id="page1" class="page-container"></div><h3>Page 2-3</h3><div class="double-spread"><div id="page2" class="page-container left"></div><div id="page3" class="page-container right"></div></div></div><script>setTimeout(() => {
+      const pageViewer = window.rtPDFPageViewer;
+      pageViewer.initialize({
         isDefaultWorker: true,
       });
-      window.rtPDFPageViewer.draw('example.pdf', 2);
+      pageViewer.loadDocument('double-spread.pdf').then(drawPages);
+
+      function el(id){
+        return document.getElementById(id);
+      }
+      function drawPages(){
+        pageViewer.drawPageTo(1, el('page1'))
+        pageViewer.drawPageTo(2, el('page2'))
+        pageViewer.drawPageTo(2, el('page3'))
+      }
     }, 1000);</script></body></html>

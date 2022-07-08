@@ -3,11 +3,13 @@ import { PDFPageView } from "pdfjs-dist/lib/web/pdf_page_view";
 import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
 import { svgFix } from "./svg-fix";
 
-const SCALE = 1.0;
+const SCALE = 0.8;
 
 class PDFPageViewerApplication {
   container = null;
   pdfjs = new PDFJsFacade();
+  /** @typedef {} */
+  currentDocument
   onPassword = () => {};
 
   onProgress = ({ loaded, total }) => {
@@ -60,6 +62,31 @@ class PDFPageViewerApplication {
 
     return this.pdfLoadingTask.then((pdfDocument) => pdfDocument.getPage(page));
   };
+
+  loadDocument = (pdfSource) => {
+    this.pdfLoadingTask = this.pdfjs.getDocument({
+      url: pdfSource,
+      disableRange: false,
+      onPassword: this.onPassword,
+      onProgress: this.onProgress,
+    });
+
+    return this.pdfLoadingTask.then((pdfDocument) => this.currentDocument = pdfDocument);
+  }
+
+  drawPageTo = (pageNumber, div) =>{
+    return this.currentDocument.getPage(pageNumber).then((pdfPage) => {
+      const pdfPageView = this.getNewPDFPageView({
+        container: div,
+        id: pageNumber,
+        scale: SCALE,
+        defaultViewport: pdfPage.getViewport({ scale: SCALE }),
+      });
+
+      pdfPageView.setPdfPage(pdfPage);
+      return pdfPageView.draw();
+    });
+  }
 
   /**
    * Draws a single page

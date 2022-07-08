@@ -796,7 +796,7 @@ function page_viewer_application_defineProperty(obj, key, value) { if (key in ob
 
 
 
-var SCALE = 1.0;
+var SCALE = 0.8;
 
 var PDFPageViewerApplication = function PDFPageViewerApplication() {
   var _this = this;
@@ -806,6 +806,8 @@ var PDFPageViewerApplication = function PDFPageViewerApplication() {
   page_viewer_application_defineProperty(this, "container", null);
 
   page_viewer_application_defineProperty(this, "pdfjs", new PDFJsFacade());
+
+  page_viewer_application_defineProperty(this, "currentDocument", void 0);
 
   page_viewer_application_defineProperty(this, "onPassword", function () {});
 
@@ -857,6 +859,34 @@ var PDFPageViewerApplication = function PDFPageViewerApplication() {
     });
     return _this.pdfLoadingTask.then(function (pdfDocument) {
       return pdfDocument.getPage(page);
+    });
+  });
+
+  page_viewer_application_defineProperty(this, "loadDocument", function (pdfSource) {
+    _this.pdfLoadingTask = _this.pdfjs.getDocument({
+      url: pdfSource,
+      disableRange: false,
+      onPassword: _this.onPassword,
+      onProgress: _this.onProgress
+    });
+    return _this.pdfLoadingTask.then(function (pdfDocument) {
+      return _this.currentDocument = pdfDocument;
+    });
+  });
+
+  page_viewer_application_defineProperty(this, "drawPageTo", function (pageNumber, div) {
+    return _this.currentDocument.getPage(pageNumber).then(function (pdfPage) {
+      var pdfPageView = _this.getNewPDFPageView({
+        container: div,
+        id: pageNumber,
+        scale: SCALE,
+        defaultViewport: pdfPage.getViewport({
+          scale: SCALE
+        })
+      });
+
+      pdfPageView.setPdfPage(pdfPage);
+      return pdfPageView.draw();
     });
   });
 
