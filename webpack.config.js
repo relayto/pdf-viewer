@@ -98,6 +98,10 @@ module.exports = {
           from: "node_modules/pdfjs-dist/es5/web/pdf_viewer.css",
           to: "pdf_viewer.css",
         },
+        {
+          from: "dist/double-spread.pdf",
+          to: "double-spread.pdf",
+        },
       ],
     }),
     new HtmlWebpackPlugin({
