@@ -166,84 +166,86 @@
         .swiper-slide-layout-align.swiper-slide-active:not(:nth-child(1)) {
         justify-content: flex-end;
       } */</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
-        PDFViewer = window.rtPDFViewer;
-        rtContainerId = null;
-        containerId = null;
-        effect = null;
-        swiper = null;
-        constructor(effect = "slide") {
-          this.effect = effect;
-          this.rtContainerId = `rt-${this.effect}-wrapper`;
-          this.containerId = `pdfviewer-${this.effect}-wrapper-container`;
-          this.initPDFViewer();
+        PDFViewer = window.rtPDFViewer
+        rtContainerId = null
+        containerId = null
+        effect = null
+        swiper = null
+        constructor(effect = 'slide') {
+          this.effect = effect
+          this.rtContainerId = `rt-${this.effect}-wrapper`
+          this.containerId = `pdfviewer-${this.effect}-wrapper-container`
+          this.initPDFViewer()
         }
 
         render = () => {
           return new Promise((resolve) => {
             const redraw = () => {
-              let self = this;
+              let self = this
 
               const swiper = document.querySelector(
-                `#${this.containerId}.swiper`
-              );
+                `#${this.containerId}.swiper`,
+              )
 
-              console.log("resize fired ! 0", swiper.style.width);
+              console.log('resize fired ! 0', swiper.style.width)
 
-              swiper.style.width = "";
-              swiper.style.height = "";
+              swiper.style.width = ''
+              swiper.style.height = ''
 
-              self.PDFViewer.pdfViewer.eventBus.dispatch("resize", {
+              self.PDFViewer.pdfViewer.eventBus.dispatch('resize', {
                 ignoreLocalEvent: true,
-              });
+              })
 
-              console.log("resize fired ! 1", swiper.style.width);
+              console.log('resize fired ! 1', swiper.style.width)
 
-              var pageDiv = self.swiper.slides[self.swiper.activeIndex];
-              var pageCanvasDiv = pageDiv.querySelector(".canvasWrapper");
-              swiper.style.height = pageCanvasDiv.clientHeight + "px";
-              swiper.style.width = pageCanvasDiv.clientWidth + "px";
+              var pageDiv = self.swiper.slides[self.swiper.activeIndex]
+              var pageCanvasDiv = pageDiv.querySelector('.canvasWrapper')
+              swiper.style.height = pageCanvasDiv.clientHeight + 'px'
+              swiper.style.width = pageCanvasDiv.clientWidth + 'px'
 
-              console.log("resize fired ! 2", swiper.style.width);
-            };
+              console.log('resize fired ! 2', swiper.style.width)
+            }
 
-            this.PDFViewer.eventBus.on("resize", (val) => {
-              console.log("resize fired !");
-              if (!val.ignoreLocalEvent) redraw();
-            });
+            this.PDFViewer.eventBus.on('resize', (val) => {
+              console.log('resize fired !')
+              if (!val.ignoreLocalEvent) redraw()
+            })
 
-            this.PDFViewer.eventBus.on("pagesloaded", (val) => {
+            this.PDFViewer.eventBus.on('pagesloaded', (val) => {
               if (val.source.container.id === this.containerId) {
                 setTimeout(() => {
                   this.initSwiper({
                     afterInit: resolve,
-                  });
-                });
+                  })
+                })
               }
-            });
-          });
-        };
+            })
+          })
+        }
 
         initPDFViewer() {
           this.PDFViewer.initialize({
             containerId: this.containerId,
-            currentScaleValue: "page-fit",
-            cMapUrl: "/pdf-js/cmaps/",
+            currentScaleValue: 'page-fit',
+            cMapUrl: '/pdf-js/cmaps/',
             cMapPacked: true,
-          });
+          })
 
-          this.PDFViewer.open("kr.pdf");
+          var self = this
+
+          this.PDFViewer.open('test.pdf')
         }
 
         initSwiper(eventBus) {
-          let that = this;
-          const swiper = document.querySelector(`#${that.containerId}.swiper`);
-          const pages = document.querySelectorAll(`#${that.containerId} .page`);
+          let that = this
+          const swiper = document.querySelector(`#${that.containerId}.swiper`)
+          const pages = document.querySelectorAll(`#${that.containerId} .page`)
 
           pages.forEach((page) => {
-            page.classList.add("swiper-slide", "swiper-slide-layout-align");
-            swiper.style.width = page.style.width;
-            swiper.style.height = page.style.height;
-          });
+            page.classList.add('swiper-slide', 'swiper-slide-layout-align')
+            swiper.style.width = page.style.width
+            swiper.style.height = page.style.height
+          })
 
           const conf = {
             on: eventBus,
@@ -258,50 +260,48 @@
               onlyInViewport: true,
             },
             on: {
-              afterInit: function (swiper) {},
-
               beforeTransitionStart: (swiper) => {
-                for (
-                  var i = swiper.activeIndex;
-                  i < swiper.activeIndex + 3;
-                  i++
-                ) {
-                  rtPDFViewer.page = i;
-                  rtPDFViewer.updateSlide();
-                }
+                var activeIndex = swiper.activeIndex
+                var slideBefore = activeIndex - 3 < 0 ? 0 : activeIndex - 3
+                var slideAfter =
+                  activeIndex + 3 > swiper.slides.length
+                    ? swiper.slides.length - 1
+                    : activeIndex + 3
+                rtPDFViewer.updateSlide(slideBefore, slideAfter)
+                rtPDFViewer.page = activeIndex + 1
               },
               slideChangeTransitionEnd: (swiper) => {},
             },
-          };
+          }
 
-          if (that.effect === "creative") {
+          if (that.effect === 'creative') {
             conf.creativeEffect = {
               prev: {
                 shadow: true,
-                origin: "left center",
-                translate: ["-5%", 0, -200],
+                origin: 'left center',
+                translate: ['-5%', 0, -200],
                 rotate: [0, 100, 0],
               },
               next: {
-                origin: "right center",
-                translate: ["5%", 0, -200],
+                origin: 'right center',
+                translate: ['5%', 0, -200],
                 rotate: [0, -100, 0],
               },
-            };
+            }
           }
 
-          console.log("conf", conf);
+          console.log('conf', conf)
 
-          that.swiper = new Swiper(`#${this.containerId}.swiper`, conf);
+          that.swiper = new Swiper(`#${this.containerId}.swiper`, conf)
         }
       }
 
-      document.addEventListener("DOMContentLoaded", async () => {
-        await new SwiperPDF("slide").render();
+      document.addEventListener('DOMContentLoaded', async () => {
+        await new SwiperPDF('slide').render()
         // await new SwiperPDF('fade').render();
         // await new SwiperPDF('flip').render();
         // await new SwiperPDF('cards').render();
         // await new SwiperPDF("cube").render();
         // await new SwiperPDF('coverflow').render();
         // await new SwiperPDF('creative').render();
-      });</script></body></html>
+      })</script></body></html>

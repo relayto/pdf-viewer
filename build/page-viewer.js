@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("pdfjsLib"), require("pdfjsViewer")) : factory(root["pdfjsLib"], root["pdfjsViewer"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(self, function(__WEBPACK_EXTERNAL_MODULE__544__, __WEBPACK_EXTERNAL_MODULE__231__) {
+})(self, function(__WEBPACK_EXTERNAL_MODULE__23__, __WEBPACK_EXTERNAL_MODULE__626__) {
 return /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -21,8 +21,8 @@ return /******/ (function() { // webpackBootstrap
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(667);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _images_shadow_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(307);
-/* harmony import */ var _images_loading_icon_gif__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(764);
+/* harmony import */ var _images_shadow_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(207);
+/* harmony import */ var _images_loading_icon_gif__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(905);
 // Imports
 
 
@@ -125,7 +125,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -133,6 +133,10 @@ module.exports = function cssWithMappingToString(item) {
   var _item = _slicedToArray(item, 4),
       content = _item[1],
       cssMapping = _item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
 
   if (typeof btoa === "function") {
     // eslint-disable-next-line no-undef
@@ -465,31 +469,31 @@ module.exports = function (list, options) {
 
 /***/ }),
 
-/***/ 764:
+/***/ 905:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "ff2dfa442d903d9d5e30.gif";
 
 /***/ }),
 
-/***/ 307:
+/***/ 207:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "020ca14de41fcc6c4d0b.png";
 
 /***/ }),
 
-/***/ 544:
+/***/ 23:
 /***/ (function(module) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__544__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__23__;
 
 /***/ }),
 
-/***/ 231:
+/***/ 626:
 /***/ (function(module) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__231__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__626__;
 
 /***/ })
 
@@ -592,10 +596,12 @@ var update = injectStylesIntoStyleTag_default()(style/* default */.Z, options);
 
 /* harmony default export */ var src_style = (style/* default.locals */.Z.locals || {});
 // EXTERNAL MODULE: external "pdfjsLib"
-var external_pdfjsLib_ = __webpack_require__(544);
+var external_pdfjsLib_ = __webpack_require__(23);
 // EXTERNAL MODULE: external "pdfjsViewer"
-var external_pdfjsViewer_ = __webpack_require__(231);
+var external_pdfjsViewer_ = __webpack_require__(626);
 ;// CONCATENATED MODULE: ./src/lib/pdfjs-lib-facade.js
+var _excluded = ["onPassword", "onProgress"];
+
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
@@ -637,7 +643,7 @@ var PDFJsFacade = function PDFJsFacade() {
   _defineProperty(this, "createDocLoadingTask", function (params) {
     var onPassword = params.onPassword,
         onProgress = params.onProgress,
-        getParams = _objectWithoutProperties(params, ["onPassword", "onProgress"]);
+        getParams = _objectWithoutProperties(params, _excluded);
 
     var url = getParams.url;
     return new Promise(function (resolve, reject) {
@@ -780,7 +786,9 @@ var createCSSPathRef = function createCSSPathRef(id) {
   return "url(#".concat(id, ")");
 };
 ;// CONCATENATED MODULE: ./src/lib/page-viewer-application.js
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+var page_viewer_application_excluded = ["workerSrc"];
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { page_viewer_application_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -821,7 +829,7 @@ var PDFPageViewerApplication = function PDFPageViewerApplication() {
     var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     var workerSrc = config.workerSrc,
-        pdfjsLibConfigs = page_viewer_application_objectWithoutProperties(config, ["workerSrc"]);
+        pdfjsLibConfigs = page_viewer_application_objectWithoutProperties(config, page_viewer_application_excluded);
 
     if (!config.isDefaultWorker) {
       _this.pdfjs.lib.GlobalWorkerOptions.workerPort = null;
