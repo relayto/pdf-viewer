@@ -134,7 +134,11 @@ class PDFViewerApplication {
     this._initializeViewer()
 
     this.bindEvents()
-    this.bindWindowEvents()
+    // Setting to either enable or disable
+    // pdfjks window resize handling
+    if(this.config.autoResize) {
+      this.bindWindowEvents()
+    }
 
     this.preferences = {}
     this.settingPages = config.relaytoPagesView || []
