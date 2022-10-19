@@ -941,9 +941,13 @@ var PDFViewerApplication = /*#__PURE__*/function () {
 
       _this._initializeViewer();
 
-      _this.bindEvents();
+      _this.bindEvents(); // Setting to either enable or disable
+      // pdfjks window resize handling
 
-      _this.bindWindowEvents();
+
+      if (_this.config.autoResize) {
+        _this.bindWindowEvents();
+      }
 
       _this.preferences = {};
       _this.settingPages = config.relaytoPagesView || [];
