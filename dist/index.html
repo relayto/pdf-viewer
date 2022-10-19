@@ -26,10 +26,10 @@
         <script defer="defer" src="pdf.js"></script>
         <script defer="defer" src="pdf_viewer.js"></script>
         <style>
-            #rt-presentation-container {
+            /* #rt-presentation-container {
                 height: 100% !important;
                 overflow: hidden !important;
-            }
+            } */
 
             #rt-presentation-container .swiper-wrapper {
                 margin: 0 auto !important;
@@ -128,13 +128,12 @@
             }
 
             /* SLides */
-            .rt-swiper-slide .viewerContainer,
-            .rt-swiper-fade .viewerContainer {
+            /* .viewerContainer {
                 flex: 1;
 
-                width: 100% !important;
-                height: 100% !important;
-            }
+                width: 100%;
+                height: 100%;
+            } */
 
             .rt-swiper-slide .page.swiper-slide,
             .rt-swiper-fade .page.swiper-slide {
@@ -184,7 +183,7 @@
                     <input ng-model="vm.pdfUrl" ng-change="vm.initSwiperPDF()" ng-model-options="{debounce: 500 }" />
                 </md-input-container>
 
-                <div layout="row">
+                <div layout="row" style="z-index: 9999;">
                     <md-button class="md-primary md-mini md-fab" no-ink ng-click="vm.zoomIn()">
                         +
                     </md-button>
@@ -210,7 +209,7 @@
                 </div>
 
                 <div ng-if="!vm.renderAsScroll" flex layout="column" layout-align="center center">
-                    <div class="rt-swiper-{{vm.activeEffect.type}}" flex style="position: relative; height: 100%;">
+                    <div id="rt-view" class="rt-swiper-{{vm.activeEffect.type}}" flex style="position: relative; height: 100%;">
                         <div id="rt-presentation-container" class="swiper viewerContainer">
                             <div class="pdfViewer swiper-wrapper"></div>
                         </div>
@@ -228,6 +227,16 @@
         </div>
 
         <script>
+            var _debounce = function (ms, fn) {
+                var timer;
+                return function () {
+                    clearTimeout(timer);
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift(this);
+                    timer = setTimeout(fn.bind.apply(fn, args), ms);
+                };
+            };
+
             function makeid(length) {
                 var result = '';
                 var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -243,13 +252,13 @@
                 vm.selectEffect = selectEffect;
                 vm.initSwiperPDF = initSwiperPDF;
                 vm.effects = [
-                    {id: makeid(8), active: true, type: 'slide'},
+                    {id: makeid(8), active: false, type: 'slide'},
                     {id: makeid(8), active: false, type: 'fade'},
                     {id: makeid(8), active: false, type: 'cube'},
                     {id: makeid(8), active: false, type: 'coverflow'},
                     {id: makeid(8), active: false, type: 'flip'},
                     {id: makeid(8), active: false, type: 'creative'},
-                    {id: makeid(8), active: false, type: 'cards'}
+                    {id: makeid(8), active: true, type: 'cards'}
                 ];
 
                 function getOptions() {
@@ -284,23 +293,37 @@
                     });
                 }
 
-                function updateSwiper() {
-                    $timeout(() => {
-                        vm.view.swiper.el.querySelectorAll('.page').forEach((page) => {
-                            if (vm.view.effect === 'slide' || vm.view.effect === 'fade') {
-                                var parentElementDims = page.parentElement.getBoundingClientRect();
-                                page.style.width = parentElementDims.width + 'px';
-                                page.style.height = parentElementDims.height + 'px';
-                            }
-                        });
-                    });
+                function updateSlide(swiper) {
+                    var activeIndex = swiper.activeIndex;
+                    var slideBefore = activeIndex - 3 < 0 ? 0 : activeIndex - 3;
+                    var slideAfter = activeIndex + 3 > swiper.slides.length ? swiper.slides.length - 1 : activeIndex + 3;
+                    window.rtPDFViewer.updateSlide(slideBefore, slideAfter);
+                    window.rtPDFViewer.page = activeIndex + 1;
+                }
+
+                function updateSize() {
+                    var container = document.querySelector('.swiper');
+
+                    container.style.width = `100%`;
+                    container.style.height = `100%`;
+
+                    var page = vm.view.swiper.el.querySelector('.page.swiper-slide-active');
+
+                    switch (vm.view.effect) {
+                        case 'slide':
+                        case 'fade':
+                            page.style.width = '100%';
+                            return;
+                    }
+
+                    updateSlide(vm.view.swiper);
                 }
 
                 vm.zoomIn = () => {
                     vm.view.zoomScale++;
                     vm.view.PDFViewer.zoomIn(vm.view.zoomScale);
 
-                    updateSwiper();
+                    updateSize();
                 };
                 vm.zoomOut = () => {
                     if (vm.view.zoomScale > 0) {
@@ -308,7 +331,7 @@
                         vm.view.zoomScale--;
                     }
 
-                    updateSwiper();
+                    updateSize();
                 };
 
                 vm.updateView = function () {
@@ -347,13 +370,10 @@
                     }
 
                     render = () => {
-                        this.PDFViewer.eventBus.on('resize', (val) => {
-                            console.log('val', val);
-
-                            updateSwiper();
-                        });
-
                         if (!vm.renderAsScroll) {
+                            this.PDFViewer.eventBus.on('resize', (val) => {
+                                updateSize();
+                            });
                             this.PDFViewer.eventBus.on('pagesinit', (val) => {
                                 $timeout(() => {
                                     var container = document.querySelector('.swiper');
@@ -365,6 +385,7 @@
                                             container.style.height = pageDiv.style.height;
                                         }
                                     });
+
                                     this.initSwiper();
                                 });
                             });
@@ -375,6 +396,7 @@
                         this.PDFViewer.initialize(
                             Object.assign(
                                 {
+                                    autoResize: true,
                                     removePageBorders: true,
                                     scrollable: true,
                                     containerId: this.containerId,
@@ -415,14 +437,26 @@
                                 onlyInViewport: true
                             },
                             on: {
-                                afterInit: function () {},
-                                beforeTransitionStart: (swiper) => {
-                                    var activeIndex = swiper.activeIndex;
-                                    var slideBefore = activeIndex - 3 < 0 ? 0 : activeIndex - 3;
-                                    var slideAfter = activeIndex + 3 > swiper.slides.length ? swiper.slides.length - 1 : activeIndex + 3;
-                                    rtPDFViewer.updateSlide(slideBefore, slideAfter);
-                                    rtPDFViewer.page = activeIndex + 1;
+                                resize: function (swiper) {
+                                    $timeout(() => {
+                                        var container = document.querySelector('.swiper');
+                                        var page = swiper.el.querySelector('.page.swiper-slide-active');
+                                        var canvasWrapper = page.querySelector('.canvasWrapper');
+
+                                        switch (vm.view.effect) {
+                                            case 'slide':
+                                            case 'fade':
+                                                container.style.width = '100%';
+                                                page.style.width = '100%';
+                                                return;
+                                        }
+
+                                        container.style.width = canvasWrapper.style.width;
+                                        container.style.height = canvasWrapper.style.height;
+                                    });
                                 },
+                                afterInit: function () {},
+                                beforeTransitionStart: updateSlide,
                                 slideChangeTransitionEnd: (swiper) => {},
                                 activeIndexChange: (swiper) => {
                                     var pageDiv = swiper.slides[swiper.activeIndex];
