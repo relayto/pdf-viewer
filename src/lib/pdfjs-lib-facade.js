@@ -1,7 +1,8 @@
-import * as pdfjsLib from "pdfjs-dist/webpack";
-import { AnnotationLayerBuilder } from "pdfjs-dist/lib/web/annotation_layer_builder";
-import { DefaultTextLayerFactory } from "pdfjs-dist/lib/web/text_layer_builder";
-import { TextLayerBuilder } from "pdfjs-dist/lib/web/text_layer_builder";
+import * as pdfjsLib from 'pdfjs-dist/webpack';
+import {
+  AnnotationLayerBuilder, TextLayerBuilder,
+} from 'pdfjs-dist/web/pdf_viewer';
+
 
 const docPromises = [];
 
@@ -10,7 +11,6 @@ export class PDFJsFacade {
   
   viewer = {
     AnnotationLayerBuilder,
-    DefaultTextLayerFactory,
     TextLayerBuilder,
   };
 

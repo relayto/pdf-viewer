@@ -75,19 +75,19 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: 'node_modules/pdfjs-dist/es5/build/pdf.js',
+          from: 'node_modules/pdfjs-dist/build/pdf.js',
           to: 'pdf.js',
         },
         {
-          from: 'node_modules/pdfjs-dist/es5/build/pdf.js.map',
+          from: 'node_modules/pdfjs-dist/build/pdf.js.map',
           to: 'pdf.js.map',
         },
         {
-          from: 'node_modules/pdfjs-dist/es5/build/pdf.worker.js',
+          from: 'node_modules/pdfjs-dist/build/pdf.worker.js',
           to: 'pdf.worker.js',
         },
         {
-          from: 'node_modules/pdfjs-dist/es5/build/pdf.worker.js.map',
+          from: 'node_modules/pdfjs-dist/build/pdf.worker.js.map',
           to: 'pdf.worker.js.map',
         },
         {
@@ -95,7 +95,7 @@ module.exports = {
           to: 'pdf_viewer.js',
         },
         {
-          from: 'node_modules/pdfjs-dist/es5/web/pdf_viewer.css',
+          from: 'node_modules/pdfjs-dist/web/pdf_viewer.css',
           to: 'pdf_viewer.css',
         },
       ],

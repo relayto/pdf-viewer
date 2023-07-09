@@ -1,7 +1,7 @@
-import { PDFJsFacade } from "./pdfjs-lib-facade";
-import { PDFPageView } from "pdfjs-dist/lib/web/pdf_page_view";
-import { EventBus } from "pdfjs-dist/lib/web/ui_utils";
-import { svgFix } from "./svg-fix";
+import { PDFPageView, EventBus } from "pdfjs-dist/web/pdf_viewer";
+
+import { PDFJsFacade } from './pdfjs-lib-facade';
+import { svgFix } from './svg-fix';
 
 const SCALE = 1.0;
 

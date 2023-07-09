@@ -1,8 +1,9 @@
-import { PDFJsFacade } from './pdfjs-lib-facade'
-import { PDFLinkService } from 'pdfjs-dist/lib/web/pdf_link_service'
-import { EventBus } from 'pdfjs-dist/lib/web/ui_utils'
-import { PDFViewer } from 'pdfjs-dist/lib/web/pdf_viewer'
-import { svgFix } from './svg-fix'
+import {
+  EventBus, PDFLinkService, PDFViewer,
+} from 'pdfjs-dist/web/pdf_viewer';
+
+import { PDFJsFacade } from './pdfjs-lib-facade';
+import { svgFix } from './svg-fix';
 
 const DEFAULT_SCALE_VALUE = 'auto'
 const DEFAULT_SCALE_DELTA = 1.1
