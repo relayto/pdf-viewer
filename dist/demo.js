@@ -22,45 +22,24 @@ class PdfViewerApp {
     }
 
     monitorEvents = () => {
-        this.PDFViewer.eventBus.on('resize', (val) => {
-            console.log('resize', val);
-        });
-        this.PDFViewer.eventBus.on('pagesinit', (val) => {
-            console.log('pagesinit', val);
-        });
-        this.PDFViewer.eventBus.on('pagerendered', (val) => {
-            console.log('pagerendered', val);
-        });
-        this.PDFViewer.eventBus.on('pagechanging', (val) => {
-            console.log('pagechanging', val);
-        });
+        const eventNames = [
+            'resize',
+            'pagesinit',
+            'pagerendered',
+            'pagechanging',
+            'pagerender',
+            'pagerendered',
+            'presentationmodechanged',
+            'rotationchanging',
+            'scalechanging',
+            'thumbnailrendered',
+            'updatetextlayermatches'
+        ];
 
-        this.PDFViewer.eventBus.on('pagerender', (val) => {
-            console.log('pagerender', val);
-        });
-
-        this.PDFViewer.eventBus.on('pagerendered', (val) => {
-            console.log('pagerendered', val);
-        });
-
-        this.PDFViewer.eventBus.on('presentationmodechanged', (val) => {
-            console.log('presentationmodechanged', val);
-        });
-
-        this.PDFViewer.eventBus.on('rotationchanging', (val) => {
-            console.log('rotationchanging', val);
-        });
-
-        this.PDFViewer.eventBus.on('scalechanging', (val) => {
-            console.log('scalechanging', val);
-        });
-
-        this.PDFViewer.eventBus.on('thumbnailrendered', (val) => {
-            console.log('thumbnailrendered', val);
-        });
-
-        this.PDFViewer.eventBus.on('updatetextlayermatches', (val) => {
-            console.log('updatetextlayermatches', val);
+        eventNames.forEach(eventName => {
+            this.PDFViewer.eventBus.on(eventName, (val) => {
+                console.log(`[EVENT] ${eventName}`, val);
+            });
         });
     };
 
