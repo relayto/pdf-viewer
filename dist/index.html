@@ -113,11 +113,31 @@
                 }
             }
 
+            var app, ui;
+
+            class UI {
+                constructor(app){
+                    this.pdfViewer = app.PDFViewer;
+                    this.init();
+                }
+
+                init(){}
+
+                zoomIn(){
+                    this.pdfViewer.zoomIn(1);
+                }
+                zoomOut(){
+                    this.pdfViewer.zoomOut(1);
+                }
+            }
+
             window.onload = function () {
-                var app = new PdfViewerApp({
+                app = new PdfViewerApp({
                     pdfUrl: './example.pdf',
                     containerId: 'pdfViewer'
                 });
+
+                ui = new UI(app);
             };
             
         </script>
@@ -131,7 +151,8 @@
                 </div>
             </div>
             <div class="uiControllers">
-                Controls
+                <button class="btn" onclick="ui.zoomOut()">-</button>
+                <button class="btn" onclick="ui.zoomIn()">+</button>
             </div>
         </div>
     </body>
