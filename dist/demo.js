@@ -25,7 +25,6 @@ class PdfViewerApp {
         const eventNames = [
             'resize',
             'pagesinit',
-            'pagerendered',
             'pagechanging',
             'pagerender',
             'pagerendered',
