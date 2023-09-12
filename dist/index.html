@@ -3,9 +3,8 @@
     <head>
         <meta charset="utf-8" />
         <title>PDF Viewer Example</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
         <style>
-            
             body {
                 margin: 0;
                 padding: 0;
@@ -27,7 +26,6 @@
             .btn:hover {
                 background-color: rgb(199, 199, 199);
             }
-            
 
             #pdfViewer {
                 width: 100%;
@@ -63,99 +61,37 @@
                 justify-content: center;
                 align-items: center;
                 background-color: #ccc;
-                gap: 10px; 
+                gap: 10px;
             }
 
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
 
+            .controlWithLabel {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: start;
+            }
+
+            .controlWithLabel label {
+                font-size: 10px;
+            }
+
+            select {
+                font-size: 14px;
+            }
         </style>
         <link rel="stylesheet" href="pdf_viewer.css" />
 
         <script src="pdf.js"></script>
         <script src="pdf_viewer.js"></script>
-        <script>
-            var _debounce = function (ms, fn) {
-                var timer;
-                return function () {
-                    clearTimeout(timer);
-                    var args = Array.prototype.slice.call(arguments);
-                    args.unshift(this);
-                    timer = setTimeout(fn.bind.apply(fn, args), ms);
-                };
-            };
-
-            class PdfViewerApp {
-                PDFViewer = window.rtPDFViewer;
-                containerId = null;
-
-                options = {};
-                zoomScale = 0;
-
-                constructor(options) {
-                    this.options = options;
-                    this.containerId = options.containerId;
-                    this.initPDFViewer();
-                }
-
-                render = () => {
-                    this.PDFViewer.eventBus.on('resize', (val) => {
-                        console.log('resize', val);
-                    });
-                    this.PDFViewer.eventBus.on('pagesinit', (val) => {
-                        console.log('pagesinit', val);
-                    });
-                };
-
-                initPDFViewer() {
-                    this.PDFViewer.initialize(
-                        Object.assign(
-                            {
-                                autoResize: true,
-                                removePageBorders: true,
-                                scrollable: true,
-                                containerId: this.containerId,
-                                currentScaleValue: 'page-fit',
-                                cMapUrl: '/pdf-js/cmaps/',
-                                cMapPacked: true,
-                                workerSrc: './pdf.worker.js'
-                            },
-                            this.options
-                        )
-                    );
-
-                    var self = this;
-
-                    this.PDFViewer.open(this.options.pdfUrl).then(this.render);
-                }
-            }
-
-            var app, ui;
-
-            class UI {
-                constructor(app){
-                    this.pdfViewer = app.PDFViewer;
-                    this.init();
-                }
-
-                init(){}
-
-                zoomIn(){
-                    this.pdfViewer.zoomIn(1);
-                }
-                zoomOut(){
-                    this.pdfViewer.zoomOut(1);
-                }
-            }
-
-            window.onload = function () {
-                app = new PdfViewerApp({
-                    pdfUrl: './example.pdf',
-                    containerId: 'pdfViewer'
-                });
-
-                ui = new UI(app);
-            };
-            
-        </script>
+        <script src="demo.js"></script>
     </head>
 
     <body>
@@ -166,8 +102,14 @@
                 </div>
             </div>
             <div class="uiControllers">
-                <button class="btn" onclick="ui.zoomOut()">-</button>
-                <button class="btn" onclick="ui.zoomIn()">+</button>
+                <div class="controlWithLabel">
+                    <label for="pdfUrl">PDF File</label>
+                    <select id="fileList" onchange="ui.loadPDF(this.value)"></select>
+                </div>
+                <div>
+                    <button class="btn" onclick="ui.zoomOut()">-</button>
+                    <button class="btn" onclick="ui.zoomIn()">+</button>
+                </div>
             </div>
         </div>
     </body>
