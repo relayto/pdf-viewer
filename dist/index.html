@@ -12,17 +12,31 @@
                 font-family: 'Roboto', sans-serif;
             }
 
+            .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: rgb(214, 214, 218);
+                color: rgb(76, 75, 75);
+                font-size: 16px;
+                border-radius: 15px;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn:hover {
+                background-color: rgb(199, 199, 199);
+            }
+            
+
             #pdfViewer {
                 width: 100%;
                 height: 100%;
                 position: absolute;
-                border: 1px solid red;
-                width: calc(100% - 40px);
-                height: calc(100% - 40px);
-                margin: 20px;
+                background-color: #313131;
                 overflow: auto;
             }
-            
+
             #pdfViewer .page {
                 margin: 0 auto;
             }
@@ -32,6 +46,7 @@
                 flex-direction: column;
                 height: 100vh;
                 width: 100vw;
+                gap: 10px;
             }
 
             .mainViewer {
@@ -47,8 +62,8 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                border: 1px solid blue;
-                margin: 0 20px;
+                background-color: #ccc;
+                gap: 10px; 
             }
 
 
