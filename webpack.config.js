@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: [path.join(__dirname, 'dist')],
     publicPath: '/',
     compress: false,
     port: 8080,
@@ -101,12 +101,14 @@ module.exports = {
       ],
     }),
     new HtmlWebpackPlugin({
-      filename: path.resolve(__dirname, 'build/index.html'),
-      template: path.resolve(__dirname, 'dist/index.html'),
+      filename: path.resolve(__dirname, 'build/demo/index.html'),
+      template: path.resolve(__dirname, 'dist/demo/index.html'),
+      inject: true
     }),
     new HtmlWebpackPlugin({
-      filename: path.resolve(__dirname, 'build/single-page.html'),
-      template: path.resolve(__dirname, 'dist/single-page.html'),
+      filename: path.resolve(__dirname, 'build/demo/single-page.html'),
+      template: path.resolve(__dirname, 'dist/demo/single-page.html'),
+      inject: true
     }),
   ],
   optimization: {
