@@ -53,7 +53,22 @@ class PdfViewerApp {
                     currentScaleValue: 'page-fit',
                     cMapUrl: '/pdf-js/cmaps/',
                     cMapPacked: true,
-                    workerSrc: './pdf.worker.js'
+                    workerSrc: './pdf.worker.js',
+                    relaytoPagesView: [
+                        {
+                          embed: {
+                            pdfSvg: true,
+                          }
+                        },
+                        {
+                          style: {
+                            embed: {
+                              type: 'video',
+                              url: 'https://aaa.com',
+                            }
+                          },
+                        }
+                      ],
                 },
                 this.options
             )
@@ -64,8 +79,6 @@ class PdfViewerApp {
         this.PDFViewer.open(this.options.pdfUrl).then(this.monitorEvents);
     }
 }
-
-var app, ui;
 
 class UI {
     fileList = [
@@ -130,6 +143,8 @@ class UI {
         this.pdfViewer.open(`./${url}`);
     }
 }
+
+var app, ui;
 
 window.onload = function () {
     app = new PdfViewerApp({
