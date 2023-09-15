@@ -17,6 +17,7 @@ module.exports = {
       'pdfjs-dist/web/pdf_viewer': path.resolve(__dirname, 'monkey-patch/pdf.js/web/pdf_viewer.js')
     },
   },
+  target: 'web',
   externals: [
     function ({ context, request }, callback) {
       if (/^pdfjs-dist\/webpack$/.test(request)) {
