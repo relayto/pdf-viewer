@@ -1,5 +1,5 @@
 import {
-  EventBus, PDFLinkService, PDFViewer,
+  EventBus, PDFLinkService, PDFViewer
 } from 'pdfjs-dist/web/pdf_viewer';
 
 import { PDFJsFacade } from './pdfjs-lib-facade';
