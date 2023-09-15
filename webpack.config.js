@@ -11,7 +11,12 @@ module.exports = {
     hot: true,
     inline: true,
   },
-  target: ['web', 'es5'],
+  resolve: {
+    alias: {
+      // Alias to the pathced pdf-viewer
+      'pdfjs-dist/web/pdf_viewer': path.resolve(__dirname, 'monkey-patch/pdf.js/web/pdf_viewer.js')
+    },
+  },
   externals: [
     function ({ context, request }, callback) {
       if (/^pdfjs-dist\/webpack$/.test(request)) {
@@ -91,7 +96,7 @@ module.exports = {
           to: 'pdf.worker.js.map',
         },
         {
-          from: 'monkey-path/pdf.js/web/pdf_viewer.js',
+          from: 'monkey-patch/pdf.js/web/pdf_viewer.js',
           to: 'pdf_viewer.js',
         },
         {
