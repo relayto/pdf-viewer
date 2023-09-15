@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "paths": {
+            "pdfjs-dist/web/pdf_viewer": ["monkey-patch/pdf.js/web/pdf_viewer.js"],
+        }
+    }
+}
