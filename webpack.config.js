@@ -25,10 +25,11 @@ module.exports = {
         return callback(null, 'pdfjsLib')
       }
 
-      if (/^pdfjs-dist\/lib\/web.+$/.test(request)) {
+      if (/^pdfjs-dist\/web.+$/.test(request)) {
         console.log('External', request, 'pdfjsViewer')
         return callback(null, 'pdfjsViewer')
       }
+
       console.log('Internal', request)
       // Continue without externalizing the import
       callback()
@@ -45,6 +46,7 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     publicPath: '',
     clean: true,
+    library: 'rtpdfjs',
     libraryTarget: 'umd',
   },
   module: {
@@ -111,13 +113,11 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'build/demo/index.html'),
-      template: path.resolve(__dirname, 'dist/demo/index.html'),
-      inject: true
+      template: path.resolve(__dirname, 'dist/demo/index.html')
     }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'build/demo/single-page.html'),
-      template: path.resolve(__dirname, 'dist/demo/single-page.html'),
-      inject: true
+      template: path.resolve(__dirname, 'dist/demo/single-page.html')
     }),
   ],
   optimization: {
