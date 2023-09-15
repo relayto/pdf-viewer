@@ -20,7 +20,7 @@
  * Javascript code in this page
  */
 
- (function webpackUniversalModuleDefinition(root, factory) {
+(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -5593,10 +5593,7 @@ var PDFPageView = /*#__PURE__*/function () {
       this.cancelRendering(keepAnnotations);
       this.renderingState = _pdf_rendering_queue.RenderingStates.INITIAL;
       var div = this.div;
-      // Get container width on slides reset with slide effect
-      // Because slide effect uses full width page
-      // div.style.width = Math.floor(this.viewport.width) + "px";
-      div.style.width = Math.floor(this.div.className.indexOf('swiper-slide') > -1 ? this.div.parentNode.width : this.viewport.width) + "px";
+      div.style.width = Math.floor(this.viewport.width) + "px";
       div.style.height = Math.floor(this.viewport.height) + "px";
       var childNodes = div.childNodes;
       var currentZoomLayerNode = keepZoomLayer && this.zoomLayer || null;
@@ -5827,8 +5824,8 @@ var PDFPageView = /*#__PURE__*/function () {
 
       this.renderingState = _pdf_rendering_queue.RenderingStates.RUNNING;
       var canvasWrapper = document.createElement("div");
-      canvasWrapper.style.width = Math.floor(this.viewport.width) + "px";
-      canvasWrapper.style.height = Math.floor(this.viewport.height) + "px";
+      canvasWrapper.style.width = div.style.width;
+      canvasWrapper.style.height = div.style.height;
       canvasWrapper.classList.add("canvasWrapper");
 
       if (this.annotationLayer && this.annotationLayer.div) {
@@ -5859,18 +5856,16 @@ var PDFPageView = /*#__PURE__*/function () {
 
       if (this.renderingQueue) {
         renderContinueCallback = function renderContinueCallback(cont) {
-          // Dont use it, page not loading
-          // For some reasons it pause page and not loading 
-          // if (!_this.renderingQueue.isHighestPriority(_this)) {
-          //   _this.renderingState = _pdf_rendering_queue.RenderingStates.PAUSED;
+          if (!_this.renderingQueue.isHighestPriority(_this)) {
+            _this.renderingState = _pdf_rendering_queue.RenderingStates.PAUSED;
 
-          //   _this.resume = function () {
-          //     _this.renderingState = _pdf_rendering_queue.RenderingStates.RUNNING;
-          //     cont();
-          //   };
+            _this.resume = function () {
+              _this.renderingState = _pdf_rendering_queue.RenderingStates.RUNNING;
+              cont();
+            };
 
-          //   return;
-          // }
+            return;
+          }
 
           cont();
         };
@@ -6729,17 +6724,6 @@ var BaseViewer = /*#__PURE__*/function () {
         var textLayerFactory = _this2.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this2 : null;
 
         for (var pageNum = 1; pageNum <= pagesCount; ++pageNum) {
-          var renderer = _this2.renderer;
-          var settingPage = window.rtPDFViewer.settingPages[pageNum];
-          if (settingPage) {
-            if (
-              (settingPage.embed && settingPage.embed.pdfSvg) ||
-              (settingPage.style && settingPage.style.embed && settingPage.style.embed.type === "video" && settingPage.style.embed.url)
-            ) {
-              renderer = 'svg';
-            }
-          }
-          
           var pageView = new _pdf_page_view.PDFPageView({
             container: _this2._viewerElement,
             eventBus: _this2.eventBus,
@@ -6754,16 +6738,12 @@ var BaseViewer = /*#__PURE__*/function () {
             annotationLayerFactory: _this2,
             imageResourcesPath: _this2.imageResourcesPath,
             renderInteractiveForms: _this2.renderInteractiveForms,
-            renderer: renderer,
+            renderer: _this2.renderer,
             enableWebGL: _this2.enableWebGL,
             useOnlyCssZoom: _this2.useOnlyCssZoom,
             maxCanvasPixels: _this2.maxCanvasPixels,
             l10n: _this2.l10n
           });
-
-          // Fix broking fonts after 30 sec
-          // Stop execute clean timeout for pages that renders like SVG
-          pageView.renderingQueue.onIdle = null;
 
           _this2._pages.push(pageView);
         }
@@ -7903,3 +7883,4 @@ exports.PDFViewer = PDFViewer;
 /***/ })
 /******/ ]);
 });
+//# sourceMappingURL=pdf_viewer.js.map
