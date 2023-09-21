@@ -30,6 +30,7 @@ body {
 
 #pdfViewer .page {
   margin: 0 auto;
+  position: relative;
 }
 
 #app {
@@ -85,6 +86,18 @@ body {
   color: #fff;
   background: #00000075;
   border-radius: 7px;
+}
+
+.svg-control {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  padding: 10px;
+  font-size: 14px;
+  color: #fff;
+  background: #00000075;
+  border-radius: 7px;
+  z-index: 100;
 }
 
 select {

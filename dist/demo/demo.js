@@ -53,6 +53,7 @@ class PdfViewerApp {
                     currentScaleValue: 'page-fit',
                     cMapUrl: '/pdf-js/cmaps/',
                     cMapPacked: true,
+                    pdfBug: true,
                     workerSrc: './pdf.worker.js',
                     relaytoPagesView: [
                         {
@@ -76,7 +77,12 @@ class PdfViewerApp {
 
         var self = this;
 
-        this.PDFViewer.open(this.options.pdfUrl).then(this.monitorEvents);
+        var promise = this.PDFViewer.open(this.options.pdfUrl);
+        if(this.options.monitorEvents) {
+            promise.then(function () {
+                self.monitorEvents();
+            });
+        }
     }
 }
 
@@ -106,13 +112,38 @@ class UI {
 
     attachPDFViewerEvents() {
         var self = this;
-
         this.pdfViewer.eventBus.on('pagechanging', function () {
             self.updatePageNumber();
         });
         this.pdfViewer.eventBus.on('pagesinit', function () {
             self.updatePageNumber();
         });
+        // attach pagerendered 
+        this.pdfViewer.eventBus.on('pagerendered', function (e) {
+            self.attachSVGControlToPage(e.pageNumber, e.source);
+        });
+    }
+
+    attachSVGControlToPage(pageNumber, source) {
+        var pageElement = source.div;
+        var checked = source.renderer === 'svg' ? 'checked' : '';
+
+        var template = `
+                    <input 
+                        type="checkbox"
+                        onchange="ui.updatePage(${pageNumber},this.checked)"
+                        ${checked}
+                        name="svg-${pageNumber}">
+                    <label for="svg-${pageNumber}">SVG</label>
+            `;
+
+        // create element from template
+        var control = document.createElement('div');
+        control.innerHTML = template;
+        control.className = 'svg-control';
+
+        // append control to page
+        pageElement.appendChild(control);
     }
 
     updatePageNumber() {
@@ -141,6 +172,12 @@ class UI {
 
     loadPDF(url) {
         this.pdfViewer.open(`./${url}`);
+    }
+
+    updatePage(pageNum, useSVGRenderer) {
+        var renderer = useSVGRenderer ? 'svg' : 'canvas';
+        console.log('Rendering page', { pageNum, renderer });
+        this.pdfViewer.redrawPage(pageNum, renderer);
     }
 }
 
