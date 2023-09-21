@@ -108,11 +108,7 @@ module.exports = {
         {
           from: 'node_modules/pdfjs-dist/web/pdf_viewer.css',
           to: 'pdf_viewer.css',
-        },
-        {
-          from: 'node_modules/pdfjs-dist/web/pdf_viewer.js.map',
-          to: 'pdf_viewer.js.map',
-        },
+        }
       ],
     }),
     new HtmlWebpackPlugin({
