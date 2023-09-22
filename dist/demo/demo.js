@@ -1,8 +1,8 @@
-var _debounce = function (ms, fn) {
-    var timer;
+const _debounce = function (ms, fn) {
+    let timer;
     return function () {
         clearTimeout(timer);
-        var args = Array.prototype.slice.call(arguments);
+        const args = Array.prototype.slice.call(arguments);
         args.unshift(this);
         timer = setTimeout(fn.bind.apply(fn, args), ms);
     };
@@ -53,7 +53,7 @@ class PdfViewerApp {
                     currentScaleValue: 'page-fit',
                     cMapUrl: '/pdf-js/cmaps/',
                     cMapPacked: true,
-                    pdfBug: true,
+                    pdfBug: false, // PDFjs library debug mode
                     workerSrc: './pdf.worker.js',
                     relaytoPagesView: [
                         {
@@ -75,9 +75,9 @@ class PdfViewerApp {
             )
         );
 
-        var self = this;
+        const self = this;
 
-        var promise = this.PDFViewer.open(this.options.pdfUrl);
+        const promise = this.PDFViewer.open(this.options.pdfUrl);
         if(this.options.monitorEvents) {
             promise.then(function () {
                 self.monitorEvents();
@@ -111,7 +111,7 @@ class UI {
     }
 
     attachPDFViewerEvents() {
-        var self = this;
+        const self = this;
         this.pdfViewer.eventBus.on('pagechanging', function () {
             self.updatePageNumber();
         });
@@ -125,10 +125,10 @@ class UI {
     }
 
     attachSVGControlToPage(pageNumber, source) {
-        var pageElement = source.div;
-        var checked = source.renderer === 'svg' ? 'checked' : '';
+        const pageElement = source.div;
+        const checked = source.renderer === 'svg' ? 'checked' : '';
 
-        var template = `
+        const template = `
                     <input 
                         type="checkbox"
                         onchange="ui.updatePage(${pageNumber},this.checked)"
@@ -138,7 +138,7 @@ class UI {
             `;
 
         // create element from template
-        var control = document.createElement('div');
+        const control = document.createElement('div');
         control.innerHTML = template;
         control.className = 'svg-control';
 
@@ -147,16 +147,17 @@ class UI {
     }
 
     updatePageNumber() {
-        var currentPage = this.pdfViewer.page;
-        var totalPage = this.pdfViewer.pagesCount;
-        document.getElementById('pageNumber').innerText = `${currentPage} / ${totalPage}`;
+        const currentPage = this.pdfViewer.page;
+        const totalPages = this.pdfViewer.pagesCount;
+        document.getElementById('pageNumber').innerText = `${currentPage} / ${totalPages}`;
+        document.getElementById('labelPageNumber').innerText = currentPage;
     }
 
     createFileListUI() {
-        var select = document.getElementById('fileList');
+        const select = document.getElementById('fileList');
         let fileList = this.fileList.sort();
         fileList.forEach(function (file) {
-            var option = document.createElement('option');
+            const option = document.createElement('option');
             option.value = file;
             option.innerText = file;
             select.appendChild(option);
@@ -175,18 +176,35 @@ class UI {
     }
 
     updatePage(pageNum, useSVGRenderer) {
-        var renderer = useSVGRenderer ? 'svg' : 'canvas';
+        const renderer = useSVGRenderer ? 'svg' : 'canvas';
         console.log('Rendering page', { pageNum, renderer });
         this.pdfViewer.redrawPage(pageNum, renderer);
     }
+
+    updatePages(){
+        const pageNum = this.getCurrentPage();
+        const totalPages = this.pdfViewer.pagesCount;
+        const slideIndexBefore = pageNum - 2 >= 0 ? pageNum - 1 : 0;
+        const slideIndexAfter = pageNum + 1 <= totalPages - 1 ? pageNum + 1 : totalPages - 1;
+        this.pdfViewer.updateSlide(slideIndexBefore, slideIndexAfter);
+        Toastify({
+            text: `Update pages ${slideIndexBefore} ~ ${slideIndexAfter}`,
+            className: "info",
+          }).showToast();
+    }
+
+    getCurrentPage() {
+        return this.pdfViewer.page;
+    }
 }
 
-var app, ui;
+let app, ui;
 
 window.onload = function () {
     app = new PdfViewerApp({
         pdfUrl: './example.pdf',
-        containerId: 'pdfViewer'
+        containerId: 'pdfViewer',
+        monitorEvents: true
     });
 
     ui = new UI(app);

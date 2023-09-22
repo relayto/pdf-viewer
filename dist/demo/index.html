@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <title>PDF Viewer Example</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <link rel="stylesheet" href="/pdf_viewer.css" />
         <link rel="stylesheet" href="/demo/demo.css" />
         <script defer src="/pdf.js"></script>
@@ -30,7 +31,11 @@
                     <button class="btn" onclick="ui.zoomOut()">-</button>
                     <button class="btn" onclick="ui.zoomIn()">+</button>
                 </div>
+                <div>
+                    <button class="btn" onclick="ui.updatePages()">Redraw page <span id="labelPageNumber"></span></button>
+                </div>
             </div>
         </div>
     </body>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </html>
