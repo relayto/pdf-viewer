@@ -3073,9 +3073,7 @@ class BaseViewer {
     };
   }
 
-  update() {
-    const visible = this._getVisiblePages();
-
+  update(visible = this._getVisiblePages(), updateLocation = true) {
     const visiblePages = visible.views,
           numVisiblePages = visiblePages.length;
 
@@ -3103,19 +3101,22 @@ class BaseViewer {
         }
       }
 
-      if (!stillFullyVisible) {
-        currentId = visiblePages[0].id;
+      if(updateLocation) {
+        if (!stillFullyVisible) {
+          currentId = visiblePages[0].id;
+        }
+  
+        this._setCurrentPageNumber(currentId);
       }
-
-      this._setCurrentPageNumber(currentId);
     }
+    if(updateLocation) {
+      this._updateLocation(visible.first);
 
-    this._updateLocation(visible.first);
-
-    this.eventBus.dispatch("updateviewarea", {
-      source: this,
-      location: this._location
-    });
+      this.eventBus.dispatch("updateviewarea", {
+        source: this,
+        location: this._location
+      });
+    }
   }
 
   containsElement(element) {
@@ -3230,7 +3231,7 @@ class BaseViewer {
     }
   }
 
-  async #ensurePdfPageLoaded(pageView) {
+  async ensurePdfPageLoaded(pageView) {
     if (pageView.pdfPage) {
       return pageView.pdfPage;
     }
@@ -3295,7 +3296,7 @@ class BaseViewer {
     this.#toggleLoadingIconSpinner(visiblePages.ids);
 
     if (pageView) {
-      this.#ensurePdfPageLoaded(pageView).then(() => {
+      this.ensurePdfPageLoaded(pageView).then(() => {
         this.renderingQueue.renderView(pageView);
       });
       return true;
