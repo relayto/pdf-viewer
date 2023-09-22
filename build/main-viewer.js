@@ -1129,42 +1129,51 @@ var PDFViewerApplication = /*#__PURE__*/function () {
     main_viewer_application_defineProperty(this, "updateSlide", function (from, to) {
       var pdfViewer = _this.pdfViewer;
 
-      for (var i = from; i <= to; i++) {
-        var views = [];
-        var view = pdfViewer._pages[i];
-        if (!view) continue;
-        views.push({
-          id: view.id,
-          view: view
-        });
-        var visible = {
-          first: views[0],
-          last: views[views.length - 1],
-          views: views
-        };
-        var visiblePages = visible.views,
-            numVisiblePages = visiblePages.length;
-        var newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
+      if (pdfViewer && pdfViewer._pages && pdfViewer._pages.length > 0 && from >= 0 && to < pdfViewer._pages.length) {
+        for (var i = from; i <= to; i++) {
+          pdfViewer._pages[i].reset();
+        }
 
-        pdfViewer._buffer.resize(newCacheSize, visiblePages);
-
-        pdfViewer.forceRendering(visible);
-
-        pdfViewer._updateHelper(visiblePages);
-
-        pdfViewer._updateLocation(visible.first);
-
-        pdfViewer.eventBus.dispatch('updateviewarea', {
-          source: _this.pdfViewer,
-          location: _this.pdfViewer._location
-        });
+        pdfViewer.update();
       }
     });
   }
 
   _createClass(PDFViewerApplication, [{
     key: "pagesCount",
-    get: function get() {
+    get: // updateSlide = (from, to) => {
+    //   const { pdfViewer } = this
+    //   let views = [], ids = new Set();
+    //   for (var i = from; i <= to; i++) {
+    //     let view = pdfViewer._pages[i]
+    //     if (!view) continue
+    //     views.push({
+    //       id: view.id,
+    //       view: view,
+    //     })
+    //     ids.add(view.id)
+    //   }
+    //   let visible = {
+    //     first: views[0],
+    //     last: views[views.length - 1],
+    //     views: views,
+    //     ids: ids
+    //   }
+    //   let visiblePages = visible.views,
+    //     numVisiblePages = visiblePages.length
+    //   let newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1)
+    //   // Not available in current version of pdfjs
+    //   // pdfViewer._buffer.resize(newCacheSize, visiblePages)
+    //   pdfViewer.forceRendering(visible)
+    //   // Not available in current version of pdfjs
+    //   //pdfViewer._updateHelper(visiblePages)
+    //   pdfViewer._updateLocation(visible.first)
+    //   pdfViewer.eventBus.dispatch('updateviewarea', {
+    //     source: this.pdfViewer,
+    //     location: this.pdfViewer._location,
+    //   })
+    // }
+    function get() {
       return this.pdfDocument ? this.pdfDocument.numPages : 0;
     }
   }, {

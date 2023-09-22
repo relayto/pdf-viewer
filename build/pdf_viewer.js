@@ -2086,9 +2086,11 @@ class BaseViewer {
       throw new Error("Invalid `container` and/or `viewer` option.");
     }
 
-    if (this.container.offsetParent && getComputedStyle(this.container).position !== "absolute") {
-      throw new Error("The `container` must be absolutely positioned.");
-    }
+    // START RELAYTO PATCH
+    // if (this.container.offsetParent && getComputedStyle(this.container).position !== "absolute") {
+    //   throw new Error("The `container` must be absolutely positioned.");
+    // }
+    // END RELAYTO PATCH
 
     this.eventBus = options.eventBus;
     this.linkService = options.linkService || new _pdf_link_service.SimpleLinkService();
@@ -2454,6 +2456,7 @@ class BaseViewer {
       const xfaLayerFactory = isPureXfa ? this : null;
 
       for (let pageNum = 1; pageNum <= pagesCount; ++pageNum) {
+        // START RELAYTO PATCH
         let renderer = this.renderer;
         const settingPage = window.rtPDFViewer.settingPages[pageNum];
           if (settingPage) {
@@ -2486,6 +2489,10 @@ class BaseViewer {
           l10n: this.l10n
         });
 
+        // Fix broking fonts after 30 sec
+        // Stop execute clean timeout for pages that renders like SVG
+        pageView.renderingQueue.onIdle = null;
+        // END RELAYTO PATCH
         this._pages.push(pageView);
       }
 
@@ -3900,7 +3907,12 @@ class PDFPageView {
     });
     this.renderingState = _ui_utils.RenderingStates.INITIAL;
     const div = this.div;
-    div.style.width = Math.floor(this.viewport.width) + "px";
+    // START RELAYTO PATCH
+    // Get container width on slides reset with slide effect
+    // Because slide effect uses full width page
+    // div.style.width = Math.floor(this.viewport.width) + "px";
+    div.style.width = Math.floor(this.div.className.indexOf('swiper-slide') > -1 ? this.div.parentNode.width : this.viewport.width) + "px";
+    // END RELAYTO PATCH
     div.style.height = Math.floor(this.viewport.height) + "px";
     const childNodes = div.childNodes,
           zoomLayerNode = keepZoomLayer && this.zoomLayer || null,
@@ -4210,8 +4222,11 @@ class PDFPageView {
 
     this.renderingState = _ui_utils.RenderingStates.RUNNING;
     const canvasWrapper = document.createElement("div");
-    canvasWrapper.style.width = div.style.width;
-    canvasWrapper.style.height = div.style.height;
+    // START RELAYTO PATCH
+    canvasWrapper.style.width = Math.floor(this.viewport.width) + "px";
+    canvasWrapper.style.height = Math.floor(this.viewport.height) + "px";
+    // END RELAYTO PATCH
+
     canvasWrapper.classList.add("canvasWrapper");
 
     if (this.annotationLayer?.div) {
@@ -4252,17 +4267,20 @@ class PDFPageView {
 
     if (this.renderingQueue) {
       renderContinueCallback = cont => {
-        if (!this.renderingQueue.isHighestPriority(this)) {
-          this.renderingState = _ui_utils.RenderingStates.PAUSED;
+        // START RELAYTO PATCH
+        // Dont use it, page not loading
+        // For some reasons it pause page and not loading 
+        // if (!this.renderingQueue.isHighestPriority(this)) {
+        //   this.renderingState = _ui_utils.RenderingStates.PAUSED;
 
-          this.resume = () => {
-            this.renderingState = _ui_utils.RenderingStates.RUNNING;
-            cont();
-          };
+        //   this.resume = () => {
+        //     this.renderingState = _ui_utils.RenderingStates.RUNNING;
+        //     cont();
+        //   };
 
-          return;
-        }
-
+        //   return;
+        // }
+        // END RELAYTO PATCH
         cont();
       };
     }
