@@ -1733,7 +1733,11 @@ class TextLayerBuilder {
 
       this._finishRendering();
 
-      this.highlighter?.enable();
+      // START RELAYTO PATCH
+      if(this.highlighter?.enabled === false) {
+        this.highlighter?.enable();
+      }
+      // END RELAYTO PATCH
     }, function (reason) {});
   }
 
