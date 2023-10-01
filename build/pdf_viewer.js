@@ -1969,6 +1969,12 @@ var PDFLinkService = /*#__PURE__*/function () {
     value: function setHistory(pdfHistory) {
       this.pdfHistory = pdfHistory;
     }
+  }, 
+  {
+    key: "goToDestination",
+    value: function goToDestination(dest) {
+      return this.navigateTo(dest)
+    }
   }, {
     key: "navigateTo",
     value: function navigateTo(dest) {

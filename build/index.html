@@ -1,307 +1,431 @@
-<!doctype html><html><head><meta charset="utf-8"/><title>PDF Viewer Example</title><script defer="defer" src="pdf.js"></script><script defer="defer" src="pdf_viewer.js"></script><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css"/><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><style>body {
-        margin: 0;
-        padding: 0;
-      }
+<!doctype html><html><head><meta charset="utf-8"/><title>PDF Viewer Example</title><style>[ng-cloak] {
+                display: none !important;
+            }</style><link rel="stylesheet" href="pdf_viewer.css"/><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css"/><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.1/angular-material.min.css"/><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-aria.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.1/angular-material.min.js"></script><script src="./kcd-recompile.js"></script><script defer="defer" src="pdf.js"></script><script defer="defer" src="pdf_viewer.js"></script><style>/* #rt-presentation-container {
+                height: 100% !important;
+                overflow: hidden !important;
+            } */
 
-      html,
-      body {
-        height: 100%;
-        position: relative;
-      }
-
-      .layout-fill {
-        margin: 0;
-        width: 100%;
-        min-height: 100%;
-        height: 100%;
-      }
-
-      .layout-column {
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        flex-direction: column;
-      }
-
-      .layout,
-      .layout-column,
-      .layout-row {
-        box-sizing: border-box;
-        display: -webkit-box;
-        display: flex;
-      }
-
-      .flex {
-        -webkit-box-flex: 1;
-        flex: 1;
-        box-sizing: border-box;
-      }
-
-      .layout-align-start-center,
-      .layout-align-center-center,
-      .layout-align-end-center,
-      .layout-align-space-between-center,
-      .layout-align-space-around-center {
-        -webkit-box-align: center;
-        align-items: center;
-        align-content: center;
-        max-width: 100%;
-      }
-
-      .layout-align-center,
-      .layout-align-center-start,
-      .layout-align-center-center,
-      .layout-align-center-end,
-      .layout-align-center-stretch {
-        -webkit-box-pack: center;
-        justify-content: center;
-      }
-
-      #pdfviewer-slide-wrapper-container {
-        width: 100% !important;
-        overflow: hidden !important;
-      }
-
-      #pdfviewer-cards-wrapper-container .swiper-wrapper,
-      #pdfviewer-slide-wrapper-container .swiper-wrapper {
-        margin: 0 auto !important;
-      }
-
-      #pdfviewer-slide-wrapper-container .pdfViewer.removePageBorders .page {
-        margin: 0;
-      }
-
-      #pdfviewer-cards-wrapper-container .page,
-      #pdfviewer-slide-wrapper-container .page {
-        height: 100% !important;
-        display: flex;
-        justify-content: center;
-      }
-
-      #pdfviewer-cards-wrapper-container .canvasWrapper,
-      #pdfviewer-slide-wrapper-container .canvasWrapper {
-        height: 100%;
-        align-items: center;
-        display: flex;
-      }
-
-      #pdfviewer-cards-wrapper-container.viewerContainer,
-      #pdfviewer-cube-wrapper-container.viewerContainer,
-      #pdfviewer-slide-wrapper-container.viewerContainer {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-
-      #pdfviewer-coverflow-wrapper-container.viewerContainer {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-
-      #pdfviewer-cards-wrapper-container .page {
-        /* overflow: hidden; */
-      }
-
-      .viewerContainer {
-        overflow: visible !important;
-      }
-
-      .page {
-        position: relative !important;
-        border: none !important;
-        height: 100%;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-      }
-
-      .page div {
-        /* margin: 0 auto; */
-      }
-
-      .annotationLayer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-      }
-
-      .annotationLayer section {
-        position: absolute;
-      }
-
-      .annotationLayer > * {
-        z-index: 1;
-      }
-
-      .swiper-wrapper {
-        align-items: center;
-        /* add this will all relevant prefixes */
-      }
-
-      /* Styles for multiple pages in slide */
-      /* #pdfviewer-slide-wrapper-container .rt-page-components,
-      #pdfviewer-slide-wrapper-container .annotationLayer,
-      #pdfviewer-slide-wrapper-container .textLayer {
-        position: absolute;
-        left: unset;
-        top: unset;
-        right: unset;
-        bottom: unset;
-      }
-
-      #pdfviewer-slide-wrapper-container
-        .swiper-slide-layout-align.swiper-slide-active {
-        justify-content: flex-end;
-      }
-
-      #pdfviewer-slide-wrapper-container
-        .swiper-slide-layout-align.swiper-slide-next {
-        justify-content: flex-start;
-      }
-
-      #pdfviewer-slide-wrapper-container
-        .swiper-slide-layout-align.swiper-slide-active:not(:nth-child(1)) {
-        justify-content: flex-end;
-      } */</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body><div class="flex layout-fill layout-column layout-align-center-center"><div id="pdfviewer-slide-wrapper-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div><script>class SwiperPDF {
-        PDFViewer = window.rtPDFViewer
-        rtContainerId = null
-        containerId = null
-        effect = null
-        swiper = null
-        constructor(effect = 'slide') {
-          this.effect = effect
-          this.rtContainerId = `rt-${this.effect}-wrapper`
-          this.containerId = `pdfviewer-${this.effect}-wrapper-container`
-          this.initPDFViewer()
-        }
-
-        render = () => {
-          return new Promise((resolve) => {
-            const redraw = () => {
-              let self = this
-
-              const swiper = document.querySelector(
-                `#${this.containerId}.swiper`,
-              )
-
-              console.log('resize fired ! 0', swiper.style.width)
-
-              swiper.style.width = ''
-              swiper.style.height = ''
-
-              self.PDFViewer.pdfViewer.eventBus.dispatch('resize', {
-                ignoreLocalEvent: true,
-              })
-
-              console.log('resize fired ! 1', swiper.style.width)
-
-              var pageDiv = self.swiper.slides[self.swiper.activeIndex]
-              var pageCanvasDiv = pageDiv.querySelector('.canvasWrapper')
-              swiper.style.height = pageCanvasDiv.clientHeight + 'px'
-              swiper.style.width = pageCanvasDiv.clientWidth + 'px'
-
-              console.log('resize fired ! 2', swiper.style.width)
+            #rt-presentation-container .swiper-wrapper {
+                margin: 0 auto !important;
             }
 
-            this.PDFViewer.eventBus.on('resize', (val) => {
-              console.log('resize fired !')
-              if (!val.ignoreLocalEvent) redraw()
-            })
-
-            this.PDFViewer.eventBus.on('pagesloaded', (val) => {
-              if (val.source.container.id === this.containerId) {
-                setTimeout(() => {
-                  this.initSwiper({
-                    afterInit: resolve,
-                  })
-                })
-              }
-            })
-          })
-        }
-
-        initPDFViewer() {
-          this.PDFViewer.initialize({
-            containerId: this.containerId,
-            currentScaleValue: 'page-fit',
-            cMapUrl: '/pdf-js/cmaps/',
-            cMapPacked: true,
-          })
-
-          var self = this
-
-          this.PDFViewer.open('test.pdf')
-        }
-
-        initSwiper(eventBus) {
-          let that = this
-          const swiper = document.querySelector(`#${that.containerId}.swiper`)
-          const pages = document.querySelectorAll(`#${that.containerId} .page`)
-
-          pages.forEach((page) => {
-            page.classList.add('swiper-slide', 'swiper-slide-layout-align')
-            swiper.style.width = page.style.width
-            swiper.style.height = page.style.height
-          })
-
-          const conf = {
-            on: eventBus,
-            effect: that.effect,
-            grabCursor: true,
-            navigation: {
-              nextEl: `.swiper-button-next`,
-              prevEl: `.swiper-button-prev`,
-            },
-            keyboard: {
-              enabled: true,
-              onlyInViewport: true,
-            },
-            on: {
-              beforeTransitionStart: (swiper) => {
-                var activeIndex = swiper.activeIndex
-                var slideBefore = activeIndex - 3 < 0 ? 0 : activeIndex - 3
-                var slideAfter =
-                  activeIndex + 3 > swiper.slides.length
-                    ? swiper.slides.length - 1
-                    : activeIndex + 3
-                rtPDFViewer.updateSlide(slideBefore, slideAfter)
-                rtPDFViewer.page = activeIndex + 1
-              },
-              slideChangeTransitionEnd: (swiper) => {},
-            },
-          }
-
-          if (that.effect === 'creative') {
-            conf.creativeEffect = {
-              prev: {
-                shadow: true,
-                origin: 'left center',
-                translate: ['-5%', 0, -200],
-                rotate: [0, 100, 0],
-              },
-              next: {
-                origin: 'right center',
-                translate: ['5%', 0, -200],
-                rotate: [0, -100, 0],
-              },
+            #rt-presentation-container .pdfViewer.removePageBorders .page {
+                margin: 0;
             }
-          }
 
-          console.log('conf', conf)
+            #rt-presentation-container .canvasWrapper {
+                height: 100%;
+                align-items: center;
+                display: flex;
+            }
 
-          that.swiper = new Swiper(`#${this.containerId}.swiper`, conf)
-        }
-      }
+            #rt-presentation-container .page {
+                margin: 0;
+                border: none;
+                background-color: transparent;
+            }
 
-      document.addEventListener('DOMContentLoaded', async () => {
-        await new SwiperPDF('slide').render()
-        // await new SwiperPDF('fade').render();
-        // await new SwiperPDF('flip').render();
-        // await new SwiperPDF('cards').render();
-        // await new SwiperPDF("cube").render();
-        // await new SwiperPDF('coverflow').render();
-        // await new SwiperPDF('creative').render();
-      })</script></body></html>
+            #rt-presentation-container.viewerContainer {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+
+            #pdfviewer-coverflow-wrapper-container.viewerContainer {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+
+            .viewerContainer {
+                overflow: visible !important;
+            }
+
+            .page {
+                position: relative !important;
+                border: none !important;
+                height: 100%;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+            }
+
+            .canvasWrapper,
+            .textLayer,
+            .annotationLayer > * {
+                z-index: 1 !important;
+            }
+
+            .annotationLayer section {
+                position: absolute;
+                text-align: initial;
+            }
+
+            .swiper-wrapper {
+                align-items: center;
+            }
+            /* Effect styles */
+
+            .rt-swiper-cube .page.swiper-slide.swiper-slide-active::after,
+            .rt-swiper-cards .page.swiper-slide.swiper-slide-active::after {
+                pointer-events: auto;
+                opacity: 1;
+                transition: opacity 0.3s ease-in-out;
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                box-shadow: 0 0 1px rgb(0 0 0 / 12%), 0 1px 1px rgb(0 0 0 / 4%), 0 2px 2px rgb(0 0 0 / 4%), 0 4px 4px rgb(0 0 0 / 4%), 0 8px 8px rgb(0 0 0 / 4%);
+            }
+
+            .rt-swiper-cube .page.swiper-slide:not(.swiper-slide-active) .annotationLayer,
+            .rt-swiper-cube .page.swiper-slide:not(.swiper-slide-active)::after,
+            .rt-swiper-cards .page.swiper-slide:not(.swiper-slide-active) .annotationLayer,
+            .rt-swiper-cards .page.swiper-slide:not(.swiper-slide-active)::after {
+                pointer-events: none;
+                opacity: 0;
+            }
+
+            .page.swiper-slide:not(.swiper-slide-active) {
+                overflow: hidden;
+            }
+
+            .page.swiper-slide {
+                position: relative !important;
+                border: none !important;
+                height: 100%;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+            }
+
+            /* SLides */
+            /* .viewerContainer {
+                flex: 1;
+
+                width: 100%;
+                height: 100%;
+            } */
+
+            .rt-swiper-slide .page.swiper-slide,
+            .rt-swiper-fade .page.swiper-slide {
+                overflow: hidden;
+            }
+
+            .rt-slides-view-container.rt-swiper-slide .pdfViewer .page.swiper-slide,
+            .rt-slides-view-container.rt-swiper-fade .pdfViewer .page.swiper-slide {
+                background-color: transparent;
+            }
+
+            .rt-swiper-slide .page.swiper-slide > .annotationLayer,
+            .rt-swiper-slide .page.swiper-slide > .textLayer,
+            .rt-swiper-fade .page.swiper-slide > .annotationLayer,
+            .rt-swiper-fade .page.swiper-slide > .textLayer {
+                position: absolute;
+                left: unset;
+                top: unset;
+                right: unset;
+                bottom: unset;
+            }
+
+            /* Annotations */
+            .annotationLayer .linkAnnotation > a:hover {
+                opacity: 0.35 !important;
+                background: linear-gradient(45deg, #428cca 10%, #a4dfff 90%);
+                margin: -2% 0 0 -2%;
+                padding: 2%;
+                box-sizing: content-box;
+            }
+            /* Text layer */
+            .textLayer > span {
+                color: transparent;
+                position: absolute;
+                white-space: pre;
+                cursor: text;
+                -webkit-transform-origin: 0% 0%;
+                transform-origin: 0% 0%;
+            }</style><script defer="defer" src="main-viewer.js"></script><script defer="defer" src="page-viewer.js"></script><script defer="defer" src="pdfjs-lib.js"></script></head><body ng-cloak ng-app="demo"><div ng-controller="Controller as vm" kcd-recompile="vm.recompile" use-boolean flex layout="column" layout-fill><div flex layout="column"><md-input-container style="margin: 0;"><input ng-model="vm.pdfUrl" ng-change="vm.initSwiperPDF()" ng-model-options="{debounce: 500 }"/></md-input-container><div layout="row" style="z-index: 9999;"><md-button class="md-primary md-mini md-fab" no-ink ng-click="vm.zoomIn()">+</md-button><md-button class="md-primary md-mini md-fab" no-ink ng-click="vm.zoomOut()">-</md-button><md-switch ng-model="vm.renderAsScroll" ng-change="vm.updateView()">Render as Scroll</md-switch><md-switch ng-model="vm.enabledSVG" ng-change="vm.updateView()">Enable SVG</md-switch><div flex layout="row" layout-align="end center"><div ng-if="!vm.renderAsScroll" ng-repeat="effect in vm.effects"><md-button md-no-ink class="md-primary" ng-class="{'md-raised':effect.active}" ng-click="vm.selectEffect(effect)">{{effect.type}}</md-button></div></div></div><div ng-if="!vm.renderAsScroll" flex layout="column" layout-align="center center"><div id="rt-view" class="rt-swiper-{{vm.activeEffect.type}}" flex style="position: relative; height: 100%;"><div id="rt-presentation-container" class="swiper viewerContainer"><div class="pdfViewer swiper-wrapper"></div></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div></div><div ng-if="vm.renderAsScroll" style="position: relative; width: 100%; height: 100%;"><div id="rt-presentation-container" style="position: absolute; left: 0; right: 0;"><div class="pdfViewer"></div></div></div></div></div><script>var _debounce = function (ms, fn) {
+                var timer;
+                return function () {
+                    clearTimeout(timer);
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift(this);
+                    timer = setTimeout(fn.bind.apply(fn, args), ms);
+                };
+            };
+
+            function makeid(length) {
+                var result = '';
+                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for (var i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                return result;
+            }
+
+            angular.module('demo', ['ngMaterial', 'ngMessages', 'kcd.directives']).controller('Controller', function ($timeout) {
+                var vm = this;
+                vm.selectEffect = selectEffect;
+                vm.initSwiperPDF = initSwiperPDF;
+                vm.effects = [
+                    {id: makeid(8), active: false, type: 'slide'},
+                    {id: makeid(8), active: false, type: 'fade'},
+                    {id: makeid(8), active: false, type: 'cube'},
+                    {id: makeid(8), active: false, type: 'coverflow'},
+                    {id: makeid(8), active: false, type: 'flip'},
+                    {id: makeid(8), active: false, type: 'creative'},
+                    {id: makeid(8), active: true, type: 'cards'}
+                ];
+
+                function getOptions() {
+                    var relaytoPagesView = {};
+                    if (vm.enabledSVG) {
+                        for (var i = 0; i < vm.view.PDFViewer.pagesCount; i++) {
+                            relaytoPagesView[i + 1] = {
+                                embed: {pdfSvg: true}
+                            };
+                        }
+                    }
+
+                    return {relaytoPagesView};
+                }
+
+                function selectEffect(active) {
+                    vm.activeEffect = active;
+                    vm.effects.map((effect) => {
+                        effect.active = effect.id === active.id;
+                        return effect;
+                    });
+
+                    vm.updateView();
+                }
+
+                function initSwiperPDF(options = {}) {
+                    Object.assign(options, {effect: vm.activeEffect.type});
+
+                    $timeout(() => {
+                        vm.view = new SwiperPDF(options);
+                        console.log('vm.view', vm.view);
+                    });
+                }
+
+                function updateSlide(swiper) {
+                    var activeIndex = swiper.activeIndex;
+                    var slideBefore = activeIndex - 3 < 0 ? 0 : activeIndex - 3;
+                    var slideAfter = activeIndex + 3 > swiper.slides.length ? swiper.slides.length - 1 : activeIndex + 3;
+                    window.rtPDFViewer.updateSlide(slideBefore, slideAfter);
+                    window.rtPDFViewer.page = activeIndex + 1;
+                }
+
+                function updateSize() {
+                    var container = document.querySelector('.swiper');
+
+                    container.style.width = `100%`;
+                    container.style.height = `100%`;
+
+                    var page = vm.view.swiper.el.querySelector('.page.swiper-slide-active');
+
+                    switch (vm.view.effect) {
+                        case 'slide':
+                        case 'fade':
+                            page.style.width = '100%';
+                            return;
+                    }
+
+                    updateSlide(vm.view.swiper);
+                }
+
+                vm.zoomIn = () => {
+                    vm.view.zoomScale++;
+                    vm.view.PDFViewer.zoomIn(vm.view.zoomScale);
+
+                    updateSize();
+                };
+                vm.zoomOut = () => {
+                    if (vm.view.zoomScale > 0) {
+                        vm.view.PDFViewer.zoomOut(vm.view.zoomScale);
+                        vm.view.zoomScale--;
+                    }
+
+                    updateSize();
+                };
+
+                vm.updateView = function () {
+                    initSwiperPDF(getOptions());
+
+                    vm.recompile = true;
+                };
+
+                vm.$onInit = function () {
+                    vm.renderAsScroll = false;
+
+                    vm.pdfUrl = 'test.pdf';
+
+                    vm.recompile = false;
+                    vm.activeEffect = angular.copy(vm.effects).filter((e) => e.active)[0];
+
+                    initSwiperPDF();
+                };
+
+                class SwiperPDF {
+                    PDFViewer = window.rtPDFViewer;
+
+                    containerId = null;
+
+                    options = {};
+                    effect = null;
+                    swiper = null;
+                    zoomScale = 0;
+
+                    constructor(options) {
+                        this.options = options;
+
+                        this.effect = options.effect;
+                        this.containerId = 'rt-presentation-container';
+                        this.initPDFViewer();
+                    }
+
+                    render = () => {
+                        if (!vm.renderAsScroll) {
+                            this.PDFViewer.eventBus.on('resize', (val) => {
+                                updateSize();
+                            });
+                            this.PDFViewer.eventBus.on('pagesinit', (val) => {
+                                $timeout(() => {
+                                    var container = document.querySelector('.swiper');
+                                    document.querySelectorAll('.swiper .page').forEach(function (pageDiv, idx) {
+                                        pageDiv.classList.add('swiper-slide', 'swiper-slide-layout-align');
+
+                                        if (idx === 0) {
+                                            container.style.width = pageDiv.style.width;
+                                            container.style.height = pageDiv.style.height;
+                                        }
+                                    });
+
+                                    this.initSwiper();
+                                });
+                            });
+                        }
+                    };
+
+                    initPDFViewer() {
+                        this.PDFViewer.initialize(
+                            Object.assign(
+                                {
+                                    autoResize: true,
+                                    removePageBorders: true,
+                                    scrollable: true,
+                                    containerId: this.containerId,
+                                    currentScaleValue: 'page-fit',
+                                    cMapUrl: '/pdf-js/cmaps/',
+                                    cMapPacked: true
+                                },
+                                this.options
+                            )
+                        );
+
+                        var self = this;
+
+                        this.PDFViewer.open(vm.pdfUrl).then(this.render);
+                    }
+
+                    initSwiper() {
+                        let self = this;
+                        const swiper = document.querySelector('.swiper');
+                        const pages = document.querySelectorAll('.page');
+
+                        pages.forEach((page) => {
+                            page.classList.add('swiper-slide', 'swiper-slide-layout-align');
+                            swiper.style.width = page.style.width;
+                            swiper.style.height = page.style.height;
+                        });
+
+                        const conf = {
+                            noSwipingSelector: '.textLayer > span, .swiper-no-swiping',
+                            effect: self.effect,
+                            grabCursor: true,
+                            navigation: {
+                                nextEl: `.swiper-button-next`,
+                                prevEl: `.swiper-button-prev`
+                            },
+                            keyboard: {
+                                enabled: true,
+                                onlyInViewport: true
+                            },
+                            on: {
+                                resize: function (swiper) {
+                                    $timeout(() => {
+                                        var container = document.querySelector('.swiper');
+                                        var page = swiper.el.querySelector('.page.swiper-slide-active');
+                                        var canvasWrapper = page.querySelector('.canvasWrapper');
+
+                                        switch (vm.view.effect) {
+                                            case 'slide':
+                                            case 'fade':
+                                                container.style.width = '100%';
+                                                page.style.width = '100%';
+                                                return;
+                                        }
+
+                                        container.style.width = canvasWrapper.style.width;
+                                        container.style.height = canvasWrapper.style.height;
+                                    });
+                                },
+                                afterInit: function () {},
+                                beforeTransitionStart: updateSlide,
+                                slideChangeTransitionEnd: (swiper) => {},
+                                activeIndexChange: (swiper) => {
+                                    var pageDiv = swiper.slides[swiper.activeIndex];
+                                    var canvasWrapperDiv = pageDiv.querySelector('.canvasWrapper');
+
+                                    if (canvasWrapperDiv && canvasWrapperDiv.firstChild) {
+                                        ['.annotationLayer', '.textLayer'].map(function (className) {
+                                            var div = pageDiv.querySelector(className);
+                                            if (div) {
+                                                switch (true) {
+                                                    case div.className === 'annotationLayer' && (self.effect === 'slide' || self.effect === 'fade'):
+                                                    case div.className === 'textLayer':
+                                                        div.style.width = canvasWrapperDiv.firstChild.style.width;
+                                                        div.style.height = canvasWrapperDiv.firstChild.style.height;
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+
+                                            pageDiv.querySelectorAll('.annotationLayer section').forEach(function (section) {
+                                                if (section.style.transform && section.style.transform.indexOf('translateZ') === -1) {
+                                                    section.style.transform += ' translateZ(1px)';
+                                                }
+                                            });
+                                        });
+                                    }
+                                }
+                            }
+                        };
+
+                        if (self.effect === 'creative') {
+                            conf.creativeEffect = {
+                                prev: {
+                                    shadow: true,
+                                    origin: 'left center',
+                                    translate: ['-5%', 0, -200],
+                                    rotate: [0, 100, 0]
+                                },
+                                next: {
+                                    origin: 'right center',
+                                    translate: ['5%', 0, -200],
+                                    rotate: [0, -100, 0]
+                                }
+                            };
+                        }
+
+                        console.log('conf', conf);
+
+                        self.swiper = new Swiper('.swiper', conf);
+                    }
+                }
+            });</script></body></html>
