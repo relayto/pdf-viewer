@@ -93,13 +93,20 @@ class PDFViewerApplication {
   settingPages = []
   config = {}
 
-  _initializeViewer = () => {
+  _initializeViewer = (CustomLinkService) => {
     this.eventBus = new EventBus()
 
-    this.pdfLinkService = new PDFLinkService({
-      eventBus: this.eventBus,
-    })
-
+    if(CustomLinkService) {
+      this.pdfLinkService = new CustomLinkService({
+        eventBus: this.eventBus,
+      })  
+    } else {
+      this.pdfLinkService = new PDFLinkService({
+        eventBus: this.eventBus,
+      })
+  
+    }
+    
     this.pdfViewer = new PDFViewer({
       container: this.container,
       eventBus: this.eventBus,
@@ -118,7 +125,7 @@ class PDFViewerApplication {
   }
 
   initialize = (config = {}) => {
-    const { workerSrc, ...pdfjsLibConfigs } = config
+    const { workerSrc, linkService, ...pdfjsLibConfigs } = config
     if (!config.isDefaultWorker) {
       this.pdfjs.lib.GlobalWorkerOptions.workerPort = null
       this.pdfjs.lib.GlobalWorkerOptions.workerSrc = config.workerSrc
@@ -131,7 +138,7 @@ class PDFViewerApplication {
       config.container ||
       window.document.getElementById(config.containerId || 'pdfViewerContent')
 
-    this._initializeViewer()
+    this._initializeViewer(linkService)
 
     this.bindEvents()
     // Setting to either enable or disable
