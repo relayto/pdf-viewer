@@ -608,6 +608,10 @@ function getOutputScale(ctx) {
   var devicePixelRatio = window.devicePixelRatio || 1;
   var backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
   var pixelRatio = devicePixelRatio / backingStoreRatio;
+  //** RELAYTO CHANGES */
+  if(pixelRatio < 2) {
+    pixelRatio = 2;
+  }
   return {
     sx: pixelRatio,
     sy: pixelRatio,
